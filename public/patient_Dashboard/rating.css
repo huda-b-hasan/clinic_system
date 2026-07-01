@@ -1,0 +1,238 @@
+/* الحاوية الرئيسية للتقييمات */
+.reviews-container {
+    max-w: 1152px;
+    margin: 0 auto;
+    padding: 24px;
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    direction: rtl; /* متوافق مع الواجهة العربية */
+}
+
+/* قسم الفورم */
+.review-form-section {
+    background-color: var(--card-bg);
+    padding: 32px;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    max-w: 650px;
+    margin: 0 auto 48px auto;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.form-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-main);
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.form-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-main);
+    margin-bottom: 8px;
+}
+
+/* المدخلات (Inputs & Select) */
+.form-select, .form-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-soft);
+    color: var(--text-main);
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.form-select:focus, .form-textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--main-pink-accent);
+}
+
+.form-textarea {
+    resize: none;
+}
+
+/* تحديد النجوم التفاعلي */
+.star-rating-container {
+    display: flex;
+    gap: 4px;
+    font-size: 32px;
+    cursor: pointer;
+}
+
+.star-input {
+    color: #e9ecef; /* لون رمادي خفيف قبل الاختيار */
+    transition: transform 0.1s ease;
+}
+
+.star-input:hover {
+    transform: scale(1.1);
+}
+
+/* الألوان الخاصة بالنجوم المثبتة */
+.star-input.active, .star-filled {
+    color: #FFD700; /* لون ذهبي دافئ للنجوم الممتلئة */
+}
+
+.star-empty {
+    color: #e9ecef;
+}
+
+/* زر الإرسال */
+.btn-submit {
+    width: 100%;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    font-weight: 500;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 16px;
+}
+
+.btn-submit:hover {
+    background-color: var(--primary-hover);
+}
+
+/* الفاصل */
+.section-divider {
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    margin: 48px 0;
+}
+
+
+/* حاوية قسم التقييمات */
+.reviews-section {
+    margin-top: 50px;
+    width: 100%;
+    max-width: 1000px;
+}
+
+.reviews-title {
+    font-size: 1.5rem;
+    color: var(--text-main);
+    margin-bottom: 24px;
+    position: relative;
+    padding-bottom: 8px;
+}
+
+/* الخط التجميلي تحت العنوان باللون البنفسجي */
+.reviews-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 45px;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 2px;
+}
+
+/* توزيع الكروت */
+.reviews-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill,minmax(400px,1fr));
+}
+
+/* كرت التقييم */
+.review-card {
+    min-width: 290px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(156, 123, 163, 0.08); /* توهج خفيف بلون البريمري */
+}
+
+/* الرأس الداخلي للكرت */
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.client-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* الـ Avatar الدائري بخلفية الزهر الناعم */
+.client-avatar {
+    width: 42px;
+    height: 42px;
+    background-color: var(--main-pink-bg);
+    color: var(--primary-hover);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.client-name {
+    font-size: 1rem;
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+/* تنسيق اسم الجلسة ليكون مميزاً وهادئاً */
+.treatment-name {
+    font-size: 0.82rem;
+    color: var(--primary-color);
+    background-color: rgba(156, 123, 163, 0.08); /* خلفية شفافة جداً من لون العيادة */
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+/* النجوم */
+.stars {
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+/* نص التعليق */
+.review-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+}
+
+/* التجاوب مع الشاشات الصغيرة */
+@media (max-width: 650px) {
+
+    .stars {
+        align-self: flex-end;
+    }
+}

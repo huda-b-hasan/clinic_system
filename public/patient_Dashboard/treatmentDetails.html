@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>  Lavender Beauty Clinic</title>
+    <link rel="stylesheet" href="treatmentDetails.css">
+</head>
+
+<body>
+
+    <div class="goBack">
+        <a href="treatments.html">
+            <button class="lavender-button" title="رجوع">
+                <svg class="icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 50 H80 M80 50 L60 30 M80 50 L60 70" />
+                </svg>
+            </button>
+        </a>
+        <h2>الرجوع الى الخدمات</h2>
+    </div>
+    <div class="details-container">
+        <div class="service-main-content">
+            <div class="service-image-wrapper">
+                <img src=""
+                    alt="خدمة الفيلر التجميلي" class="service-main-img">
+            </div>
+
+            <h1 class="service-title"> </h1>
+            <p class="service-subtitle"></p>
+
+            <p class="service-description">
+
+            </p>
+
+            <div class="session-includes">
+                <h3></h3>
+                <ul class="features-list">
+                    <li>
+                        <span class="check-icon">✓</span>
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="service-price-card">
+            <div class="price-header">
+                <span class="price-label" id="price-status-label">السعر</span>
+                <div class="price-container">
+                    <span class="price-old-detail" style="display: none;"></span>
+                    <div class="price-amount"><span class="price-num">0</span> <span class="currency">ل.س</span></div>
+                </div>
+            </div>
+
+            <div class="duration-badge">
+                <span class="clock-icon">🕒</span> <span id="duration-text"> دقيقة</span>
+            </div>
+
+            <button class="book-now-btn">احجزي الآن</button>
+            <p class="note-text">ستتم استشارتك قبل تحديد موعد أي علاج.</p>
+        </div>
+
+    </div>
+    <div class="reviews-section">
+        <div class="reviews-head">
+        <h2 class="reviews-title">آراء العميلات</h2>
+        <div id="average_rating">
+            <h5>
+              متوسط التقييم:
+            </h5>
+        </div>
+        </div>
+        <div class="reviews-grid" id="reviews-grid">
+            <!-- <div class="review-card">
+                <div class="review-header">
+                    <div class="client-info">
+                        <span class="client-avatar">أ</span>
+                        <div>
+                            <h4 class="client-name">أمل القحطاني</h4>
+                            <span class="treatment-name">جلسة فيلر شفايف 1 مل</span>
+                        </div>
+                    </div>
+                    <div class="stars">⭐
+                        ⭐
+                        ⭐⭐⭐</div>
+                </div>
+                <p class="review-text">
+                    النتيجة تجنن وطبيعية والتعامل راقي جداً، الدكتورة يدها خفيفة وما حسيت بأي ألم. أكيد رح أرجع أعيد
+                    التجربة.
+                </p>
+            </div> -->
+
+
+        </div>
+    </div>
+    <div class="booking-modal-overlay" id="bookingModal">
+    <div class="booking-modal-card">
+        
+        <div class="modal-header">
+            <h3>احجزي موعدكِ الآن - <span id="modal-service-name">فيلر شفايف</span></h3>
+            <button class="close-modal-btn" id="closeModalBtn" title="إغلاق">&times;</button>
+        </div>
+
+        <form class="modal-form" id="appointmentForm">
+            
+            <div class="patient-identity">
+                <i class="far fa-user-circle"></i>
+                <span>المريضة: <strong id="logged-in-patient-name">سارة أحمد</strong></span>
+            </div>
+
+            <div class="form-group">
+                <label for="doctor-select">اختر الطبيبة</label>
+                <div class="select-wrapper">
+                    <select id="doctor-select" required>
+                        <option value="" disabled selected>اختر الطبيبة المتخصصة...</option>
+                        <option value="1">د. مريم - متخصصة حقن وتجميل</option>
+                        <option value="2">د. ليلى - أخصائية جلدية وعناية بالبشرة</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group flex-1">
+                    <label for="booking-date">اختر التاريخ</label>
+                    <input type="date" id="booking-date" required>
+                </div>
+
+                <div class="form-group flex-1">
+                    <label for="booking-time">اختر الوقت</label>
+                    <input type="time" id="booking-time" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="booking-notes">ملاحظات إضافية (اختياري)</label>
+                <textarea id="booking-notes" rows="3" placeholder="أي طلبات خاصة أو استفسارات تودين إطلاع الطبيبة عليها..."></textarea>
+            </div>
+
+            <div class="modal-actions">
+                <button type="submit" class="confirm-booking-btn">تأكيد الحجز</button>
+                <button type="button" class="cancel-booking-btn" id="cancelModalBtn">إلغاء</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+</body>
+<script src="treatmentDetails.js"></script>
+
+</html>

@@ -1,0 +1,179 @@
+        :root {
+            --bg-soft: #F9F6F0;
+            --text-main: #2D2A26;
+            --text-muted: #706C61;
+            --card-bg: #FFFFFF;
+            --primary-color: #9C7BA3;
+            --primary-hover: #83628A;
+            --border-color: rgba(112, 108, 97, 0.15);
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-family);
+        }
+
+        body {
+            background-color: #f8f8f8;
+            color: var(--text-main);
+            font-family: var(--font-family);
+            margin: 0;
+            direction: rtl;
+        }
+
+        .profile-container {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 850px;
+            padding: 2.5rem;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .profile-header h1 {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* تنسيق الهوية الفوقية مثل أورا */
+        .avatar-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 2rem;
+            background-color: #FAF6FB;
+            padding: 15px;
+            border-radius: 15px;
+            display: inline-flex;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .avatar-circle {
+            width: 60px;
+            height: 60px;
+            background-color: #EADFEF;
+            color: var(--primary-hover);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .avatar-info {
+            text-align: right;
+        }
+
+        .avatar-info .role-badge {
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 4px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 11fr);
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background-color: #FCFBFA;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(156, 123, 163, 0.15);
+            background-color: #ffffff;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .actions-section {
+            margin-top: 2.5rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* لتجاوب الشاشات الصغيرة */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            body {
+                padding: 1rem;
+            }
+        }

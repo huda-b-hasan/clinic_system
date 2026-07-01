@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/auth/login.css">
+</head>
+
+<body>
+
+    <div class="login-container">
+        <div class="right-side">
+            <a href="/" class="logo">
+
+                <!-- <i class="fa-solid fa-spa" style="color:#c8a96a; font-size:34px;"></i> -->
+
+
+                <svg width="50" height="60" viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g stroke="#D4AF37" stroke-width="2.5" fill="none">
+
+                        <path d="M60 10 C45 35 50 60 60 80 C70 60 75 35 60 10Z" />
+
+                        <path d="M40 25 C35 45 40 65 55 80 C58 55 52 40 40 25Z" />
+                        <path d="M80 25 C68 40 62 55 65 80 C80 65 85 45 80 25Z" />
+
+                        <path d="M20 30 C15 55 30 75 55 80 C40 55 30 40 20 30Z" />
+                        <path d="M100 30 C90 40 80 55 65 80 C90 75 105 55 100 30Z" />
+
+                        <path d="M5 55 C20 50 40 55 60 80 C35 80 15 70 5 55Z" />
+                        <path d="M115 55 C105 70 85 80 60 80 C80 55 100 50 115 55Z" />
+
+                    </g>
+
+                </svg>
+
+                <div class="logo-text">
+                    <h2>Lavender</h2>
+                    <span>Beauty Clinic</span>
+                </div>
+
+            </a>
+
+            <div class="welcome-message">
+                <h2>أهلاً بعودتكِ.<br>بشرتكِ تتذكركِ.</h2>
+                <p>سجّلي الدخول لاستعراض سجل علاجاتكِ، حجز جلستكِ القادمة، والتواصل مع أخصائيتكِ.</p>
+            </div>
+        </div>
+
+        <div class="left-side">
+            <div class="form-wrapper">
+                <h1 class="form-title">تسجيل الدخول</h1>
+                <p class="form-subtitle">وضع تجريبي - اختاري الدور لمعاينة لوحة التحكم الخاصة به.</p>
+
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="email">البريد الإلكتروني</label>
+                        <input type="email" id="email" placeholder="you@example.com" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">كلمة المرور</label>
+                        <input type="password" id="password" placeholder="password123" required>
+                    </div>
+
+
+                    <div class="input-group">
+                        <label for="role">الدخول بصفة</label>
+                        <select id="role">
+                            <option value="Patient">مريضة</option>
+                            <option value="Doctor">طبيب/ة</option>
+                            <option value="Receptionist">موظف/ة استقبال</option>
+                            <option value="Manager">مدير/ة</option>
+                        </select>
+                    </div>
+
+
+                    <div class="errorMessage" id="errorMessage">
+
+                    </div>
+                    <button type="submit" class="submit-btn" id="submitBtn">دخول</button>
+                </form>
+
+                <div class="signup-redirect">
+                    جديدة هنا؟ <a href="/register">انضم إلينا</a>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</body>
+<script src="/auth/login.js"> </script>
+
+</html>

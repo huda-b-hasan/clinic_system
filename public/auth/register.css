@@ -1,0 +1,340 @@
+/* تصفير التهيئة العامة وتأكيد اتجاه الخط */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Tajawal', sans-serif;
+}
+
+:root {
+    --bg-soft: #F9F6F0;
+    --text-main: #2D2A26;
+    --text-muted: #706C61;
+    --card-bg: #FFFFFF;
+
+    --aura-pink: #FDF0ED;
+    --primary-color: #9C7BA3;
+    --primary-hover: #83628A;
+    --border-color: rgba(112, 108, 97, 0.15);
+}
+
+body {
+    background-color: var(--bg-soft);
+    color: var(--text-main);
+}
+a{
+    text-decoration: none;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+}
+
+.logo svg {
+    filter: drop-shadow(0 0 10px #D4AF37);
+}
+
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+
+}
+.special{
+margin: 0;
+    font-size: 35px;
+    color: #7D5BA6;
+    font-weight: bold;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    letter-spacing: 3px;
+}
+.logo-text h2 {
+    margin: 0;
+    font-size: 25px;
+    color: #7D5BA6;
+    /* لافندر */
+    font-weight: bold;
+
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    letter-spacing: 3px;
+
+}
+
+.logo-text span {
+    font-size: 17px;
+    color: #D4AF37;
+    /* ذهبي ناعم */
+    letter-spacing: 3px;
+
+}
+
+
+.page-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.content-wrapper {
+    width: 100%;
+    max-width: 1000px;
+}
+
+
+.logo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text-main);
+    margin-bottom: 30px;
+}
+
+.logo-icon-bg {
+    width: 36px;
+    height: 36px;
+    background-color: #F3ECE1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sparkle-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--primary-color);
+}
+
+.logo-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* الترحيب والعناوين */
+.header-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.main-title {
+    font-size: 2.6rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-top: 10px;
+}
+
+/* صندوق الاستمارة الرئيسي */
+.register-form {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(112, 108, 97, 0.04);
+}
+
+/* عناوين الأقسام الداخلية */
+.section-label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text-main);
+}
+
+/* توزيع الكروت الأربعة برأس الصفحة */
+.roles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 40px;
+}
+
+/* التصميم الأساسي لجميع الكروت */
+.role-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: right;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.role-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 15px rgba(156, 123, 163, 0.08);
+}
+
+.card-icon {
+    color: var(--primary-color);
+    margin-bottom: 12px;
+    transition: transform 0.3s ease;
+}
+
+.role-card:hover .card-icon {
+    transform: translateY(-2px);
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 4px;
+}
+
+.card-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* الكرت النشط والمختار (Active Card) */
+.role-card.active {
+    background-color: var(--aura-pink);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px var(--primary-color), 0 6px 18px rgba(156, 123, 163, 0.12);
+}
+
+/* شبكة توزيع حقول المدخلات (تلقائياً عمودين) */
+.inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+/* مجموعات الإدخال الفردية */
+.input-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-field-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.input-field-group input {
+    width: 100%;
+    height: 44px;
+    padding: 0 16px;
+    font-size: 0.95rem;
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-main);
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+/* تأثير التحديد عند البدء بالكتابة */
+.input-field-group input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(156, 123, 163, 0.15);
+}
+
+/* نصوص التلميحات داخل الحقل */
+.input-field-group input::placeholder {
+    color: #A3A099;
+}
+
+/* تذييل الصفحة والزر الرئيسي */
+.form-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+.gender-card {
+    border: 1px solid #e2e8f0;
+    padding: 10px 15px;
+    border-radius: 12px; /* لتتناسب مع انحناءات أزرار صفحتك */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    background-color: #fff;
+}
+
+/* تأثير عند تمرير الماوس أو الاختيار */
+.gender-card:hover {
+    border-color: #a855f7; /* لون ماوف يناسب ثيم العيادة */
+    background-color: #fdf4ff;
+}
+.gender-card input{
+    width: 20px;
+    height: 22px;
+}
+.primary-submit-btn {
+    padding: 12px 48px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 50px;
+    /* تصميم زر بيضاوي مريح ومطابق للشاشات */
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(156, 123, 163, 0.2);
+    transition: all 0.3s ease;
+}
+
+.primary-submit-btn:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.footer-login-text {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.login-link-inline {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    margin-right: 4px;
+}
+
+.login-link-inline:hover {
+    text-decoration: underline;
+}
+
+/* استجابة الشاشات للهواتف (Responsive) */
+@media (max-width: 768px) {
+    .register-form {
+        padding: 24px;
+    }
+
+    .inputs-grid {
+        grid-template-columns: 1fr;
+        /* تحويل الحقول لعمود واحد على الموبايل */
+        gap: 16px;
+    }
+
+    .roles-grid {
+        grid-template-columns: 1fr 1fr;
+        /* توزيع الكروت كرتين بكل سطر على الشاشات المتوسطة */
+    }
+}
+
+@media (max-width: 480px) {
+    .roles-grid {
+        grid-template-columns: 1fr;
+        /* كرت واحد بكل سطر على الشاشات الصغيرة جداً */
+    }
+}

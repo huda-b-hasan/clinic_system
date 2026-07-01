@@ -1,0 +1,604 @@
+/* تعريف المتغيرات بناءً على الألوان المرسلة */
+:root {
+    --bg-soft: #F9F6F0;
+    --text-main: #2D2A26;
+    --text-muted: #706C61;
+    --card-bg: #FFFFFF;
+    
+    --main-pink-bg: #f6e5f7;
+    --primary-color: #9C7BA3;
+    --primary-hover: #83628A;
+    --border-color: rgba(112, 108, 97, 0.15);
+    
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+}
+
+body {
+    background-color: var(--bg-soft);
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    flex-direction: column;
+}
+ .goBack{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 7px;
+    width: 100%;
+    padding:10px  80px 20px;
+}
+ .goBack h2{
+    font-size: 15px;
+    font-weight: 500;
+    text-shadow:1px 1px 1px #2d2a2659;
+ }
+.lavender-button {
+    width: 30px;
+    height: 30px;
+    background-color: var(--primary-color, #9C7BA3); /* بياخد اللون البنفسجي تبعك */
+    border: none;
+    border-radius: 50%; /* ليعطي شكل الدائرة الكاملة */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* تأثير عند تمرير الماوس فوق الزر */
+.lavender-button:hover {
+    background-color: var(--primary-hover, #83628A);
+    transform: scale(1.05); /* حركة تكبير خفيفة بتعطي جمالية */
+}
+
+/* تنسيق السهم داخل الدائرة */
+.lavender-button .icon {
+    width: 20px;
+    height: 20px;
+    stroke: #ffffff; /* لون السهم أبيض ليظهر بوضوح */
+    stroke-width: 7; /* سمك السهم */
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* الحاوية الرئيسية للواجهة */
+.details-container {
+    display: flex;
+    background-color: var(--card-bg);
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    max-width: 1000px;
+    width: 100%;
+    padding: 40px;
+    gap: 50px;
+}
+
+/* القسم الأيمن: المحتوى والصورة */
+.service-main-content {
+    flex: 1;
+}
+
+/* تنسيق غلاف الصورة لتصبح مستديرة الأطراف وتليق بالتصميم */
+.service-image-wrapper {
+    width: 100%;
+    max-height: 250px;
+    overflow: hidden;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.service-main-img {
+    width: 100%;
+    height: 50%;
+    object-fit: cover;
+}
+
+.service-title {
+    font-size: 2.2rem;
+    color: var(--text-main);
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.service-subtitle {
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.service-description {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    margin-bottom: 30px;
+}
+
+/* قائمة مميزات الجلسة */
+.session-includes h3 {
+    font-size: 1.2rem;
+    color: var(--text-main);
+    margin-bottom: 16px;
+}
+
+.features-list {
+    list-style: none;
+}
+
+.features-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.check-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background-color: var(--main-pink-bg);
+    color: var(--primary-color);
+    border-radius: 50%;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+/* القسم الأيسر: بطاقة السعر */
+.service-price-card {
+    width: 320px;
+    background-color: var(--main-pink-bg);
+    border-radius: 24px;
+    padding: 35px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: fit-content;
+}
+
+.price-header {
+    margin-bottom: 15px;
+}
+
+.price-label {
+    font-size: 0.9rem;
+    color: var(--primary-color);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.price-amount {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--primary-hover);
+}
+
+.price-amount .currency {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* بادج الوقت */
+.duration-badge {
+    background-color: var(--card-bg);
+    color: var(--text-main);
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+}
+
+/* زر احجزي الآن */
+.book-now-btn {
+    width: 100%;
+    background-color: var(--primary-color);
+    color: var(--card-bg);
+    border: none;
+    padding: 14px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.book-now-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.note-text {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+
+/* التجاوب مع الشاشات الصغيرة (الموبايل) */
+@media (max-width: 768px) {
+    .details-container {
+        flex-direction: column;
+        padding: 20px;
+        gap: 30px;
+    }
+    
+    .service-price-card {
+        width: 100%;
+    }
+}
+/* حاوية قسم التقييمات */
+.reviews-section {
+    margin-top: 50px;
+    width: 100%;
+    max-width: 1000px;
+}
+.reviews-head{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#average_rating{
+    font-size: 18px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+
+#average_rating span{
+    color:#83628A;
+    font-size: 20px;
+}
+.reviews-title {
+    font-size: 1.5rem;
+    color: var(--text-main);
+    margin-bottom: 24px;
+    position: relative;
+    padding-bottom: 8px;
+}
+
+/* الخط التجميلي تحت العنوان باللون البنفسجي */
+.reviews-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 45px;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 2px;
+}
+
+/* توزيع الكروت */
+.reviews-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill,minmax(400px,1fr));
+}
+
+/* كرت التقييم */
+.review-card {
+    min-width: 290px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(156, 123, 163, 0.08); /* توهج خفيف بلون البريمري */
+}
+
+/* الرأس الداخلي للكرت */
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.client-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* الـ Avatar الدائري بخلفية الزهر الناعم */
+.client-avatar {
+    width: 42px;
+    height: 42px;
+    background-color: var(--main-pink-bg);
+    color: var(--primary-hover);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.client-name {
+    font-size: 1rem;
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+/* تنسيق اسم الجلسة ليكون مميزاً وهادئاً */
+.treatment-name {
+    font-size: 0.82rem;
+    color: var(--primary-color);
+    background-color: rgba(156, 123, 163, 0.08); /* خلفية شفافة جداً من لون العيادة */
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+/* النجوم */
+.stars {
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+/* نص التعليق */
+.review-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+}
+
+/* التجاوب مع الشاشات الصغيرة */
+@media (max-width: 650px) {
+
+    .stars {
+        align-self: flex-end;
+    }
+}
+/* تنسيق السعر القديم المشطوب في صفحة التفاصيل */
+.price-old-detail {
+    font-size: 1.2rem;
+    color: #a09c94; /* لون رمادي باهت */
+    text-decoration: line-through; /* وضع خط فوق السعر */
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* لمنع تداخل الأسعار وضبط تنسيقها */
+.price-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+/* الخلفية المعتمة التي تغطي الشاشة بالكامل */
+.booking-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* تعتيم خفيف وناعم خلف الكرت */
+    backdrop-filter: blur(4px); /* تأثير ضبابي على الخلفية لزيادة التركيز */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+/* الكلاس الذي سيتم إضافته بالـ JS لإظهار النافذة */
+.booking-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* كرت الفورم الرئيسي */
+.booking-modal-card {
+    background-color: #ffffff;
+    width: 90%;
+    max-width: 550px;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    animation: slideUp 0.4s ease;
+}
+
+/* رأس النافذة الخلفية الملونة بالبنفسجي الفاتح */
+.modal-header {
+    background-color: rgba(156, 123, 163, 0.1);
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(156, 123, 163, 0.15);
+}
+
+.modal-header h3 {
+    font-size: 1.25rem;
+    color: var(--text-main, #333);
+    font-weight: 600;
+    margin: 0;
+}
+
+/* زر الإغلاق X */
+.close-modal-btn {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: #888;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.close-modal-btn:hover {
+    color: var(--primary-color, #9C7BA3);
+}
+
+/* جسم الفورم الداخلي */
+.modal-form {
+    padding: 24px;
+}
+
+/* هوية المريضة الإلكترونية */
+.patient-identity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #faf8f6;
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    color: var(--text-muted, #666);
+}
+
+.patient-identity i {
+    font-size: 1.2rem;
+    color: var(--primary-color, #9C7BA3);
+}
+
+/* تنسيق مجموعات المدخلات */
+.form-group {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main, #333);
+}
+
+/* تنسيق موحد للـ inputs والـ select والـ textarea */
+.modal-form input,
+.modal-form select,
+.modal-form textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color, #e2e2e2);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: #444;
+    background-color: #fdfdfd;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.modal-form input:focus,
+.modal-form select:focus,
+.modal-form textarea:focus {
+    border-color: var(--primary-color, #9C7BA3);
+    box-shadow: 0 0 0 3px rgba(156, 123, 163, 0.1);
+}
+
+/* جعل الحقول بجانب بعضها ريسبونسف */
+.form-row {
+    display: flex;
+    gap: 16px;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+/* حاوية أزرار التحكم في الأسفل */
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+/* زر تأكيد الحجز البنفسجي */
+.confirm-booking-btn {
+    flex: 2;
+    background-color: var(--primary-color, #9C7BA3);
+    color: #ffffff;
+    border: none;
+    padding: 14px;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.confirm-booking-btn:hover {
+    background-color: var(--primary-hover, #83628A);
+}
+
+/* زر الإلغاء البيج الناعم */
+.cancel-booking-btn {
+    flex: 1;
+    background-color: #f5f0e9;
+    color: #60574d;
+    border: none;
+    padding: 14px;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cancel-booking-btn:hover {
+    background-color: #ebe3d7;
+}
+
+/* تأثير حركة ظهور الكرت عند الفتح */
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* التجاوب التام مع الموبايل */
+@media (max-width: 500px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    .modal-actions {
+        flex-direction: column;
+    }
+    .confirm-booking-btn, .cancel-booking-btn {
+        width: 100%;
+    }
+}

@@ -1,0 +1,511 @@
+:root {
+    --bg-color: #f8f8f8;
+    --main-pink-bg: #f6e5f7;
+    --white-bg: #ffffff;
+    --main-pink-accent:#f6e5f7;
+    --dark-pink-accent:  #83628A;
+    --text-dark:#2D2A26;
+    --text-grey:  #706C61;
+    --border-grey: #e9ecef;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+:root {
+    --bg-soft: #F9F6F0;
+    --text-main: #2D2A26;
+    --text-muted: #706C61;
+    --card-bg: #FFFFFF;
+    
+    --aura-pink: #FDF0ED;
+    --primary-color: #9C7BA3;
+    --primary-hover: #83628A;
+    --border-color: rgba(112, 108, 97, 0.15);
+}
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    margin: 0;
+    color: var(--text-dark);
+    direction: rtl;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* تنسيق تجميعة الهيدر اليمين */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* زر القائمة (مخفي الافتراض في الشاشات الكبيرة) */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 26px;
+    color: var(--dark-pink-accent);
+    cursor: pointer;
+    padding: 0;
+}
+
+/* زر إغلاق القائمة الفرعي (مخفي افتراضياً) */
+.close-menu {
+    display: none;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo svg {
+    filter: drop-shadow(0 0 10px #D4AF37);
+    width: 50px;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.logo-text h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #7D5BA6;
+    font-weight: bold;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    letter-spacing: 3px;
+}
+
+.logo-text span {
+    font-size: 10px;
+    color: #D4AF37;
+    letter-spacing: 3px;
+}
+
+header {
+    background-color: var(--white-bg);
+    padding: 10px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-grey);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+.main-wrapper {
+    display: flex;
+    margin-top: 60px;
+}
+
+aside {
+    width: 200px;
+    background-color: var(--white-bg);
+    border-left: 1px solid var(--border-grey);
+    padding: 20px;
+    position: fixed;
+    height: calc(100vh - 60px);
+    top: 60px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    padding-top: 45px;
+    transition: all 0.3s ease;
+}
+
+aside nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+aside nav ul li {
+    margin-bottom: 10px;
+}
+
+aside nav ul li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    text-decoration: none;
+    color: var(--text-dark);
+    border-radius: 10px;
+    transition: background 0.2s;
+    font-size: 14px;
+}
+
+aside nav ul li.active a {
+    background-color: var(--main-pink-bg);
+    color: var(--dark-pink-accent);
+}
+aside nav ul li a:hover{
+    background-color: var(--main-pink-accent);
+}
+aside nav ul li a span svg{
+    width: 17px;
+}
+main {
+    flex-grow: 1;
+    padding: 30px;
+    margin-right: 200px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.welcome-section {
+    margin-bottom: 30px;
+}
+
+.welcome-section h1 {
+    font-size: 24px;
+    margin: 0 0 5px 0;
+}
+
+.welcome-section p {
+    color: var(--text-grey);
+    font-size: 14px;
+    margin: 0;
+}
+
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+    gap: 20px;
+    grid-column: grid-re;
+    margin-bottom: 30px;
+}
+
+.summary-card {
+    background-color: var(--main-pink-bg);
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.summary-card.alt-bg {
+    background-color: var(--white-bg);
+    border: 1px solid var(--border-grey);
+}
+
+.summary-card .icon-box {
+    background-color: var(--white-bg);
+    border-radius: 10px;
+    padding: 8px 10px;
+    color: var(--dark-pink-accent);
+    font-size: 18px;
+    border: 1px solid var(--border-grey);
+}
+
+.summary-card .text-content h3 {
+    font-size: 16px;
+    margin: 0 0 5px 0;
+    color: var(--text-grey);
+}
+
+.summary-card .text-content p {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.details-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+.doctor{
+    display: block;
+    color: #2D2A26;
+}
+.oclockSession{
+    display: block;
+    color: var(--text-muted);
+    font-size: 10px;
+    margin-block: 5px;
+}
+.stat-card {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #f0f0f0;
+}
+
+.stat-card.purple {
+    background-color: var(--purple-card);
+    border: none;
+}
+
+.stat-info {
+    text-align: right;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #222;
+}
+
+.stat-icon-box {
+    width: 45px;
+    height: 45px;
+    border-radius: 50px;
+    background-color: #fbf5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.stat-card.purple .stat-icon-box {
+    background-color: rgba(255, 255, 255, 0.6);
+}
+.sessions-card {
+    background-color: var(--white-bg);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    width: 90%;
+}.sessions-card h2 {
+    font-size: 18px;
+    margin: 0 0 20px 0;
+}
+
+.session-item {
+    border: 1px solid var(--border-grey);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.session-item h4 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+}
+
+.session-item p {
+    margin: 0;
+    color: var(--text-grey);
+    font-size: 14px;
+}
+
+.action-card {
+    background-color: var(--main-pink-bg);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.action-card h2 {
+    font-size: 20px;
+    margin: 0 0 10px 0;
+    color: var(--dark-pink-accent);
+}
+
+.action-card p {
+    color: var(--text-grey);
+    font-size: 14px;
+    margin: 0 0 20px 0;
+}
+
+.action-card button {
+    background-color: var(--dark-pink-accent);
+    color: var(--white-bg);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.action-card button:hover {
+    background-color: var(--primary-color);
+}
+
+.icon::before {
+    content: '?';
+    font-weight: bold;
+}
+/* ==========================================
+   تنسيقات المواعيد القادمة باستخدام div
+   ========================================== */
+.upcoming-appointments {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.appointment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--white-bg);
+    border: 1px solid var(--border-grey);
+    border-radius: 12px;
+    padding: 15px 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.appointment-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    background-color: rgba(246, 229, 247, 0.2); /* تلميح بنفسجي خفيف عند التمرير */
+}
+
+.appointment-info, .appointment-date, .appointment-status {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.appointment-status {
+    align-items: flex-end;
+}
+
+.service-name {
+    font-weight: bold;
+    color: var(--text-dark);
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+/* شارات الانتظار المتبقي */
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.status-badge.urgent {
+    background-color: #ffeef0;
+    color: #f44336;
+}
+
+.status-badge.normal {
+    background-color: #f0fdf4;
+    color: #16a34a;
+}
+.sessionFlex{
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    gap: 5px;
+}
+/* التوافق مع الشاشات الصغيرة جداً */
+@media (max-width: 480px) {
+    .appointment-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .appointment-status {
+        align-items: flex-start;
+        width: 100%;
+        margin-top: 5px;
+    }
+}
+/* ==========================================
+   شاشات الهواتف والأجهزة اللوحية (Responsive Side Drawer)
+   ========================================== */
+@media (max-width: 768px) {
+    header {
+        padding: 10px 15px;
+    }
+
+    /* إظهار زر فتح القائمة */
+    .menu-toggle {
+        display: block;
+    }
+
+    /* إظهار زر الإغلاق داخل السايدبار وتنسيقه أعلى اليسار */
+    .close-menu {
+        display: block;
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: none;
+        border: none;
+        font-size: 20px;
+        color: var(--text-grey);
+        cursor: pointer;
+    }
+
+    /* تحويل السايدبار إلى درج منزلق جانبي مخفي */
+    aside {
+        width: 260px;
+        height: 100vh;
+        top: 0;
+        right: -260px; /* مخفي تماماً خارج الشاشة يميناً */
+        left: auto;
+        bottom: auto;
+        padding-top: 70px; /* مسافة لكي لا يغطي زر الغلق العناصر الأولى */
+        border-left: 1px solid var(--border-grey);
+        border-top: none;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        z-index: 2000; /* أعلى من الهيدر لسهولة الاستخدام */
+        transition: right 0.3s ease-in-out; /* انزلاق سلس وأنيق */
+    }
+
+    /* كلاس تفعيل الظهور باستدعاء الـ JavaScript */
+    aside.open {
+        right: 0;
+    }
+
+    /* الحفاظ على ترتيب عناصر القائمة عمودياً بشكل منسق */
+    aside nav ul {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    aside nav ul li a {
+        flex-direction: row;
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+
+    /* إلغاء الهامش الأيمن للمحتوى الأساسي ليتمدد كاملاً على الموبايل */
+    main {
+        margin-right: 0;
+        padding: 20px 15px;
+    }
+
+    .details-section {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .welcome-section h1 {
+        font-size: 20px;
+    }
+}

@@ -28,7 +28,9 @@ class DatabaseSeeder extends Seeder
             AppointmentSeeder::class, // المواعيد (تعتمد على المريض، الطبيب، والغرفة)
             SessionSeeder::class,     // الجلسات (تعتمد على الموعد)
             BillSeeder::class,        // الفواتير (تعتمد على الجلسة)
-            RatingSeeder::class,      // التقييمات (تعتمد على المستخدم والعلاج)
+            RatingSeeder::class,   
+            PromoCodeSeeder::class, 
+              // التقييمات (تعتمد على المستخدم والعلاج)
         ]);
 
         // 2. ربط جداول العلاقات (Pivot Tables) المتبقية تلقائياً

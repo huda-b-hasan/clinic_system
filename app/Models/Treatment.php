@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Treatment extends Model
 {
     use HasFactory;
-protected $fillable = [
+
+    protected $fillable = [
         'name',
         'description',
         'image',
@@ -17,7 +18,7 @@ protected $fillable = [
         'duration',
         'category',
         'status',
-        'features' //new
+        'features', // new
     ];
 
     protected $casts = [
@@ -25,12 +26,29 @@ protected $fillable = [
     ];
 
     // العلاج يمكن أن يستخدم كذا جهاز
-    public function devices() { return $this->belongsToMany(Device::class, 'device_treatment'); }
+    public function devices()
+    {
+        return $this->belongsToMany(Device::class, 'device_treatment');
+    }
 
     // العلاج يستهلك كذا مادة
-    public function materials() { return $this->belongsToMany(Material::class, 'material_treatment'); }
+    public function materials()
+    {
+        return $this->belongsToMany(Material::class, 'material_treatment');
+    }
 
-    public function appointments() { return $this->belongsToMany(Appointment::class, 'appointment_treatment'); }
+    public function appointments()
+    {
+        return $this->belongsToMany(Appointment::class, 'appointment_treatment');
+    }
 
-    public function ratings() { return $this->hasMany(Rating::class); }
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function promoCodes()
+    {
+        return $this->hasMany(PromoCode::class);
+    }
 }

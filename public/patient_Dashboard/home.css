@@ -384,10 +384,11 @@ main {
     flex-direction: column;
     justify-content: center;
 }
-
-.appointment-status {
-    align-items: flex-end;
+.appointment-status{
+    gap: 7px;
+    align-items: center;
 }
+
 
 .service-name {
     font-weight: bold;
@@ -508,4 +509,99 @@ main {
     .welcome-section h1 {
         font-size: 20px;
     }
+}
+/* ==========================================
+   كارد التنبيه للجلسات الأخيرة (أقل من أسبوع)
+   ========================================== */
+.recent-session-card {
+    background: linear-gradient(135deg, #FDF0ED 0%, #F6E5F7 100%);
+    border: 1px solid rgba(156, 123, 163, 0.25);
+    border-radius: 15px;
+    padding: 15px 25px;
+    margin-bottom: 25px;
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 12px rgba(131, 98, 138, 0.05);
+    animation: fadeInCard 0.5s ease-in-out;
+}
+
+.recent-session-card .alert-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.recent-session-card .alert-icon {
+    background-color: var(--white-bg);
+    color: var(--dark-pink-accent);
+    padding: 10px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.recent-session-card .alert-text h3 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    color: var(--text-dark);
+    font-weight: bold;
+}
+
+.recent-session-card .alert-text p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-grey);
+    line-height: 1.4;
+}
+
+.recent-session-card .alert-btn {
+    background-color: var(--dark-pink-accent);
+    color: var(--white-bg);
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    transition: background 0.2s, transform 0.2s;
+    white-space: nowrap;
+}
+
+.recent-session-card .alert-btn:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+/* تأثير حركة الظهور */
+@keyframes fadeInCard {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* التوافق مع شاشات الهواتف */
+@media (max-width: 576px) {
+    .recent-session-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 15px;
+    }
+    .recent-session-card .alert-btn {
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+    }
+}
+.cancel-btn{
+    background-color: #DC3545;
+    color: white;
+    padding: 5px 16px;
+    border: none;
+    border-radius: 27px;
+    cursor: pointer;
+}
+.cancel-btn:hover{
+   background-color: #C82333;
 }

@@ -39,7 +39,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             if (data.user_type === 'Manager') {
                 window.location.href = '../manager/dashboard.html'; 
             } else if (data.user_type === 'Doctor') {
-                window.location.href = '../doctor/dashboard.html'; 
+                window.location.href = '../doctor_Dashboard/home.html'; 
             } else if(data.user_type ==="Patient") {
                 window.location.href = '/patient_Dashboard/home.html';
             }

@@ -29,7 +29,7 @@ class RatingController extends Controller
             'data' => $ratings,
         ], 200);
     }
-
+    
     public function getTreatmentRatings($treatment_id)
     {
         $treatment = Treatment::find($treatment_id);
@@ -88,8 +88,7 @@ class RatingController extends Controller
             'user_id' => $userId,
             'treatment_id' => $request->treatment_id,
             'stars_number' => $request->stars_number,
-            'comment' => $request->comment,
-        ]);
+            'comment' => $request->comment ?? '',        ]);
 
         return response()->json([
             'message' => 'تم إضافة تقييمكِ بنجاح، شكراً لكِ!',
@@ -154,4 +153,5 @@ class RatingController extends Controller
 
         return response()->json(['message' => 'تم حذف التقييم بنجاح'], 200);
     }
+
 }

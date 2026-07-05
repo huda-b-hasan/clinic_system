@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('treatment_id')->constrained()->onDelete('cascade');
             $table->tinyInteger('stars_number'); 
-            $table->text('comment')->nullable();
+            $table->string('comment')->default('');
             $table->timestamps();
         });
     }

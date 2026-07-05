@@ -236,3 +236,75 @@
         align-self: flex-end;
     }
 }
+/* حاوية الإشعارات: متموضعة في أعلى منتصف الشاشة تماماً */
+.toast-container {
+    position: fixed;
+    top: 30px; /* المسافة من أعلى الشاشة */
+    left: 50%;
+    transform: translateX(-50%); /* لضمان التوسط الأفقي الدقيق */
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 90%; /* لضمان التوافق مع الهواتف */
+    max-width: 450px; /* أقصى عرض للكارد ليحافظ على أناقته */
+    pointer-events: none; /* لتجنب حجب الضغطات خلفه */
+}
+
+/* التنسيق الأساسي للكارد المعبر */
+.custom-toast {
+    pointer-events: auto; /* السماح بالتفاعل مع الكارد نفسه إذا لزم الأمر */
+    background-color: var(--white-bg);
+    color: var(--text-dark);
+    padding: 16px 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* توسيط النص بالداخل */
+    gap: 12px;
+    direction: rtl;
+    text-align: center;
+    
+    /* الأنيميشن: الهبوط لـ 3.5 ثانية ثم الاختفاء الصاعد */
+    animation: dropDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, 
+               fadeOutUp 0.5s ease-in 3.5s forwards;
+}
+
+/* إشعار النجاح (أخضر ناعم للعيادات الجمالية) */
+.custom-toast.success {
+    background-color: #f0fdf4;
+    color: #14532d;
+}
+
+/* إشعار الخطأ (أحمر ناعم) */
+.custom-toast.error {
+    background-color: #ffeef0;
+    color: #7f1d1d;
+}
+
+/* أنيميشن الهبوط من الأعلى واستقراره بالمنتصف */
+@keyframes dropDown {
+    from { 
+        transform: translateY(-150%); 
+        opacity: 0; 
+    }
+    to { 
+        transform: translateY(0); 
+        opacity: 1; 
+    }
+}
+
+/* أنيميشن الاختفاء الصاعد للأعلى قبل الحذف */
+@keyframes fadeOutUp {
+    from { 
+        transform: translateY(0); 
+        opacity: 1; 
+    }
+    to { 
+        transform: translateY(-30px); 
+        opacity: 0; 
+    }
+}

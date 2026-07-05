@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lavender Beauty Clinic</title>
     <link rel="stylesheet" href="home.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪻</text></svg>">
 </head>
 
 <body>
@@ -101,7 +102,22 @@
                 <h1>أهلا <span id="patientName"></span></h1>
                 <p>لمحة عن رحلتك الجمالية.</p>
             </div>
-
+    <!--  -->
+<div id="recent-session-alert" class="recent-session-card">
+    <div class="alert-content">
+        <div class="alert-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+        </div>
+        <div class="alert-text">
+            <h3>رأيكِ يهمنا برحلتكِ الجمالية ✨</h3>
+            <p>لقد أجريتِ جلسة مؤخراً، يسعدنا جداً أن تشاركينا تقييمكِ وتجربتكِ لمساعدتنا في تقديم الأفضل دائماً.</p>
+        </div>
+    </div>
+    <a href="ratings.html" class="alert-btn">قيّمي الآن</a>
+</div>
+            <!--  -->
             <div class="summary-cards">
 
 
@@ -157,7 +173,7 @@
                     <div class="sessions-card">
                         <h2>المواعيد القادمة</h2>
                         <div class="upcoming-appointments">
-
+<!-- 
                             <div class="appointment-item">
                                 <div class="appointment-info">
                                     <span class="service-name">جلسة تنظيف بشرة عميق</span>
@@ -170,9 +186,9 @@
                                 <div class="appointment-status">
                                     <span class="status-badge urgent">متبقي يومين</span>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="appointment-item">
+                            <!-- <div class="appointment-item">
                                 <div class="appointment-info">
                                     <span class="service-name">ليزر كربوني للوجه</span>
                                     <span class="doctor">أخصائية نور</span>
@@ -184,7 +200,7 @@
                                 <div class="appointment-status">
                                     <span class="status-badge normal">متبقي 15 يوم</span>
                                 </div>
-                            </div>
+                            </div> -->
 
                         </div>
                     </div>
@@ -203,7 +219,20 @@
             </div>
         </main>
     </div>
+    <div id="cancelModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div class="modal-content" style="background: white; padding: 20px; border-radius: 8px; text-align: center; max-width: 400px; width: 90%;">
+        <h3>تأكيد إلغاء الموعد</h3>
+        <p>هل أنت متأكد من أنك تريد إلغاء هذا الموعد؟ لا يمكن التراجع عن هذا الإجراء.</p>
+        <div style="margin-top: 20px; display: flex; justify-content: space-around;">
+            <button id="confirmCancelBtn" style="background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">نعم، إلغاء</button>
+            <button id="closeModalBtn" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">تراجع</button>
+        </div>
+    </div>
+</div>
 
+<div id="toastNotification" style="display: none; position: fixed; bottom: 20px; left: 20px; background: #28a745; color: white; padding: 15px 25px; border-radius: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1001; direction: rtl; font-weight: bold;">
+    ✓ تم إلغاء الموعد بنجاح.
+</div>
     <script>
         const menuToggle = document.querySelector('.menu-toggle');
         const closeMenu = document.querySelector('.close-menu');
@@ -226,8 +255,10 @@
                 sidebar.classList.remove('open');
             }
         });
+
     </script>
     <script src="home.js"></script>
+
 </body>
 
 </html>

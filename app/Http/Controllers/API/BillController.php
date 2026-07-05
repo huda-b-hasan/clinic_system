@@ -5,9 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use App\Models\Patient;
-use App\Models\ClinicSessions;
-use App\Models\Bill;
+
 
 class BillController extends Controller
 {
@@ -89,6 +87,33 @@ public function getBillDataPatient(Request $request)
             'total_pending' => number_format($totalPending, 2) . ' ل.س',
         ],
         'invoices' => $formattedInvoices
+    ], 200);
+}
+public function getPendingBillsCount(Request $request)
+{
+    $userId = session('user_id');
+
+    // 1. جلب سجل المريض المرتبط بالحساب الحالي
+    $patient = \DB::table('patients')->where('user_id', $userId)->first();
+
+    if (!$patient) {
+        return response()->json([
+            'status' => false,
+            'message' => 'لم يتم العثور على ملف مريض مرتبط بهذا الحساب.'
+        ], 404);
+    }
+
+    // 2. حساب عدد الفواتير المعلقة مباشرة باستخدام count() لسرعة الأداء
+    $pendingCount = \DB::table('bills')
+        ->join('clinic_sessions', 'bills.clinic_session_id', '=', 'clinic_sessions.id')
+        ->join('appointments', 'clinic_sessions.appointment_id', '=', 'appointments.id')
+        ->where('appointments.patient_id', $patient->id)
+        ->whereIn('bills.status', ['unpaid', 'partially_paid']) // الفواتير المعلقة
+        ->count(); // إرجاع العدد فقط دون تحميل السجلات كاملة
+
+    return response()->json([
+        'status' => true,
+        'pending_bills_count' => $pendingCount
     ], 200);
 }
 //   public function index()

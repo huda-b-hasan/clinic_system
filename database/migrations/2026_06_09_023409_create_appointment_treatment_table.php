@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('appointment_id')->constrained()->onDelete('cascade');
             $table->foreignId('treatment_id')->constrained()->onDelete('cascade');
+            $table->decimal('booked_price', 8, 2);
         });
     }
 

@@ -81,7 +81,7 @@ class ProfileController extends Controller
 
         return response()->json([
             'status'  => 'success',
-            'message' => 'تم تحديث ملفكِ الشخصي بنجاح وثبات في قاعدة البيانات!'
+            'message' => 'تم تحديث ملفكِ الشخصي بنجاح!'
         ], 200);
     }
 }

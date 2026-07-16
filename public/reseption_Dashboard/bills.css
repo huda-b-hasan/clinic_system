@@ -1,0 +1,404 @@
+/* ==========================================
+   1. المتغيرات الرئيسية (CSS Variables)
+   ========================================== */
+:root {
+    --bg-soft: #F9F6F0;
+    --text-main: #2D2A26;
+    --text-muted: #706C61;
+    --card-bg: #FFFFFF;
+    --primary-color: #9C7BA3;
+    --primary-hover: #83628A;
+    --border-color: rgba(112, 108, 97, 0.15);
+    
+    /* الألوان المستوحاة من هويتكِ الراقية */
+    --main-pink-bg: #f6e5f7;        
+    --dark-pink-accent: #83628A;    
+    --white-bg: #ffffff;
+}
+
+/* ==========================================
+   2. ترويسة القسم وأزرار التصفية (Header & Tabs)
+   ========================================== */
+aside nav ul li.active a {
+    background-color: var(--main-pink-bg);
+    color: var(--dark-pink-accent);
+}
+.bills-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 1.5px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+.bills-section-header h4 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--text-main);
+}
+
+/* أزرار التصفية (مطابقة تماماً لصفحة الـ Home) */
+.appointment-tabs {
+    display: flex;
+    gap: 8px;
+    background-color: var(--bg-soft);
+    padding: 5px;
+    border-radius: 30px;
+    border: 1px solid var(--border-color);
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    padding: 8px 22px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+    color: var(--primary-color);
+}
+
+.tab-btn.active {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(156, 123, 163, 0.15);
+}
+
+/* ==========================================
+   3. حاوية الكروت (Cards Container List)
+   ========================================== */
+.bills-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* يضمن وجود مسافة عمودية ثابتة ومريحة بين كروت الفواتير */
+    width: 100%;
+}
+
+/* ==========================================
+   4. الهيكل الشبكي الموحد للفواتير (Grid Layout)
+   ========================================== */
+.bills-grid-layout {
+    display: grid;
+    /* تقسيم الأعمدة الستة ليتناسب مع البيانات مع بقاء محاذاتها ثابتة */
+    grid-template-columns: 2fr 1.5fr 1.2fr 1.2fr 1fr 1.5fr;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+/* ستايل صف العناوين الثابتة من فوق */
+.bills-grid-header {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1.2fr 1.2fr 1fr 1.5fr;
+    gap: 15px;
+    padding: 12px 20px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: bold;
+    border-bottom: 1.5px solid var(--border-color);
+    margin-bottom: 10px;
+}
+
+/* في حال إخفاء عموب الأكشن (عند عرض الفواتير المدفوعة) */
+.hide-action-column {
+    grid-template-columns: 2fr 1.5fr 1.2fr 1.2fr 1fr;
+}
+
+/* ==========================================
+   5. كرت الفاتورة الفردي (Bill Card Item)
+   ========================================== */
+.bill-card-item {
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 16px 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bill-card-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+}
+
+/* تلوين حواف الكروت حسب حالة الفاتورة */
+.bill-card-item.pending-border {
+    border-right: 5px solid var(--primary-color);
+    background-color: var(--white-bg);
+}
+
+.bill-card-item.paid-border {
+    border-right: 5px solid #2e7d32;
+    background-color: var(--white-bg);
+}
+
+/* ==========================================
+   6. تنسيق البيانات والنصوص داخل الكرت
+   ========================================== */
+.bill-title-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.bill-title-info .id-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.bill-title-info .session-title {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bill-meta-group .meta-val {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.bill-meta-group .price-val {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* ==========================================
+   7. باجات الحالة (Status Badges)
+   ========================================== */
+.status-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-align: center;
+    width: fit-content;
+}
+
+.status-badge.status-in-progress {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+.status-badge.status-completed {
+    background-color: #e8f5e9;
+    color: #2ecc71;
+}
+
+/* ==========================================
+   8. أزرار التحكم والعمليات (Action Buttons)
+   ========================================== */
+.appointment-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.btn-complete-session {
+    background-color: var(--white-bg);
+    color:#2ecc71;
+    border: 1.5px solid #2ecc71;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+}
+
+.btn-complete-session:hover {
+    background-color: #2ecc71;
+    color: var(--white-bg);
+    box-shadow: 0 4px 10px rgba(46, 125, 50, 0.15);
+}
+
+/* ==========================================
+   9. شاشات الجوال والتجاوب (Responsive Design)
+   ========================================== */
+@media (max-width: 900px) {
+    /* إخفاء ترويسة الجدول العلوي لتفادي الازدحام */
+    .bills-grid-header {
+        display: none;
+    }
+    
+    /* تحويل الهيكل ليكون قائمتك المرنة الكلاسيكية على الجوال */
+    .bills-grid-layout, .hide-action-column {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .bill-meta-group {
+        display: flex;
+        justify-content: start;
+        gap: 20px;
+        width: 100%;
+        border-bottom: 1px dashed rgba(0,0,0,0.05);
+        padding-bottom: 6px;
+    }
+
+    /* تعويض العناوين المفقودة باستخدام attribute label المضاف بالـ JS */
+    .bill-meta-group::before {
+        content: attr(data-label);
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+    
+    .appointment-actions {
+        width: 100%;
+        margin-top: 5px;
+    }
+    
+    .btn-complete-session {
+        width: 100%;
+        text-align: center;
+    }
+}
+.status-in-progress{
+    border-color:  #e65100 !important;
+}
+.bill-grid-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr) 120px; /* لتتطابق تماماً مع العناوين الثابتة في الـ Grid header */
+    align-items: center;
+    padding: 15px;
+    background: #fff;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+.bill-grid-row:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* شارات الحالة المعلقة والمدفوعة */
+.badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    display: inline-block;
+}
+.status-paid {
+    background-color: #e6f7ed;
+    color: #2e7d32;
+}
+.status-pending {
+    background-color: #fff3e0;
+    color: #ef6c00;
+}
+/* ==========================================
+   10. التوست والنافذة المنبثقة (Toast & Modal)
+   ========================================== */
+
+/* ستايل نافذة التأكيد */
+.confirm-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(45, 42, 38, 0.5); /* تعتيم الخلفية */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.confirm-modal-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.confirm-modal-card {
+    background-color: var(--white-bg);
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.confirm-modal-overlay.show .confirm-modal-card {
+    transform: translateY(0);
+}
+
+.modal-header {
+    margin-bottom: 15px;
+}
+
+.modal-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.confirm-modal-card h3 {
+    margin: 0;
+    color: var(--text-main);
+    font-size: 1.3rem;
+}
+
+.confirm-modal-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin: 15px 0 25px 0;
+    line-height: 1.6;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.modal-btn {
+    padding: 10px 24px;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    width: 120px;
+}
+
+.btn-confirm {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-confirm:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-cancel {
+    background-color: var(--bg-soft);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+}
+
+.btn-cancel:hover {
+    background-color: #eeeae1;
+}
+

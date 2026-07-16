@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lavender Beauty Clinic </title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="bills.css">
+    <link rel="stylesheet" href="../template.css">
+    <link rel="stylesheet" href="../toast.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪻</text></svg>">
+</head>
+
+<body>
+
+    <header>
+        <div class="header-right">
+            <button class="menu-toggle" aria-label="فتح القائمة">☰</button>
+
+            <a href="../auth/home.html" class="logo">
+                <svg width="50" height="60" viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g stroke="#D4AF37" stroke-width="2.5" fill="none">
+                        <path d="M60 10 C45 35 50 60 60 80 C70 60 75 35 60 10Z" />
+                        <path d="M40 25 C35 45 40 65 55 80 C58 55 52 40 40 25Z" />
+                        <path d="M80 25 C68 40 62 55 65 80 C80 65 85 45 80 25Z" />
+                        <path d="M20 30 C15 55 30 75 55 80 C40 55 30 40 20 30Z" />
+                        <path d="M100 30 C90 40 80 55 65 80 C90 75 105 55 100 30Z" />
+                        <path d="M5 55 C20 50 40 55 60 80 C35 80 15 70 5 55Z" />
+                        <path d="M115 55 C105 70 85 80 60 80 C80 55 100 50 115 55Z" />
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <h2>Lavender</h2>
+                    <span>Beauty Clinic</span>
+                </div>
+            </a>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <aside>
+            <button class="close-menu">✕</button>
+            <nav>
+                <ul>
+                    <li><a href="home.html"><span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-layout-dashboard h-4 w-4">
+                                    <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+                                    <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+                                    <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+                                    <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+                                </svg>
+                            </span><span>نظرة عامة</span></a></li>
+
+                    <li><a href="pateins.html"><span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-users h-5 w-5">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                    <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                </svg>
+                            </span><span>المرضى</span></a></li>
+                    <li class="active"><a href="bills.html"><span class="icon-nav"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                            </span><span> الفواتير</span></a></li>
+                    <li><a href="profile.html"><span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-user h-4 w-4">
+                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </span><span>الملف الشخصي</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main>
+            <!-- قسم الترحيب الرئيسي الموحد -->
+            <div class="welcome-section">
+                <h1>سجل الفواتير المالية 👋</h1>
+                <p>تابعي فواتير المدفوعة والمستحقة لجلسات العيادة .</p>
+            </div>
+
+            <!-- الكروت العلوية مطابقة لتصميم الصفحة الرئيسية -->
+            <div class="summary-cards">
+                <!-- كرت عدد الفواتير المعلقة -->
+                <div class="summary-card">
+                    <div class="icon-box1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-file-text">
+                            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                            <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                            <path d="M10 9H8" />
+                            <path d="M16 13H8" />
+                            <path d="M16 17H8" />
+                        </svg>
+                    </div>
+                    <div class="text-content">
+                        <h3>عدد الفواتير المعلقة</h3>
+                        <p id="pendingInvoicesCount">0</p>
+                    </div>
+                </div>
+
+                <!-- كرت إجمالي المبالغ المعلقة -->
+                <div class="summary-card alt-bg">
+                    <div class="icon-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-credit-card">
+                            <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+                            <line x1="2" x2="22" y1="10" y2="10"></line>
+                        </svg>
+                    </div>
+                    <div class="text-content">
+                        <h3>إجمالي المبالغ المعلقة</h3>
+                        <p id="totalUnpaid">0.00 ر.س</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- قسم تفاصيل الفواتير داخل details-section -->
+            <div class="details-section">
+
+                <div class="bills-section-header">
+                    <h4>لوحة إدارة الفواتير</h4>
+                    <!-- أزرار الفلترة مطابقة لتصميم التابس -->
+                    <div class="appointment-tabs">
+                        <button class="tab-btn active" id="tabPending" onclick="switchTab('unpaid')">المعلقة</button>
+                        <button class="tab-btn" id="tabPaid" onclick="switchTab('paid')">المدفوعة</button>
+                    </div>
+                </div>
+
+                <!-- العناوين الثابتة من فوق محاذية تماماً لمحتوى الكروت -->
+                <div class="bills-grid-header">
+                    <div>رقم الفاتورة والجلسة</div>
+                    <div>المريضة</div>
+                    <div>التاريخ</div>
+                    <div>المبلغ المطلوب</div>
+                    <div>الحالة</div>
+                    <div class="action-header-title" id="gridActionHeader">الإجراء</div>
+                </div>
+
+                <!-- قائمة الكروت الديناميكية المرتبة على شكل Grid -->
+                <div id="billsCardsContainer" class="bills-cards-list">
+                    <!-- يتم بناؤها برمجياً بواسطة الـ JavaScript -->
+                </div>
+
+            </div>
+        </main>
+    </div>
+    <!-- نوتيفيكيشن التوست (Toast Notification) -->
+    <div class="toast"></div>
+
+    <div id="confirmModal" class="confirm-modal-overlay">
+        <div class="confirm-modal-card">
+            <div class="modal-header">
+                <span class="modal-icon">💸</span>
+                <h3>تأكيد الدفع</h3>
+            </div>
+            <p>هل أنتِ متأكدة من رغبتكِ في تحويل حالة هذه الفاتورة إلى <strong>"مدفوعة"</strong>؟</p>
+            <div class="modal-actions">
+                <button id="modalConfirmBtn" class="modal-btn btn-confirm">نعم، تم الدفع</button>
+                <button onclick="closeConfirmModal()" class="modal-btn btn-cancel">إلغاء</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const closeMenu = document.querySelector('.close-menu');
+        const sidebar = document.querySelector('aside');
+
+        menuToggle.addEventListener('click', (e) => {
+            sidebar.classList.toggle('open');
+            e.stopPropagation();
+        });
+
+        closeMenu.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+            }
+        });
+    </script>
+    <script src="bills.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Lavender Beauty Clinic</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪻</text></svg>">
+
+</head>
+
+<body>
+
+
+    <header>
+        <div class="header-right">
+            <button class="menu-toggle" aria-label="فتح القائمة">☰</button>
+
+            <a href="../auth/home.html" class="logo">
+                <svg width="50" height="60" viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g stroke="#D4AF37" stroke-width="2.5" fill="none">
+                        <path d="M60 10 C45 35 50 60 60 80 C70 60 75 35 60 10Z"></path>
+                        <path d="M40 25 C35 45 40 65 55 80 C58 55 52 40 40 25Z"></path>
+                        <path d="M80 25 C68 40 62 55 65 80 C80 65 85 45 80 25Z"></path>
+                        <path d="M20 30 C15 55 30 75 55 80 C40 55 30 40 20 30Z"></path>
+                        <path d="M100 30 C90 40 80 55 65 80 C90 75 105 55 100 30Z"></path>
+                        <path d="M5 55 C20 50 40 55 60 80 C35 80 15 70 5 55Z"></path>
+                        <path d="M115 55 C105 70 85 80 60 80 C80 55 100 50 115 55Z"></path>
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <h2>Lavender</h2>
+                    <span>Beauty Clinic</span>
+                </div>
+            </a>
+        </div>
+    </header>
+    <!-- end header -->
+    <div class="main-wrapper">
+        <aside>
+            <button class="close-menu">✕</button>
+            <nav>
+                <ul>
+                    <li class="active"><a href="home.html"><span class="icon-nav"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-layout-dashboard h-4 w-4"
+                                    aria-hidden="true">
+                                    <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+                                    <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+                                    <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+                                    <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+                                </svg></span><span>نظرة عامة</span></a></li>
+
+                    <li>
+                        <a href="sessions.html">
+                            <span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-stethoscope h-4 w-4"
+                                    aria-hidden="true">
+                                    <path d="M11 2v2"></path>
+                                    <path d="M5 2v2"></path>
+                                    <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path>
+                                    <path d="M8 15a6 6 0 0 0 12 0v-3"></path>
+                                    <circle cx="20" cy="10" r="2"></circle>
+                                </svg>
+
+                            </span>
+                            <span>الجلسات</span>
+                        </a>
+                    </li>
+                    <li><a href="pateins.html"><span class="" icon-nav="">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-users h-5 w-5" aria-hidden="true">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                    <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                </svg>
+                            </span><span> المرضى</span></a></li>
+                    <li><a href="profile.html"><span class="" icon-nav=""><svg xmlns="http://www.w3.org/2000/svg"
+                                    width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="lucide lucide-user h-4 w-4" aria-hidden="true">
+                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg></span><span>الملف الشخصي</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+        <!-- end aside -->
+
+        <main>
+            <div class="welcome-section">
+                <h1>أهلاً بكِ، د.<span id="doctorName"></span></h1>
+                <p> إليكِ نظرة سريعة على جدول عيادتكِ اليوم.</p>
+            </div>
+
+
+            <div class="summary-cards">
+
+                <div class="summary-card">
+
+                    <div class="icon-box1">
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-calendar-check h-5 w-5" aria-hidden="true">
+                            <path d="M8 2v4"></path>
+                            <path d="M16 2v4"></path>
+                            <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                            <path d="M3 10h18"></path>
+                            <path d="m9 16 2 2 4-4"></path>
+                        </svg>
+                    </div>
+                    <div class="text-content">
+                        <h3>مواعيد اليوم</h3>
+                        <p id="today_sessions">0</p>
+                    </div>
+                </div>
+
+                <div class="summary-card alt-bg">
+                    <div class="icon-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-users h-5 w-5" aria-hidden="true">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+
+
+                    <div class="text-content">
+                        <h3> إجمالي المرضى</h3>
+                        <p id="active_Patients">0</p>
+                    </div>
+                </div>
+                <div class="summary-card alt-bg">
+                    <div class="icon-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-sparkles h-5 w-5" aria-hidden="true">
+                            <path
+                                d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z">
+                            </path>
+                            <path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5.5Z"></path>
+                            <path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z"></path>
+                        </svg>
+                    </div>
+                    <div class="text-content">
+                        <h3>إجمالي الجلسات المنفذة</h3>
+                        <p id="total_completed_sessions">0</p>
+                    </div>
+                </div>
+                <!-- مستوى التقيييم -->
+                <!-- <div class="summary-card alt-bg">
+                    <div class="icon-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-star h-5 w-5" aria-hidden="true">
+                            <path
+                                d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="text-content">
+                        <h3>متوسط التقييم</h3>
+                        <p id="Average_Rating">4,9</p>
+                    </div>
+                </div> -->
+            </div>
+            <!-- =========================== -->
+            <div class="details-section">
+                <div id="sessions-card" class="sessions-card">
+                    <h4>جدول اليوم</h4>
+                    <div class="appointment-tabs">
+                        <button class="tab-btn active" onclick="switchTab('active')">المواعيد القائمة</button>
+                        <button class="tab-btn" onclick="switchTab('canceled')">الملغاة</button>
+                    </div>
+                </div>
+
+                <div id="active-appointments" class="full tab-content">
+                    <!-- <div class="action-card-one">
+                        <div class="first-date">
+                            <h5>نورا الفهد</h5>
+                            <p>بوتوكس · 10:00 · جناح اللؤلؤ</p>
+                        </div>
+                        <button>ابدئي الجلسة</button>
+                    </div> -->
+                </div>
+
+                <div id="canceled-appointments" class="full tab-content" style="display: none;">
+                    <div class="action-card-one canceled-card">
+                        <div class="first-date">
+                            <h5><del>سارة الأحمد</del></h5>
+                            <p>تنظيف بشرة · 12:00 · جناح الورد</p>
+                        </div>
+                        <span class="status-canceled">تم الإلغاء</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- ============= -->
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const closeMenu = document.querySelector('.close-menu');
+        const sidebar = document.querySelector('aside');
+
+        // فتح وإغلاق القائمة عند الضغط على زر الهامبرغر
+        menuToggle.addEventListener('click', (e) => {
+            sidebar.classList.toggle('open');
+            e.stopPropagation(); // لمنع تضارب الحدث مع إغلاق القائمة عند الضغط بالخارج
+        });
+
+        // إغلاق القائمة عند الضغط على زر إكس (✕)
+        closeMenu.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+        });
+
+        // ميزة إضافية: إغلاق القائمة تلقائياً عند الضغط في أي مكان خارجها (UX ممتاز)
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+            }
+        });
+    </script>
+    <script src="home.js"></script>
+</body>
+
+</html>

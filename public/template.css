@@ -1,0 +1,214 @@
+/* ==========================================================================
+   1. المتغيرات والتهيئة الأساسية (Variables & Base Styles)
+   ========================================================================== */
+:root {
+    --bg-soft: #F9F6F0;
+    --text-main: #2D2A26;
+    --text-muted: #706C61;
+    --card-bg: #FFFFFF;
+    --aura-pink: #FDF0ED;
+    --primary-color: #9C7BA3;
+    --primary-hover: #83628A;
+    --border-color: rgba(112, 108, 97, 0.15);
+
+    --bg-color: #f8f8f8;            
+    --main-pink-bg: #f6e5f7;        
+    --white-bg: #ffffff;            
+    --main-pink-accent: #f6e5f7;    
+    --dark-pink-accent: #83628A;    
+
+    --text-dark: #2D2A26;           
+    --text-grey: #706C61;           
+    --border-grey: #e9ecef;         
+
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    direction: rtl; 
+}
+
+a {
+    text-decoration: none;
+}
+
+/* ==========================================================================
+   2. الهيدر (Header Component)
+   ========================================================================== */
+header {
+    background-color: var(--white-bg);
+    border-bottom: 1px solid var(--border-grey);
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--dark-pink-accent);
+    cursor: pointer;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.logo svg {
+    filter: drop-shadow(0 0 10px #D4AF37);
+}
+
+.logo-text h2 {
+    color: #7D5BA6;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.logo-text span {
+    color: #D4AF37;
+    font-size: 11px;
+    letter-spacing: 3px;
+    display: block;
+}
+
+/* ==========================================================================
+   3. هيكل الصفحة والسايدبار (Layout & Sidebar)
+   ========================================================================== */
+.main-wrapper {
+    display: flex;
+    margin-top: 70px;
+    min-height: calc(100vh - 70px);
+    flex: 1;
+}
+
+aside {
+    width: 260px;
+    background-color: var(--white-bg);
+    border-left: 1px solid var(--border-grey);
+    padding: 30px 15px;
+    position: fixed;
+    top: 70px;
+    bottom: 0;
+    right: 0;
+    z-index: 999;
+    transition: transform 0.3s ease;
+}
+
+.close-menu {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--text-grey);
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    cursor: pointer;
+}
+
+aside nav ul {
+    list-style: none;
+}
+
+aside nav ul li {
+    margin-bottom: 8px;
+}
+
+aside nav ul li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    color: var(--text-dark);
+    text-decoration: none;
+    border-radius: 14px;
+    font-weight: 500;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+aside nav ul li a:hover {
+    background-color: var(--main-pink-accent);
+}
+
+aside nav ul li.active a {
+    background-color: var(--main-pink-bg);
+    color: var(--dark-pink-accent);
+}
+
+aside nav ul li a span svg {
+    width: 17px;
+}
+
+.icon-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+}
+
+/* مساحة المحتوى الرئيسية لتوزيع العناصر بالشكل الصحيح بجانب السايدبار */
+main {
+    flex: 1;
+    margin-right: 260px;
+    padding: 40px;
+    max-width: 1200px;
+    width: 100%;
+}
+
+/* ==========================================================================
+   4. التجاوب مع شاشات الموبايل والتابلت (Responsive Layout)
+   ========================================================================== */
+@media (max-width: 992px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    aside {
+        transform: translateX(100%);
+    }
+
+    aside.open {
+        transform: translateX(0);
+        box-shadow: -5px 0 25px rgba(0,0,0,0.05);
+    }
+
+    .close-menu {
+        display: block;
+    }
+
+    main {
+        margin-right: 0;
+        padding: 20px;
+    }
+}

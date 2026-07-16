@@ -3,7 +3,6 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Laravel\Sanctum\HasApiTokens;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -23,7 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'phone'
+        'phone',
     ];
 
     /**
@@ -48,13 +47,31 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function roles(){
+
+    public function roles()
+    {
         return $this->belongsToMany(Role::class);
     }
-    public function hasRole($roleName){
-        return $this->roles()->where('name',$roleName)->exists();
+
+    public function hasRole($roleName)
+    {
+        return $this->roles()->where('name', $roleName)->exists();
     }
-    public function patient(){
+
+    public function patient()
+    {
         return $this->hasOne(Patient::class);
+    }
+
+    public function scopeDoctor($query)
+    {
+        return $query->whereHas('roles', function ($q) {
+            $q->where('name', 'Doctor');
+        });
+    }
+
+    public function scopeReceptionist($query)
+    {
+        return $query->where('role', 'receptionist');
     }
 }

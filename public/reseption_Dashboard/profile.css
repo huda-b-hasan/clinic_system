@@ -1,0 +1,402 @@
+/* ==========================================================================
+   1. المتغيرات والتهيئة الأساسية (Variables & Base Styles) - متطابقة مع المرجعي
+   ========================================================================== */
+:root {
+    --bg-soft: #F9F6F0;
+    --text-main: #2D2A26;
+    --text-muted: #706C61;
+    --card-bg: #FFFFFF;
+    --aura-pink: #FDF0ED;
+    --primary-color: #9C7BA3;
+    --primary-hover: #83628A;
+    --border-color: rgba(112, 108, 97, 0.15);
+
+    --bg-color: #f8f8f8;            
+    --main-pink-bg: #f6e5f7;        
+    --white-bg: #ffffff;            
+    --main-pink-accent: #f6e5f7;    
+    --dark-pink-accent: #83628A;    
+
+    --text-dark: #2D2A26;           
+    --text-grey: #706C61;           
+    --border-grey: #e9ecef;         
+
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    direction: rtl; 
+}
+
+a {
+    text-decoration: none;
+}
+
+/* ==========================================================================
+   2. الهيدر (Header Component) - مطابق للمرجعي تماماً
+   ========================================================================== */
+header {
+    background-color: var(--white-bg);
+    border-bottom: 1px solid var(--border-grey);
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--dark-pink-accent);
+    cursor: pointer;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.logo svg {
+    filter: drop-shadow(0 0 10px #D4AF37);
+}
+
+.logo-text h2 {
+    color: #7D5BA6;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.logo-text span {
+    color: #D4AF37;
+    font-size: 11px;
+    letter-spacing: 3px;
+    display: block;
+}
+
+/* ==========================================================================
+   3. هيكل الصفحة والسايدبار (Layout & Sidebar) - مطابق للمرجعي تماماً
+   ========================================================================== */
+.main-wrapper {
+    display: flex;
+    margin-top: 70px;
+    min-height: calc(100vh - 70px);
+    flex: 1;
+}
+
+aside {
+    width: 260px;
+    background-color: var(--white-bg);
+    border-left: 1px solid var(--border-grey);
+    padding: 30px 15px;
+    position: fixed;
+    top: 70px;
+    bottom: 0;
+    right: 0;
+    z-index: 999;
+    transition: transform 0.3s ease;
+}
+
+.close-menu {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--text-grey);
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    cursor: pointer;
+}
+
+aside nav ul {
+    list-style: none;
+}
+
+aside nav ul li {
+    margin-bottom: 8px;
+}
+
+aside nav ul li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    color: var(--text-dark);
+    text-decoration: none;
+    border-radius: 14px;
+    font-weight: 500;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+aside nav ul li a:hover {
+    background-color: var(--main-pink-accent);
+}
+
+aside nav ul li.active a {
+    background-color: var(--main-pink-bg);
+    color: var(--dark-pink-accent);
+}
+
+aside nav ul li a span svg {
+    width: 17px;
+}
+
+.icon-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+}
+
+/* ==========================================================================
+   4. مساحة المحتوى الرئيسية (Main Content Area) - متطابقة مع المرجعي
+   ========================================================================== */
+main {
+    flex: 1;
+    margin-right: 260px;
+    padding: 40px;
+    max-width: 1200px;
+    width: 100%;
+}
+
+/* ==========================================================================
+   5. تنسيقات صفحة الملف الشخصي الفريدة (Profile Page Specific Styles)
+   ========================================================================== */
+.profile-container {
+    background-color: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    padding: 2.5rem;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.profile-header h1 {
+    font-size: 1.8rem;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.profile-header p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* ستايل الهوية الفوقية */
+.avatar-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 2rem;
+    background-color: #FAF6FB;
+    padding: 15px;
+    border-radius: 15px;
+    display: inline-flex;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.avatar-circle {
+    width: 60px;
+    height: 60px;
+    background-color: #EADFEF;
+    color: var(--primary-hover);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.avatar-info {
+    text-align: right;
+}
+
+.avatar-info .role-badge {
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 0.75rem;
+    padding: 2px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-top: 4px;
+}
+
+/* تقسيم شبكة الفورم */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group.full-width {
+    grid-column: span 2;
+}
+
+.form-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background-color: #FCFBFA;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(156, 123, 163, 0.15);
+    background-color: #ffffff;
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.actions-section {
+    margin-top: 2.5rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-submit {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-submit:hover {
+    background-color: var(--primary-hover);
+}
+
+/* ==========================================================================
+   6. رسائل التنبيه والتوست (Toast/Alert Elements)
+   ========================================================================== */
+.toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #2ecc71; 
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 16px;
+    position: fixed;
+    z-index: 9999;
+    left: 30px;
+    bottom: 30px;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: opacity 0.3s, bottom 0.3s;
+    opacity: 0;
+}
+
+.toast.show {
+    visibility: visible;
+    opacity: 1;
+    bottom: 40px; 
+}
+
+/* ==========================================================================
+   7. التجاوب مع شاشات الموبايل والتابلت (Responsive Design) - مطابق للمرجعي
+   ========================================================================== */
+@media (max-width: 992px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    aside {
+        transform: translateX(100%);
+    }
+
+    aside.open {
+        transform: translateX(0);
+        box-shadow: -5px 0 25px rgba(0,0,0,0.05);
+    }
+
+    .close-menu {
+        display: block;
+    }
+
+    main {
+        margin-right: 0;
+        padding: 20px;
+    }
+}
+
+/* تجاوب عناصر شبكة فورم الملف الشخصي */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full-width {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 576px) {
+    .welcome-section h1 {
+        font-size: 22px;
+    }
+}

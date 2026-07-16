@@ -1,0 +1,479 @@
+/* ===========================
+   ROOT VARIABLES
+=========================== */
+
+:root {
+
+    --bg-soft: #F9F6F0;
+    --text-main: #2D2A26;
+    --text-muted: #706C61;
+
+    --card-bg: #FFFFFF;
+
+    --aura-pink: #FDF0ED;
+
+    --primary-color: #9C7BA3;
+    --primary-hover: #83628A;
+
+    --border-color: rgba(112, 108, 97, 0.15);
+
+
+    --bg-color: #f8f8f8;
+
+    --main-pink-bg: #f6e5f7;
+    --white-bg: #ffffff;
+
+    --main-pink-accent: #f6e5f7;
+    --dark-pink-accent: #83628A;
+
+
+    --text-dark: #2D2A26;
+    --text-grey: #706C61;
+
+
+    --border-grey: #e9ecef;
+
+
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
+
+
+
+
+
+/* ===========================
+   RESET
+=========================== */
+
+* {
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    padding: 0;
+
+    font-family: var(--font-family);
+
+}
+
+
+body {
+
+    background-color: var(--bg-color);
+
+    color: var(--text-dark);
+
+    direction: rtl;
+
+}
+
+
+
+
+a {
+
+    text-decoration: none;
+
+}
+
+
+/* ===========================
+   HEADER
+=========================== */
+/* تنسيق تجميعة الهيدر اليمين */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* زر القائمة (مخفي الافتراض في الشاشات الكبيرة) */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 26px;
+    color: var(--dark-pink-accent);
+    cursor: pointer;
+    padding: 0;
+}
+
+/* زر إغلاق القائمة الفرعي (مخفي افتراضياً) */
+.close-menu {
+    display: none;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo svg {
+    filter: drop-shadow(0 0 10px #D4AF37);
+    width: 50px;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.logo-text h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #7D5BA6;
+    font-weight: bold;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    letter-spacing: 3px;
+}
+
+.logo-text span {
+    font-size: 10px;
+    color: #D4AF37;
+    letter-spacing: 3px;
+}
+
+header {
+    background-color: var(--white-bg);
+    padding: 10px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-grey);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+.main-wrapper {
+    display: flex;
+    margin-top: 60px;
+}
+
+aside {
+    width: 200px;
+    background-color: var(--white-bg);
+    border-left: 1px solid var(--border-grey);
+    padding: 20px;
+    position: fixed;
+    height: calc(100vh - 60px);
+    top: 60px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    padding-top: 45px;
+    transition: all 0.3s ease;
+}
+
+aside nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+aside nav ul li {
+    margin-bottom: 10px;
+}
+
+aside nav ul li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    text-decoration: none;
+    color: var(--text-dark);
+    border-radius: 10px;
+    transition: background 0.2s;
+    font-size: 14px;
+}
+
+aside nav ul li.active a {
+    background-color: var(--main-pink-bg);
+    color: var(--dark-pink-accent);
+}
+aside nav ul li a:hover{
+    background-color: var(--main-pink-accent);
+}
+aside nav ul li a span svg{
+    width: 17px;
+}
+
+
+
+/* ===========================
+   MAIN CONTENT
+=========================== */
+
+
+main {
+
+    flex-grow: 1;
+
+
+    padding: 30px;
+
+
+    margin-right: 200px;
+
+
+    transition: all 0.3s ease;
+
+}
+
+
+
+        .profile-container {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            padding: 2.5rem;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .profile-header h1 {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* تنسيق الهوية الفوقية مثل أورا */
+        .avatar-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 2rem;
+            background-color: #FAF6FB;
+            padding: 15px;
+            border-radius: 15px;
+            display: inline-flex;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .avatar-circle {
+            width: 60px;
+            height: 60px;
+            background-color: #EADFEF;
+            color: var(--primary-hover);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .avatar-info {
+            text-align: right;
+        }
+
+        .avatar-info .role-badge {
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 4px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 11fr);
+            
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background-color: #FCFBFA;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(156, 123, 163, 0.15);
+            background-color: #ffffff;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .actions-section {
+            margin-top: 2.5rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--primary-hover);
+        }
+
+/* 
+        لتجاوب الشاشات الصغيرة */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            body {
+                padding: 1rem;
+            }
+        }
+        .toast {
+    visibility: hidden; /* مخفي بشكل افتراضي */
+    min-width: 250px;
+    background-color: #2ecc71; 
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 16px;
+    position: fixed;
+    z-index: 9999;
+    left: 30px;
+    bottom: 30px;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: opacity 0.3s, bottom 0.3s;
+    opacity: 0;
+}
+
+.toast.show {
+    visibility: visible;
+    opacity: 1;
+    bottom: 40px; 
+}
+@media (max-width: 768px) {
+    header {
+        padding: 10px 15px;
+    }
+
+    /* إظهار زر فتح القائمة */
+    .menu-toggle {
+        display: block;
+    }
+
+    /* إظهار زر الإغلاق داخل السايدبار وتنسيقه أعلى اليسار */
+    .close-menu {
+        display: block;
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: none;
+        border: none;
+        font-size: 20px;
+        color: var(--text-grey);
+        cursor: pointer;
+    }
+
+    /* تحويل السايدبار إلى درج منزلق جانبي مخفي */
+    aside {
+        width: 260px;
+        height: 100vh;
+        top: 0;
+        right: -260px; /* مخفي تماماً خارج الشاشة يميناً */
+        left: auto;
+        bottom: auto;
+        padding-top: 70px; /* مسافة لكي لا يغطي زر الغلق العناصر الأولى */
+        border-left: 1px solid var(--border-grey);
+        border-top: none;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        z-index: 2000; /* أعلى من الهيدر لسهولة الاستخدام */
+        transition: right 0.3s ease-in-out; /* انزلاق سلس وأنيق */
+    }
+
+    /* كلاس تفعيل الظهور باستدعاء الـ JavaScript */
+    aside.open {
+        right: 0;
+    }
+
+    /* الحفاظ على ترتيب عناصر القائمة عمودياً بشكل منسق */
+    aside nav ul {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    aside nav ul li a {
+        flex-direction: row;
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+
+    /* إلغاء الهامش الأيمن للمحتوى الأساسي ليتمدد كاملاً على الموبايل */
+    main {
+        margin-right: 0;
+        padding: 20px 15px;
+    }
+
+    .details-section {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .welcome-section h1 {
+        font-size: 20px;
+    }
+}

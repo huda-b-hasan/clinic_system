@@ -11,5 +11,5 @@ class Bill extends Model
 
     protected $fillable = ['clinic_session_id', 'amount_paid', 'date'];
 
-    public function clinicSession() { return $this->belongsTo(ClinicSessionس::class,'clinic_session_id'); }
+    public function clinicSession() { return $this->belongsTo(ClinicSessions::class,'clinic_session_id'); }
 }

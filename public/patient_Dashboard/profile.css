@@ -23,7 +23,7 @@
             margin: 0;
             direction: rtl;
         }
-
+        
         .profile-container {
             background-color: var(--card-bg);
             border-radius: 20px;
@@ -177,3 +177,26 @@
                 padding: 1rem;
             }
         }
+        .toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #2ecc71;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 16px;
+    position: fixed;
+    z-index: 9999;
+    left: 30px;
+    bottom: 30px;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: opacity 0.3s, bottom 0.3s;
+    opacity: 0;
+}
+
+.toast.show {
+    visibility: visible;
+    opacity: 1;
+    bottom: 40px;
+}

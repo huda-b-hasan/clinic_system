@@ -335,7 +335,6 @@ main {
 
 .action-card button {
     background-color: var(--dark-pink-accent);
-    color: var(--white-bg);
     border: none;
     padding: 12px 25px;
     border-radius: 25px;
@@ -343,7 +342,10 @@ main {
     cursor: pointer;
     transition: background 0.2s;
 }
-
+.action-card button a{
+    
+    color: var(--white-bg);
+}
 .action-card button:hover {
     background-color: var(--primary-color);
 }
@@ -595,7 +597,7 @@ main {
     }
 }
 .cancel-btn{
-    background-color: #DC3545;
+    background-color: #d9534f;
     color: white;
     padding: 5px 16px;
     border: none;

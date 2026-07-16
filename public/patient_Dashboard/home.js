@@ -154,10 +154,10 @@ function renderDashboard(resData) {
     const sessionsList = document.getElementById('sessions-list');
     sessionsList.innerHTML = ''; 
 
-    if (data.past_sessions && data.past_sessions.length > 0) {
+    if (data.completed_appointments && data.completed_appointments.length > 0) {
         noSessionTxt.style.display = 'none'; 
 
-        data.past_sessions.forEach(session => {
+        data.completed_appointments.forEach(session => {
             const sessDate = new Date(session.appointment_date).toISOString().split('T')[0];
             const treatmentName = session.treatments && session.treatments.length > 0
                 ? session.treatments[0].name

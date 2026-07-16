@@ -31,7 +31,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         const data = await response.json(); 
 
         if (response.ok && data.status === 'success') {
-            console.log(response)
+            console.log()
             
             localStorage.setItem('user_name', data.user_name);
             localStorage.setItem('user_type', data.user_type);
@@ -39,9 +39,11 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             if (data.user_type === 'Manager') {
                 window.location.href = '../manager/dashboard.html'; 
             } else if (data.user_type === 'Doctor') {
-                window.location.href = '../doctor_Dashboard/home.html'; 
+                window.location.href = '/doctor_Dashboard/home.html'; 
             } else if(data.user_type ==="Patient") {
                 window.location.href = '/patient_Dashboard/home.html';
+            }else if(data.user_type ==="Receptionist"){
+                window.location.href = '/reseption_Dashboard/home.html';
             }
 
         } else {

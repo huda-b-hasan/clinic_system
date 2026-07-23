@@ -1,0 +1,148 @@
+/* ستايل النافذة المنبثقة والخلفية المظلمة */
+.modal {
+    display: none; /* مخفي افتراضياً ويظهر بالجافاسكريبت */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* تأثير التظليل الخلفي الدافئ */
+    align-items: center;
+    justify-content: center;
+    direction: rtl; /* متوافق مع الاتجاه العربي بالكامل */
+    font-family: sans-serif;
+}
+
+/* صندوق المحتوى الداخلي للمودال */
+.modal-content {
+    background-color: #fff;
+    padding: 24px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 420px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* رأس النافذة */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f1f1;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.15rem;
+    font-weight: bold;
+}
+
+.close-btn {
+    font-size: 24px;
+    cursor: pointer;
+    color: #aaa;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+.modal-warning-text {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+/* تنسيق حقل الإدخال للسبب */
+.form-group {
+    margin-bottom: 18px;
+    text-align: right;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 8px;
+}
+
+.form-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 12px; /* حواف دائرية ناعمة */
+    font-size: 0.9rem;
+    color: #333;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    resize: none;
+}
+
+.form-group textarea:focus {
+    border-color: #d9534f; /* يتغير للون زر الإلغاء عند الكتابة */
+    box-shadow: 0 0 5px rgba(217, 83, 79, 0.15);
+}
+
+/* أزرار التحكم في أسفل النافذة */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    border-top: 1px solid #f1f1f1;
+    padding-top: 16px;
+    margin-top: 20px;
+}
+
+/* زر التراجع (الرمادي) */
+.back-btn {
+    background-color: #f5f5f5;
+    color: #666;
+    padding: 8px 24px;
+    border: none;
+    border-radius: 27px; /* الستايل الدائري الأنيق الخاص بكِ */
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.back-btn:hover {
+    background-color: #e8e8e8;
+    color: #333;
+}
+
+/* زر تأكيد الإلغاء (الأحمر) */
+.cancel-btn {
+    background-color: #d9534f;
+    color: white;
+    padding: 8px 24px;
+    border: none;
+    border-radius: 27px; /* متناسق تماماً مع زر التراجع */
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.cancel-btn:hover {
+    background-color: #C82333;
+    color: white;
+}
+p{
+    margin-block: 15px;
+}

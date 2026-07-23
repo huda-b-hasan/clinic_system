@@ -132,7 +132,7 @@ aside nav ul li.active a {
 }
 
 .bill-card-item.paid-border {
-    border-right: 5px solid #2e7d32;
+    border-right: 5px solid #2ecc71;
     background-color: var(--white-bg);
 }
 

@@ -1004,4 +1004,87 @@ main {
         flex: 1;
         text-align: center;
     }
+}/* ==========================================
+   تنسيقات تفاصيل الإلغاء الخاصة بالطبيب
+   ========================================== */
+
+/* كارت إلغاء ممتد ليحتوي على صندوق السبب */
+.canceled-card-expanded {
+    opacity: 0.75;
+    background-color: #fafafa !important;
+    flex-direction: column !important; /* تحويل الترتيب لعمودي ليتسع للسبب */
+    height: auto !important; 
+    align-items: stretch !important;
+    padding: 15px 20px !important;
+    gap: 12px !important;
+}
+
+/* الصف العلوي الأساسي للمعلومات داخل الكارت الملغي */
+.canceled-main-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+/* تجميع شارة الشخص الملغي مع حالة الإلغاء */
+.canceled-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* شارات من لغى الموعد */
+.role-badge {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+/* لو الملغي مريض (وردي متناسق مع Lavender) */
+.role-badge.role-patient {
+    background-color: var(--main-pink-bg);
+    color: var(--dark-pink-accent);
+}
+
+/* لو الملغي طبيب (بنفسجي غامق احترافي) */
+.role-badge.role-doctor {
+    background-color: #eef2ff;
+    color: #4f46e5;
+}
+
+/* شريط تفاصيل سبب الإلغاء السفلي */
+.cancellation-reason-bar {
+    font-size: 13px;
+    color: var(--text-grey);
+    background-color: rgba(0, 0, 0, 0.02);
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: 1px dashed var(--border-grey);
+}
+
+/* تنسيق إضافي لزر بدء الجلسة ليتطابق مع ألوانكِ */
+.btn-start-session {
+    background-color: var(--dark-pink-accent) !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-start-session:hover {
+    background-color: var(--primary-hover) !important;
+    box-shadow: 0 2px 8px rgba(131, 98, 138, 0.2);
+}
+
+/* التوافق مع شاشات الجوال */
+@media (max-width: 768px) {
+    .canceled-main-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .canceled-meta {
+        width: 100%;
+        justify-content: space-between;
+    }
 }

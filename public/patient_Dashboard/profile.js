@@ -52,13 +52,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.log(data.message);
                     patientHeaderName.innerText = formData.name;
                     userInitials.innerText = formData.name.charAt(0).toUpperCase();
+                    
                 } else {
                     console.log("حدث خطأ أثناء حفظ البيانات.");
                 }
-                if (response.ok && result.status === 'success') {
+                if ( data.status === 'success') {
                     // 
                     const toast = document.getElementById('toast');
-                    toast.textContent = result.message;
+                    toast.textContent = data.message;
                     toast.classList.add('show');
 
                     setTimeout(() => {

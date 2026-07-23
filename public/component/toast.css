@@ -1,0 +1,41 @@
+/* Toast Notification Base Style */
+.toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #2ecc71; /* اللون الافتراضي (نجاح) */
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 16px;
+    position: fixed;
+    z-index: 9999;
+    left: 30px;
+    bottom: 30px;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: opacity 0.3s ease, bottom 0.3s ease, visibility 0.3s;
+    opacity: 0;
+}
+
+.toast.show {
+    visibility: visible;
+    opacity: 1;
+    bottom: 40px; 
+}
+
+/* الألوان الخاصة بكل حالة لتنفيذ التنبيهات في كل الموقع */
+.toast.success {
+    background-color: #2ecc71; /* أخضر - نجاح */
+}
+
+.toast.error {
+    background-color: #e74c3c; /* أحمر - خطأ */
+}
+
+.toast.warning {
+    background-color: #f39c12; /* برتقالي - تحذير */
+}
+
+.toast.info {
+    background-color: #8e44ad; /* بنفسجي - لافندر/معلومات */
+}

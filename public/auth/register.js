@@ -1,6 +1,8 @@
 
 const form = document.getElementById('registerForm');
 const roleButtons = document.querySelectorAll('.role-card');
+const errorMessage = document.getElementById('errorMessage');
+
 let selectedRole = 'patient';
 
 roleButtons.forEach(button => {
@@ -62,11 +64,13 @@ form.addEventListener('submit', async (e) => {
                 console.log(errorMessage);
             } else {
                 console.log(result.message || 'حدث خطأ أثناء إنشاء الحساب.');
+                errorMessage.textContent = result.message || 'حدث خطأ أثناء إنشاء الحساب.';
             }
         }
 
     } catch (error) {
         console.error('Connection Error:', error);
+
         console.log('عذراً، فشل الاتصال بالسيرفر. تأكدي من تشغيل أمر php artisan serve.');
     }
 });

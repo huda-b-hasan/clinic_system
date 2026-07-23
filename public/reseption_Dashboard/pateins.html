@@ -9,6 +9,8 @@
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪻</text></svg>">
     <link rel="stylesheet" href="../template.css">
     <link rel="stylesheet" href="pateins.css">
+    <link rel="stylesheet" href="../component/toast.css">
+
 </head>
 
 <body>
@@ -54,7 +56,7 @@
                                 </svg>
                             </span><span>نظرة عامة</span></a></li>
 
-                    <li  class="active"><a href="pateins.html"><span class="icon-nav">
+                    <li class="active"><a href="pateins.html"><span class="icon-nav">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round" class="lucide lucide-users h-5 w-5">
@@ -131,7 +133,20 @@
                     </div>
 
                     <div class="details-content" id="detailsContent" style="display: none;">
-                        <h3 class="details-title">تفاصيل الملف الطبي</h3>
+                        <div class="details-header">
+                            <h3 class="details-title">تفاصيل الملف الطبي</h3>
+
+                            <!-- زر تعديل الملف -->
+                            <button class="btn-edit-patient" id="openEditModalBtn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="icon-edit">
+                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+                                    <path d="m15 5 4 4"></path>
+                                </svg>
+                                <span>تعديل الملف</span>
+                            </button>
+                        </div>
                         <div class="info-grid">
                             <div class="info-item">
                                 <span class="info-label">الاسم الكامل:</span>
@@ -180,7 +195,7 @@
                     <div class="form-group-p">
                         <label class="form-label-p" for="name">الاسم الكامل *</label>
                         <input type="text" id="name" name="name" required class="form-input-p"
-                            placeholder="أدخل اسم المريض الثنائي">
+                            placeholder=" اسم المريض الثنائي">
                     </div>
 
                     <div class="form-group-p">
@@ -223,62 +238,32 @@
             </form>
         </div>
     </div>
+    <div id="toast" class="toast">تم تحديث ملفكِ الشخصي بنجاح!</div>
 
-    <!-- كود الـ JavaScript التفاعلي للـ Modal وعرض التفاصيل وتجاوب السايدبار -->
     <script>
-        // فتح وإغلاق السايدبار على الموبايل
-        const sidebar = document.getElementById('sidebar');
-        const menuToggle = document.getElementById('menuToggle');
-        const closeMenu = document.getElementById('closeMenu');
+        const menuToggle = document.querySelector('.menu-toggle');
+        const closeMenu = document.querySelector('.close-menu');
+        const sidebar = document.querySelector('aside');
 
-        if (menuToggle && sidebar && closeMenu) {
-            menuToggle.addEventListener('click', () => sidebar.classList.add('open'));
-            closeMenu.addEventListener('click', () => sidebar.classList.remove('open'));
-        }
-
-        // تشغيل وإغلاق نافذة الـ Modal للفورم
-        const modal = document.getElementById('addPatientModal');
-        const openModalBtn = document.getElementById('openModalBtn');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const cancelModalBtn = document.getElementById('cancelModalBtn');
-
-        openModalBtn.addEventListener('click', () => modal.classList.add('active'));
-
-        const closeModal = () => modal.classList.remove('active');
-        closeModalBtn.addEventListener('click', closeModal);
-        cancelModalBtn.addEventListener('click', closeModal);
-
-        // إغلاق المودال عند النقر خارج الصندوق الأبيض
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
+        // فتح وإغلاق القائمة عند الضغط على زر الهامبرغر
+        menuToggle.addEventListener('click', (e) => {
+            sidebar.classList.toggle('open');
+            e.stopPropagation(); // لمنع تضارب الحدث مع إغلاق القائمة عند الضغط بالخارج
         });
 
-        // عرض تفاصيل المريض بالـ JS
-        function showPatientDetails(id, name, phone, gender, birthdate, address, notes) {
-            document.getElementById('emptyState').style.display = 'none';
-            document.getElementById('detailsContent').style.display = 'block';
+        // إغلاق القائمة عند الضغط على زر إكس (✕)
+        closeMenu.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+        });
 
-            // ملء البيانات
-            document.getElementById('detName').textContent = name;
-            document.getElementById('detPhone').textContent = phone;
-            document.getElementById('detGender').textContent = gender;
-            document.getElementById('detBirthdate').textContent = birthdate ? birthdate : 'غير مسجل';
-            document.getElementById('detAddress').textContent = address ? address : 'غير مسجل';
-            document.getElementById('detNotes').textContent = notes ? notes : 'لا توجد ملاحظات طبية مسجلة لهذا المريض.';
-
-            // إضافة تأثير بصري خفيف للتنبيه بالتحديث
-            const detailsContent = document.getElementById('detailsContent');
-            detailsContent.style.opacity = 0;
-            setTimeout(() => {
-                detailsContent.style.opacity = 1;
-                detailsContent.style.transition = 'opacity 0.2s ease';
-            }, 50);
-
-            // تفعيل كلاس النشاط على الكارت المختار
-            document.querySelectorAll('.patient-card').forEach(card => card.classList.remove('active-card'));
-            event.currentTarget.classList.add('active-card');
-        }
+        // ميزة إضافية: إغلاق القائمة تلقائياً عند الضغط في أي مكان خارجها (UX ممتاز)
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+            }
+        });
     </script>
+    <script src="../component/patientData.js"></script>
 </body>
 
 </html>

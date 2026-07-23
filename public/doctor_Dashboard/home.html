@@ -160,22 +160,7 @@
                         <p id="total_completed_sessions">0</p>
                     </div>
                 </div>
-                <!-- مستوى التقيييم -->
-                <!-- <div class="summary-card alt-bg">
-                    <div class="icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="lucide lucide-star h-5 w-5" aria-hidden="true">
-                            <path
-                                d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-                            </path>
-                        </svg>
-                    </div>
-                    <div class="text-content">
-                        <h3>متوسط التقييم</h3>
-                        <p id="Average_Rating">4,9</p>
-                    </div>
-                </div> -->
+
             </div>
             <!-- =========================== -->
             <div class="details-section">
@@ -187,24 +172,56 @@
                     </div>
                 </div>
 
+                <!-- 1. تبويب المواعيد القائمة (النشطة حالياً) -->
                 <div id="active-appointments" class="full tab-content">
-                    <!-- <div class="action-card-one">
+                    <div class="action-card-one">
                         <div class="first-date">
                             <h5>نورا الفهد</h5>
                             <p>بوتوكس · 10:00 · جناح اللؤلؤ</p>
                         </div>
-                        <button>ابدئي الجلسة</button>
-                    </div> -->
+                        <button class="btn-start-session">ابدئي الجلسة</button>
+                    </div>
                 </div>
 
+                <!-- 2. تبويب المواعيد الملغاة (يعرض مين لغى والسبب) -->
                 <div id="canceled-appointments" class="full tab-content" style="display: none;">
-                    <div class="action-card-one canceled-card">
-                        <div class="first-date">
-                            <h5><del>سارة الأحمد</del></h5>
-                            <p>تنظيف بشرة · 12:00 · جناح الورد</p>
+
+                    <!-- مثال 1: إلغاء بواسطة المريض -->
+                    <div class="action-card-one canceled-card-expanded">
+                        <div class="canceled-main-info">
+                            <div class="first-date">
+                                <h5><del>سارة الأحمد</del></h5>
+                                <p>تنظيف بشرة · 12:00 · جناح الورد</p>
+                            </div>
+                            <!-- شارة توضح من لغى الموعد -->
+                            <div class="canceled-meta">
+                                <span class="role-badge role-patient">بواسطة: المريض</span>
+                                <span class="status-canceled">تم الإلغاء</span>
+                            </div>
                         </div>
-                        <span class="status-canceled">تم الإلغاء</span>
+                        <!-- صندوق السبب المضاف بذكاء -->
+                        <div class="cancellation-reason-bar">
+                            <strong>السبب:</strong> ظرف صحي مفاجئ للمريضة.
+                        </div>
                     </div>
+
+                    <!-- مثال 2: إلغاء بواسطة الطبيب نفسه أو الاستقبال -->
+                    <div class="action-card-one canceled-card-expanded">
+                        <div class="canceled-main-info">
+                            <div class="first-date">
+                                <h5><del>ريما العبدالله</del></h5>
+                                <p>ليزر كربوني · 02:30 · جناح الياسمين</p>
+                            </div>
+                            <div class="canceled-meta">
+                                <span class="role-badge role-doctor">بواسطة: الطبيب (أنت)</span>
+                                <span class="status-canceled">تم الإلغاء</span>
+                            </div>
+                        </div>
+                        <div class="cancellation-reason-bar">
+                            <strong>السبب:</strong> لم تحضر المريضة بعد مرور 20 دقيقة من الوقت المحدد.
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </main>
@@ -233,6 +250,7 @@
             }
         });
     </script>
+
     <script src="home.js"></script>
 </body>
 

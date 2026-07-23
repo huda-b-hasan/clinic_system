@@ -73,7 +73,7 @@ class BillController extends Controller
             return [
                 'invoice_number' => 'B-'.str_pad($bill->id, 4, '0', STR_PAD_LEFT).'#',
                 'session_name' => $sessionName,
-                'amount' => number_format($bill->amount_paid, 2).' ل.س',
+                'amount' => number_format($bill->amount_paid, 0).' ل.س',
                 'date' => $bill->date,
                 'status' => $bill->status == 'paid' ? 'مدفوعة' : 'غير مدفوعة',
                 'raw_status' => $bill->status,
@@ -82,8 +82,8 @@ class BillController extends Controller
 
         return response()->json([
             'summary' => [
-                'total_paid' => number_format($totalPaid, 2).' ل.س',
-                'total_pending' => number_format($totalPending, 2).' ل.س',
+                'total_paid' => number_format($totalPaid, 0).' ل.س',
+                'total_pending' => number_format($totalPending, 0).' ل.س',
             ],
             'invoices' => $formattedInvoices,
         ], 200);
@@ -93,7 +93,6 @@ class BillController extends Controller
     {
         $userId = session('user_id');
 
-        // 1. جلب سجل المريض المرتبط بالحساب الحالي
         $patient = \DB::table('patients')->where('user_id', $userId)->first();
 
         if (! $patient) {
@@ -103,13 +102,12 @@ class BillController extends Controller
             ], 404);
         }
 
-        // 2. حساب عدد الفواتير المعلقة مباشرة باستخدام count() لسرعة الأداء
         $pendingCount = \DB::table('bills')
             ->join('clinic_sessions', 'bills.clinic_session_id', '=', 'clinic_sessions.id')
             ->join('appointments', 'clinic_sessions.appointment_id', '=', 'appointments.id')
             ->where('appointments.patient_id', $patient->id)
             ->whereIn('bills.status', ['unpaid', 'partially_paid']) // الفواتير المعلقة
-            ->count(); // إرجاع العدد فقط دون تحميل السجلات كاملة
+            ->count(); 
 
         return response()->json([
             'status' => true,
@@ -120,12 +118,10 @@ class BillController extends Controller
     public function getBillsSummary(Request $request)
     {
         try {
-            // 1. حساب الأعداد بناءً على الحقول الصحيحة في جدولكِ
             $paidBillsCount = Bill::where('status', 'paid')->count();
             $unpaidBillsCount = Bill::where('status', 'unpaid')->count();
 
-            // 2. جلب الفواتير مع علاقة الجلسة والمريض إن وجدت لتفادي البطء
-            // (تأكدي من تعريف علاقة clinicSession داخل موديل Bill إذا أردتِ جلب اسم المريض ديناميكياً)
+
             $allBills = Bill::orderBy('created_at', 'desc')->get();
 
             $paidBillsList = [];
@@ -133,30 +129,27 @@ class BillController extends Controller
 
             foreach ($allBills as $bill) {
 
-                // محاولة الوصول لاسم المريض من خلال الجلسة المشتركة بأمان
+               // محاولة الوصول لاسمالمريض من خلال الجلسة المشتركة بأمان
                 $patientName = 'مريض غير معروف';
 
                 if (method_exists($bill, 'clinicSession') && $bill->clinicSession) {
                     $session = $bill->clinicSession;
-                    // إذا كانت الجلسة مرتبطة بال مريض مباشرة أو عبر موعد (appointment)
                     if ($session->patient) {
                         $patientName = $session->patient->name;
                     } elseif ($session->appointment && $session->appointment->patient) {
                         $patientName = $session->appointment->patient->name;
                     }
                 } else {
-                    // اسم احتياطي يحمل رقم الجلسة لكي لا يظهر الاسم فارغاً
                     $patientName = 'جلسة عيادة رقم (#'.$bill->clinic_session_id.')';
                 }
 
-                // تجهيز البيانات بالأسماء المطابقة لملف الـ Migration الخاص بكِ
                 $billData = [
                     'id' => $bill->id,
                     'bill_number' => '#'.$bill->id,
                     'patient_name' => $patientName,
-                    'amount' => $bill->amount_paid, // الحقل الصحيح من الـ Migration
-                    'status' => $bill->status,      // الحقل الصحيح من الـ Migration
-                    'date' => $bill->date,          // حقل التاريخ من الـ Migration
+                    'amount' => $bill->amount_paid, 
+                    'status' => $bill->status,     
+                    'date' => $bill->date,          
                 ];
 
                 // تقسيم الفواتير حسب الحالة الحقيقية لها

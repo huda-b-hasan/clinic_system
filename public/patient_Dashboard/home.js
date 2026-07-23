@@ -1,3 +1,6 @@
+// ==========================================
+// 1. جلب بيانات المريض الشخصية لعرض الاسم
+// ==========================================
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const response = await fetch('/patient/profile', {
@@ -10,49 +13,148 @@ document.addEventListener('DOMContentLoaded', async () => {
         const result = await response.json();
 
         if (response.ok && result.status === 'success') {
-            // console.log('بيانات المريض بالكامل:', result.data);
-            // set name in html
             document.getElementById('patientName').innerHTML = result.data.user.name;
-            // أمثلة لكيفية عرض البيانات داخل عناصر الـ HTML عندكِ
-            // document.getElementById('patient-name').textContent = result.data.user.name;
-            // document.getElementById('patient-email').textContent = result.data.user.email;
-            // document.getElementById('patient-phone').textContent = result.data.phone;
         } else {
-            alert(result.message);
             window.location.href = '/login';
         }
     } catch (error) {
         console.error('حدث خطأ أثناء جلب البيانات:', error);
     }
 });
-// show the data like appintment session bill
-// home.js
+
+// ==========================================
+// 2. إدارة ومراقبة المودال والتوست لإلغاء المواعيد
+// ==========================================
+let appointmentIdToCancel = null;
+
+// دالة فتح المودال (يتم استدعاؤها برمجياً عند الضغط على أزرار الجدول)
+function openCancelModal(id) {
+    appointmentIdToCancel = id;
+    const modal = document.getElementById('cancelModal');
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+}
+
+// دالة إغلاق وتنظيف المودال
+function closeCancelModal() {
+    const modal = document.getElementById('cancelModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+    const reasonInput = document.getElementById('cancellation_reason');
+    if (reasonInput) {
+        reasonInput.value = ""; // تفريغ حقل النص
+    }
+    appointmentIdToCancel = null;
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-    // استدعاء دالة جلب البيانات بمجرد تحميل الصفحة
+    // جلب البيانات الأساسية للداشبورد
     fetchDashboardData();
+    // فحص التقييمات المعلقة
+    checkPendingRating();
+
+    // ربط زر الإغلاق العلوي (x)
+    const closeBtn = document.getElementById('closeModalBtn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeCancelModal);
+    }
+
+    // ربط زر التراجع السفلي (تراجع)
+    const backBtn = document.getElementById('backModalBtn');
+    if (backBtn) {
+        backBtn.addEventListener('click', closeCancelModal);
+    }
+
+    // ربط زر تأكيد الإلغاء الجديد بدون alert ومع الـ Toast الذكي
+    const confirmBtn = document.getElementById('confirmCancelBtn');
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', () => {
+            if (!appointmentIdToCancel) return;
+
+            const cancellationReasonInput = document.getElementById('cancellation_reason');
+            const cancellationReason = cancellationReasonInput ? cancellationReasonInput.value : '';
+            const toast = document.getElementById('toastNotification');
+
+            // إرسال طلب الإلغاء للـ API بالـ Method PUT وسيقوم الـ Controller بتحديد الجهة تلقائياً
+            fetch(`/appointments/${appointmentIdToCancel}/cancel`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+                },
+                body: JSON.stringify({
+                    cancellation_reason: cancellationReason
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    closeCancelModal();
+
+                    if (data.success) {
+                        if (toast) {
+                            toast.style.background = '#28a745'; // أخضر للنجاح
+                            toast.textContent = `✓ ${data.message}`;
+                            toast.style.display = 'block';
+                        }
+
+                        setTimeout(() => {
+                            if (toast) toast.style.display = 'none';
+                            location.reload(); // تحديث الجدول في الصفحة
+                        }, 4000);
+                    } else {
+                        console.log(data)
+                        if (toast) {
+                            toast.style.background = '#dc3545'; // أحمر للفشل
+                            toast.textContent = ` ${data.message}`;
+                            toast.style.display = 'block';
+                        }
+
+                        setTimeout(() => {
+                            if (toast) toast.style.display = 'none';
+                        }, 6000);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    closeCancelModal();
+
+                    if (toast) {
+                        toast.style.background = '#dc3545'; // أحمر لخطأ السيرفر
+                        toast.textContent = ' حدث خطأ غير متوقع أثناء الاتصال بالخادم.';
+                        toast.style.display = 'block';
+                    }
+
+                    setTimeout(() => {
+                        if (toast) toast.style.display = 'none';
+                    }, 4000);
+                });
+        });
+    }
 });
 
+// ==========================================
+// 3. جلب وعرض بيانات لوحة التحكم (الداشبورد)
+// ==========================================
 async function fetchDashboardData() {
     try {
-        // ضع المسار الصحيح للـ API الخاص بك هنا
         const response = await fetch('/patient/dashboard-data', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
-                // إذا كنت تستخدم توكن للتصديق مرره هنا، لكن الباك إند يعتمد على الـ Session حالياً
             }
         });
 
         if (response.status === 403) {
-            // الجلسة منتهية - تحويل المستخدم لصفحة تسجيل الدخول
             window.location.href = "../auth/login.html";
             return;
         }
 
         const resData = await response.json();
-        console.log(resData)
+        console.log(resData);
 
         if (resData.status === 'success') {
             renderDashboard(resData);
@@ -65,29 +167,20 @@ async function fetchDashboardData() {
     }
 }
 
-
-
-
-
-let appointmentIdToCancel = null;
-
 function renderDashboard(resData) {
     const stats = resData.stats;
     const data = resData.data;
-
-    // 2. تحديث عدادات بطاقات الإحصائيات
-    document.getElementById('futureSession').textContent = `${stats.pending_appointments_count}  `;
+    checkCancellationNotification(resData.data.unread_cancellations); document.getElementById('futureSession').textContent = `${stats.pending_appointments_count}  `;
     document.getElementById('lastSession').textContent = stats.completed_sessions_count;
 
-    // 3. تحديث قائمة المواعيد القادمة ديناميكياً
     const upcomingContainer = document.querySelector('.upcoming-appointments');
-    upcomingContainer.innerHTML = ''; 
+    upcomingContainer.innerHTML = '';
 
     if (data.pending_appointments && data.pending_appointments.length > 0) {
         data.pending_appointments.forEach(appointment => {
             const appDate = new Date(appointment.appointment_date);
-            const dateString = appDate.toISOString().split('T')[0]; 
-            const timeString = appDate.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', hour12: true });
+            const dateString = appDate.toISOString().split('T')[0];
+            const timeString = appDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
 
             const today = new Date();
             const diffTime = appDate - today;
@@ -117,7 +210,6 @@ function renderDashboard(resData) {
                 : 'جلسة علاجية';
             const doctorName = appointment.doctor ? appointment.doctor.name : 'غير محدد';
 
-            // تعديل هنا: تم إضافة data-id لزر الإلغاء وتغيير الـ id إلى class لأن الـ id يجب أن يكون فريداً
             const itemHtml = `
                 <div class="appointment-item">
                     <div class="appointment-info">
@@ -137,25 +229,25 @@ function renderDashboard(resData) {
             upcomingContainer.insertAdjacentHTML('beforeend', itemHtml);
         });
 
-        // ربط أزرار الإلغاء بفتح النافذة المنبثقة
         document.querySelectorAll('.cancel-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                appointmentIdToCancel = this.getAttribute('data-id');
-                document.getElementById('cancelModal').style.display = 'flex';
+            button.addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                openCancelModal(id);
             });
         });
+
 
     } else {
         upcomingContainer.innerHTML = '<p class="no-data">لا توجد مواعيد قادمة حالياً.</p>';
     }
 
-    // 4. تحديث قائمة الجلسات السابقة
+    // تحديث قائمة الجلسات السابقة
     const noSessionTxt = document.getElementById('noSession');
     const sessionsList = document.getElementById('sessions-list');
-    sessionsList.innerHTML = ''; 
+    sessionsList.innerHTML = '';
 
     if (data.completed_appointments && data.completed_appointments.length > 0) {
-        noSessionTxt.style.display = 'none'; 
+        noSessionTxt.style.display = 'none';
 
         data.completed_appointments.forEach(session => {
             const sessDate = new Date(session.appointment_date).toISOString().split('T')[0];
@@ -180,55 +272,12 @@ function renderDashboard(resData) {
     } else {
         noSessionTxt.style.display = 'block';
     }
+
 }
 
-// --- منطق التحكم بالنوافذ والإشعارات ---
-
-// إغلاق النافذة عند الضغط على "تراجع"
-document.getElementById('closeModalBtn').addEventListener('click', () => {
-    document.getElementById('cancelModal').style.display = 'none';
-    appointmentIdToCancel = null;
-});
-
-// عند الضغط على "نعم، إلغاء"
-document.getElementById('confirmCancelBtn').addEventListener('click', () => {
-    if (!appointmentIdToCancel) return;
-
-    // إرسال طلب الإلغاء للـ API في Laravel
-    fetch(`/appointments/${appointmentIdToCancel}/cancel`, { // تأكدي من مسار الـ Route الخاص بك
-        method: 'PUT', // أو DELETE/PUT حسب الـ Route عندك
-        headers: {
-            'Content-Type': 'application/json',
-            // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') // إذا كنت تستخدمين جارد الويب
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        // إخفاء نافذة التأكيد
-        document.getElementById('cancelModal').style.display = 'none';
-
-        if (data.success) {
-            // 1. إظهار الإشعار الأخضر
-            const toast = document.getElementById('toastNotification');
-            toast.textContent = `✓ ${data.message}`;
-            toast.style.display = 'block';
-
-            // 2. إخفاء الإشعار بعد 4 ثوانٍ
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 4000);
-
-            // 3. إعادة تحديث البيانات بالصفحة (أعيدي استدعاء دالة جلب البيانات هنا)
-            // fetchDashboardData(); 
-        } else {
-            alert(data.message); // في حال حدث خطأ من الـ backend
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        document.getElementById('cancelModal').style.display = 'none';
-    });
-});
+// ==========================================
+// 4. جلب عدد الفواتير المعلقة
+// ==========================================
 const countApiUrl = '/patient/pending-bills/count';
 
 fetch(countApiUrl, {
@@ -240,31 +289,22 @@ fetch(countApiUrl, {
 })
     .then(response => response.json())
     .then(data => {
-        console.log(data)
-
+        console.log(data);
         if (data.status) {
             document.getElementById('billNotPaid').textContent = data.pending_bills_count;
-
         } else {
             document.getElementById('billNotPaid').textContent = 0;
-
         }
     })
     .catch(error => console.error('حدث خطأ أثناء جلب العدد:', error));
 
-document.addEventListener("DOMContentLoaded", function () {
-    // استدعاء الدالة بمجرد تحميل الصفحة
-    checkPendingRating();
-});
-
+// ==========================================
+// 5. فحص التقييم المعلق وعرض التنبيه
+// ==========================================
 function checkPendingRating() {
-    // 1. تحديد عنصر الكارد من الـ HTML
     const ratingAlertCard = document.getElementById('recent-session-alert');
-
-    // مسار الـ Route في لارافيل
     const apiUrl = '/patient/check-pending-rating';
 
-    // 2. إرسال الطلب إلى الـ API
     fetch(apiUrl, {
         method: 'GET',
         headers: {
@@ -274,29 +314,116 @@ function checkPendingRating() {
     })
         .then(response => response.json())
         .then(result => {
-            console.log(result)
-            // 3. قراءة النتيجة والتحكم بظهور الكارد
+            console.log(result);
             if (result.status && result.has_pending) {
-
-                // تخصيص النص باسم المعالجة القادمة من الـ API
                 const alertTextParagraph = ratingAlertCard.querySelector('.alert-text p');
                 if (alertTextParagraph && result.data.treatment_name) {
                     alertTextParagraph.innerHTML = `لقد أتممتِ جلسة <strong>(${result.data.treatment_name})</strong> مؤخراً، يسعدنا جداً أن تشاركينا تقييمكِ لمساعدتنا في تقديم الأفضل دائماً.`;
                 }
-
-                // إظهار الكارد بالـ Flex ليتناسق مع التنسيقات
                 ratingAlertCard.style.display = 'flex';
-
             } else {
-                // إخفاء الكارد تماماً إذا لم يكن هناك جلسة تحتاج تقييم خلال أسبوع
-                ratingAlertCard.style.display = 'none';
+                if (ratingAlertCard) ratingAlertCard.style.display = 'none';
             }
         })
         .catch(error => {
             console.error('حدث خطأ أثناء جلب بيانات التقييم المعلق:', error);
-            // في حال حدوث خطأ، نُخفي الكارد لضمان تجربة مستخدم نظيفة
             if (ratingAlertCard) {
                 ratingAlertCard.style.display = 'none';
             }
         });
+}
+// notefication 
+// ==========================================
+// 6. عرض إشعار إلغاء الموعد (إذا وُجد)
+// ==========================================
+// هذه الدالة تظهر الكارد التجميعي
+// 1. تعريف العناصر
+const showDetailsBtn = document.getElementById('show-details-btn');
+const modal = document.getElementById('cancellationDetailsModal');
+
+// 2. عند الضغط على "عرض التفاصيل" في الكارد
+showDetailsBtn.onclick = function () {
+    modal.style.display = 'flex'; // إظهار المودل
+};
+
+// 3. دالة إغلاق المودل
+function closeModal() {
+    modal.style.display = 'none'; // إخفاء المودل
+}
+
+// 4. إغلاق المودل عند الضغط خارج منطقة الكونتير (اختياري)
+window.onclick = function (event) {
+    if (event.target == modal) {
+        closeModal();
+    }
+}
+function checkCancellationNotification(unreadCancellations) {
+    const alertCard = document.getElementById('cancellation-alert-card');
+
+    if (unreadCancellations && unreadCancellations.length > 0) {
+        // إظهار الكارد في الصفحة
+        alertCard.style.display = 'flex';
+
+        // تحديث الرقم في الكارد
+        document.getElementById('noteficationNumber').innerText = unreadCancellations.length;
+
+        // عند الضغط على زر "عرض التفاصيل"
+        document.getElementById('show-details-btn').onclick = () => {
+            // استهداف حاوية القائمة داخل المودل الجديد
+            const listContent = document.getElementById('cancelled-appointments-list');
+            // ملء القائمة بالكاردات الجديدة
+            listContent.innerHTML = unreadCancellations.map(app => `
+                <div class="cancellation-card" data-id="${app.id}">
+                    <div class="card-info">
+                        <h4>${app.treatment}</h4>
+                        <p>السبب: ${app.cancellation_reason || 'غير محدد'}</p>
+                    </div>
+                    <div class="card-action">
+                    <button class="btn-rebook" onclick="markAsSeen(event, '${app.id}')">تم</button>                    </div>
+                </div>
+            `).join('');
+
+            // إظهار المودل الجديد
+            document.getElementById('cancellationDetailsModal').style.display = 'flex';
+        };
+    } else {
+        alertCard.style.display = 'none';
+    }
+}
+
+// دالة الإغلاق الموحدة للمودل الجديد
+function closeDropdown() {
+    document.getElementById('cancellationDetailsModal').style.display = 'none';
+}
+function markAsSeen(appointmentId) {
+    if (event) event.preventDefault();
+    // 1. إرسال الطلب للسيرفر
+    fetch(`/appointments/${appointmentId}/mark-as-seen`, {
+        method: 'POST',
+        headers: {
+         'Content-Type': 'application/json',
+            'Accept': 'application/json'      ,
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+         }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // 2. إزالة الكارد من المودل بعد نجاح العملية
+        // const card = document.querySelector(`.cancellation-card[data-id="${appointmentId}"]`);
+        // if (card) {
+        //     card.remove();
+        // }
+
+        // // 3. تحديث الرقم في التنبيه الرئيسي (اختياري)
+        // const remainingCards = document.querySelectorAll('.cancellation-card');
+        // const countSpan = document.getElementById('noteficationNumber');
+        // countSpan.innerText = remainingCards.length;
+
+        // 4. إذا لم يتبقَ أي كاردات، أخفي التنبيه الرئيسي والمودل
+        if (remainingCards.length === 0) {
+            document.getElementById('cancellation-alert-card').style.display = 'none';
+            document.getElementById('cancellationDetailsModal').style.display = 'none';
+        }
+    })
+    .catch(error => console.error('Error:', error));
 }

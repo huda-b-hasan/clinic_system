@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة المواعيد - Lavender Beauty Clinic</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪻</text></svg>">
+    <link rel="stylesheet" href="../template.css">
+    <link rel="stylesheet" href="appointment.css">
+    <link rel="stylesheet" href="../component/toast.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="header-right">
+            <button class="menu-toggle" aria-label="فتح القائمة">☰</button>
+            <a href="../auth/home.html" class="logo">
+                <svg width="50" height="60" viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g stroke="#D4AF37" stroke-width="2.5" fill="none">
+                        <path d="M60 10 C45 35 50 60 60 80 C70 60 75 35 60 10Z"></path>
+                        <path d="M40 25 C35 45 40 65 55 80 C58 55 52 40 40 25Z"></path>
+                        <path d="M80 25 C68 40 62 55 65 80 C80 65 85 45 80 25Z"></path>
+                        <path d="M20 30 C15 55 30 75 55 80 C40 55 30 40 20 30Z"></path>
+                        <path d="M100 30 C90 40 80 55 65 80 C90 75 105 55 100 30Z"></path>
+                        <path d="M5 55 C20 50 40 55 60 80 C35 80 15 70 5 55Z"></path>
+                        <path d="M115 55 C105 70 85 80 60 80 C80 55 100 50 115 55Z"></path>
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <h2>Lavender</h2>
+                    <span>Beauty Clinic</span>
+                </div>
+            </a>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <!-- Sidebar -->
+        <aside id="sidebar">
+            <button class="close-menu" id="closeMenu">✕</button>
+            <nav>
+                <ul>
+                    <li><a href="home.html"><span class="icon-nav">📊</span><span>نظرة عامة</span></a></li>
+                    <li><a href="pateins.html"><span class="icon-nav">👥</span><span>المرضى</span></a></li>
+                    <li class="active"><a href="appointments.html"><span class="icon-nav">📅</span><span>المواعيد</span></a></li>
+                    <li><a href="bills.html"><span class="icon-nav">📄</span><span>الفواتير</span></a></li>
+                    <li><a href="profile.html"><span class="icon-nav">👤</span><span>الملف الشخصي</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            <div class="appointments-page-header">
+                <div class="welcome-section">
+                    <h1>إدارة المواعيد</h1>
+                    <p>استعرض، أضف، ونظم مواعيد عيادة لافندر بكل سهولة.</p>
+                </div>
+                <button class="btn-add-appointment" id="openAddModalBtn">
+                    <span>+</span> حجز موعد جديد
+                </button>
+            </div>
+
+            <!-- Filter & Search Controls -->
+            <div class="controls-card">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="بحث باسم المريضة أو رقم الهاتف...">
+                </div>
+                <div class="filter-box">
+                    <input type="date" id="filterDate">
+                    <select id="filterDoctor">
+                        <option value="all">جميع الطبيبات</option>
+                        <option value="1">د. مريم - حقن وتجميل</option>
+                        <option value="2">د. ليلى - أخصائية جلدية</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Tabs Section -->
+            <div class="details-section">
+                <div class="sessions-card">
+                    <h4>فلترة المواعيد</h4>
+                    <div class="appointment-tabs">
+                        <button class="tab-btn active" onclick="switchTab('all')">الكل</button>
+                        <button class="tab-btn" onclick="switchTab('pending')">منتظرة</button>
+                        <button class="tab-btn" onclick="switchTab('completed')">مكتملة</button>
+                        <button class="tab-btn" onclick="switchTab('canceled')">ملغاة</button>
+                    </div>
+                </div>
+
+                <!-- Container for Rendered Appointments -->
+                <div id="appointments-container" class="appointments-list-wrapper">
+                    <!-- Dynamic rendering via JS -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: تفاصيل الموعد كاملة -->
+    <div class="booking-modal-overlay" id="detailsModal">
+        <div class="booking-modal-card">
+            <div class="modal-header">
+                <h3>تفاصيل الموعد الكاملة</h3>
+                <button class="close-modal-btn" onclick="closeModal('detailsModal')">✕</button>
+            </div>
+            <div class="modal-form">
+                <div class="patient-identity">
+                    <span>المريضة: <strong id="det-patient-name">-</strong></span>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-item"><strong>الطبيبة:</strong> <span id="det-doctor-name">-</span></div>
+                    <div class="detail-item"><strong>العلاج المحجوز:</strong> <span id="det-treatment">-</span></div>
+                    <div class="detail-item"><strong>التاريخ والوقت:</strong> <span id="det-datetime">-</span></div>
+                    <div class="detail-item"><strong>الحالة:</strong> <span id="det-status" class="status-badge">-</span></div>
+                    <div class="detail-item"><strong>كود الخصم:</strong> <span id="det-promo">-</span></div>
+                    <div class="detail-item full-width" id="cancellation-info-box" style="display: none;">
+                        <strong style="color: #e74c3c;">جهة الإلغاء و السبب:</strong> 
+                        <p id="det-canceled-by" style="color: #666; margin-top: 4px;">-</p>
+                    </div>
+                </div>
+                <div class="modal-actions" style="margin-top: 20px;">
+                    <button type="button" class="confirm-booking-btn" id="editAppBtn">تعديل الموعد</button>
+                    <button type="button" class="cancel-booking-btn" onclick="closeModal('detailsModal')">إغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: إضافة / تعديل موعد -->
+    <div class="booking-modal-overlay" id="appointmentModal">
+        <div class="booking-modal-card">
+            <div class="modal-header">
+                <h3 id="modalTitle">حجز موعد جديد</h3>
+                <button class="close-modal-btn" onclick="closeModal('appointmentModal')">✕</button>
+            </div>
+            <form class="modal-form" id="appointmentForm">
+                <input type="hidden" id="appointmentId">
+                
+                <div class="form-group">
+                    <label for="patient-name-input">اسم المريضة</label>
+                    <input type="text" id="patient-name-input" required placeholder="أدخل اسم المريضة الكامل">
+                </div>
+
+                <div class="form-group">
+                    <label for="doctor-select">اختر الطبيبة</label>
+                    <div class="select-wrapper">
+                        <select id="doctor-select" required>
+                            <option value="" disabled selected>اختر الطبيبة المتخصصة...</option>
+                            <option value="د. مريم - متخصصة حقن وتجميل">د. مريم - متخصصة حقن وتجميل</option>
+                            <option value="د. ليلى - أخصائية جلدية وعناية بالبشرة">د. ليلى - أخصائية جلدية وعناية بالبشرة</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="treatment-input">العلاج / الخدمة</label>
+                    <input type="text" id="treatment-input" required placeholder="مثال: تنظيف بشرة هيدرافيشيال">
+                </div>
+
+                <div class="form-group">
+                    <label for="promoCode">كود الخصم (إن وجد):</label>
+                    <input type="text" id="promoCode" placeholder="000000">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="booking-date">التاريخ</label>
+                        <input type="date" id="booking-date" required>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="booking-time">الوقت</label>
+                        <input type="time" id="booking-time" required>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="submit" class="confirm-booking-btn">تأكيد الحجز</button>
+                    <button type="button" class="cancel-booking-btn" onclick="closeModal('appointmentModal')">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="appointments.js"></script>
+</body>
+
+</html>

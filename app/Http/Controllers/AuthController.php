@@ -29,10 +29,25 @@ class AuthController extends Controller
         $chosenRole = strtolower($request->role);
 
         $hasRole = $user->roles()->where('name', $chosenRole)->exists();
+        if($request->role==="Doctor"){
+            $roleArabic="طبيب";
+        }
+        else if($request->role==="Manager"){
+            $roleArabic="مدير";
+
+        }
+        else if($request->role==="Receptionist"){
+            $roleArabic="استقبال";
+
+        }
+        else if($request->role==="Patient"){
+            $roleArabic="مريض";
+
+        }
 
         if (! $hasRole) {
             return response()->json([
-                'message' => 'عذراً، حسابك لا يمتلك صلاحية الدخول بصفة '.$request->role.'!',
+                'message' => 'عذراً، حسابك لا يمتلك صلاحية الدخول بصفة '.$roleArabic.'!',
             ], 422);
         }
 
@@ -123,7 +138,6 @@ class AuthController extends Controller
     // }
     public function register(Request $request)
     {
-        // 1. التحقق من البيانات (قمنا بإزالة unique:users لأننا سنعالجها يدوياً برمجياً)
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
@@ -134,7 +148,6 @@ class AuthController extends Controller
         ]);
 
         try {
-            // 2. التحقق من وجود الدور في نظامك
             $role = Role::where('name', $validatedData['role'])->first();
 
             if (! $role) {
@@ -144,25 +157,20 @@ class AuthController extends Controller
                 ], 400);
             }
 
-            // 3. البحث عن المستخدم: هل هو مسجل مسبقاً في النظام؟
             $user = User::where('email', $validatedData['email'])->first();
 
             if ($user) {
-                // [الحالة الأولى]: المستخدم موجود مسبقاً (مثلاً مريض ويريد إضافة دور طبيب)
 
-                // نتحقق أولاً إن كان يمتلك هذا الدور بالفعل حتى لا يتكرر
                 if ($user->roles()->where('role_id', $role->id)->exists()) {
                     return response()->json([
                         'status' => 'error',
-                        'message' => 'هذا الحساب يمتلك هذه الصلاحية بالفعل في النظام!',
+                        'message' => 'هذا الحساب مسجل بالفعل بهذا الدور!',
                     ], 422);
                 }
 
-                // نقوم بإضافة الدور الجديد له فقط (دون إنشاء مستخدم جديد)
                 $user->roles()->attach($role->id);
                 $message = 'تم إضافة الصلاحية الجديدة لحسابك الحالي بنجاح!';
             } else {
-                // [الحالة الثانية]: مستخدم جديد تماماً في النظام
                 $user = User::create([
                     'name' => $validatedData['name'],
                     'email' => $validatedData['email'],
@@ -170,12 +178,10 @@ class AuthController extends Controller
                     'phone' => $validatedData['phone'],
                 ]);
 
-                // ربط الدور الأول له
                 $user->roles()->attach($role->id);
                 $message = 'تم إنشاء حسابكِ بنجاح لأول مرة!';
             }
 
-            // 4. إذا كان الدور المطلوب "مريض"، ننشئ له السجل الخاص به في جدول المرضى (إن لم يكن موجوداً)
             if ($validatedData['role'] === 'patient' && ! $user->patient()->exists()) {
                 $user->patient()->create([
                     'name' => $user->name,
@@ -184,11 +190,8 @@ class AuthController extends Controller
                 ]);
             }
 
-            // 5. تسجيل الدخول وتحديث الجلسة
-            // 5. تسجيل الدخول وتحديث الجلسة بالدور الحالي الذي تم التسجيل به للتو
             Auth::login($user);
 
-            // نأخذ الدور الفعلي الذي تم إرساله في الطلب الحالي ونحوله لكابيتال
             $currentRoleName = ucfirst(strtolower($validatedData['role']));
 
             session([
@@ -200,7 +203,7 @@ class AuthController extends Controller
                 'status' => 'success',
                 'message' => $message,
                 'user_name' => $user->name,
-                'current_role' => $currentRoleName, // نرسل الدور الحالي لتسهيل التوجيه بالفرونت
+                'current_role' => $currentRoleName, 
                 'all_roles' => $user->roles()->pluck('name')->toArray(),
             ], 201);
 

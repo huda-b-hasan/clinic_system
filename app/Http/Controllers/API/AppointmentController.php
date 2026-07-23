@@ -12,10 +12,8 @@ use Illuminate\Support\Facades\DB;
 
 class AppointmentController extends Controller
 {
-
     public function storeAppointment(Request $request)
     {
-        // 1. التحقق من البيانات المدخلة (Validation)
         $request->validate([
             'patient_id' => 'required|exists:patients,id',
             'user_id' => 'required_without:auth_id',
@@ -27,7 +25,6 @@ class AppointmentController extends Controller
             'promo_code' => 'nullable|string',
         ]);
 
-        // 2. فحص فواتير المريض المعلقة (Unpaid Bills Check) عبر Eloquent
         $hasUnpaidBills = Appointment::where('patient_id', $request->patient_id)
             ->whereHas('clinicSession.bill', function ($query) {
                 $query->where('status', 'unpaid');
@@ -36,11 +33,10 @@ class AppointmentController extends Controller
         if ($hasUnpaidBills) {
             return response()->json([
                 'status' => false,
-                'message' => 'عذراً، لا يمكن إتمام الحجز لوجود فواتير مستحقة وغير مدفوعة على هذا المريض من جلسات سابقة.',
+                'message' => 'عذراً، لا يمكن إتمام الحجز بسبب وجود فواتير سابقة غير مدفوعة',
             ], 422);
         }
 
-        // 3. التحقق من صحة كود الخصم في حال إرساله (Promo Code Validation Logic)
         $promoCode = null;
         if ($request->filled('promo_code')) {
             $promoCode = PromoCode::where('code', $request->promo_code)->first();
@@ -61,14 +57,13 @@ class AppointmentController extends Controller
                 return response()->json(['status' => false, 'message' => 'عذراً، نفدت الكمية المتاحة لاستخدام هذا الكود.'], 422);
             }
 
-            // فحص استخدام المريض المسبق عبر علاقة Eloquent أو الجدول الوسيط
             $alreadyUsed = DB::table('promo_code_patient') // هذا جدول وسيط بسيط (لا بأس بـ DB هنا أو يمكنك إنشاء موديل له)
                 ->where('patient_id', $request->patient_id)
                 ->where('promo_code_id', $promoCode->id)
                 ->exists();
 
             if ($alreadyUsed) {
-                return response()->json(['status' => false, 'message' => 'لقد قمت باستخدام هذا الكود من قبل، لا يمكن استخدامه إلا مرة واحدة للمريض الواحد.'], 422);
+                return response()->json(['status' => false, 'message' => 'لقد قمت باستخدام هذا الكود من قبل.'], 422);
             }
 
             if ($promoCode->treatment_id !== null && ! in_array($promoCode->treatment_id, $request->treatment_ids)) {
@@ -91,22 +86,18 @@ class AppointmentController extends Controller
             ], 422);
         }
 
-        // جلب جميع مواعيد اليوم المختار (لتجنب عمل Queries معقدة، سنقوم بالفحص برمجياً)
         $existingAppointments = Appointment::with('treatments')
             ->whereDate('appointment_date', $startTime->toDateString())
             ->get();
 
-        // دالة داخلية لمقارنة الأوقات ومعرفة ما إذا كان الموعد الجديد يتعارض مع موعد قائم
         $hasConflict = function ($existingApp) use ($startTime, $endTime) {
             $appStart = Carbon::parse($existingApp->appointment_date);
             $appDuration = $existingApp->treatments->sum('duration');
             $appEnd = $appStart->copy()->addMinutes($appDuration);
 
-            // شرط التداخل بين فترتين زمنيتين: (Start1 < End2) و (End1 > Start2)
             return $startTime->lessThan($appEnd) && $endTime->greaterThan($appStart);
         };
 
-        // 5. فحص تعارض الطبيب
         $doctorBusy = $existingAppointments
             ->where('doctor_id', $request->doctor_id)
             ->contains($hasConflict);
@@ -115,13 +106,13 @@ class AppointmentController extends Controller
             return response()->json(['status' => false, 'message' => 'الطبيب مشغول في هذا الوقت، يرجى اختيار وقت آخر.'], 422);
         }
 
-        // 6. فحص تعارض الغرفة
         $roomBusy = $existingAppointments
             ->where('room_id', $request->room_id)
             ->contains($hasConflict);
 
         if ($roomBusy) {
-            return response()->json(['status' => false, 'message' => 'الغرفة المختارة محجوزة لحساب موعد آخر في هذا الوقت.'], 422);
+            return response()->json(['status' => false,
+                'message' => 'الغرفة المختارة غير متاحة في هذا الوقت.'], 422);
         }
 
         // 7. فحص تعارض الأجهزة الطبية المرتبطة بالطلب
@@ -134,7 +125,6 @@ class AppointmentController extends Controller
             ->toArray();
 
         if (! empty($requiredDeviceIds)) {
-            // نمر على كل المواعيد المتداخلة ونرى إن كانت تستخدم نفس الأجهزة
             $deviceConflict = $existingAppointments->filter($hasConflict)->contains(function ($appointment) use ($requiredDeviceIds) {
                 $currentAppDeviceIds = $appointment->treatments
                     ->loadMissing('devices')
@@ -151,7 +141,6 @@ class AppointmentController extends Controller
             }
         }
 
-        // 8. إنشاء الموعد وتطبيق الخصم داخل الـ Transaction
         DB::beginTransaction();
         try {
             $appointment = Appointment::create([
@@ -219,12 +208,14 @@ class AppointmentController extends Controller
         }
     }
 
-    public function cancelAppointment($id)
+    public function cancelAppointment(Request $request, $id)
     {
-        // 1. البحث عن الموعدد
+        $request->validate([
+            'cancellation_reason' => 'nullable|string|max:500',
+        ]);
+
         $appointment = Appointment::findOrFail($id);
 
-        // 2. التحقق من أن حالة الموعد الحالية هي قيد الانتظار فقط
         if ($appointment->status !== 'pending') {
             return response()->json([
                 'success' => false,
@@ -232,14 +223,55 @@ class AppointmentController extends Controller
             ], 400);
         }
 
-        // 3. تعديل الحالة إلى ملغي وحفظ التعديل
-        $appointment->status = 'canceled';
-        $appointment->save();
+        $currentRole = session('user_role');
+        $cancelledVia = 'system'; // القيمة الافتراضية
+
+        if ($currentRole === 'Patient') {
+            $cancelledVia = 'Patient';
+
+            if (now()->diffInHours($appointment->appointment_date, false) < 24) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'عذراً، لا يمكن الإلغاء قبل أقل من 24 ساعة من الموعد.',                ], 422);
+            }
+        } elseif ($currentRole === 'Doctor') {
+            $cancelledVia = 'Doctor';
+        } elseif (in_array($currentRole, ['Receptionist', 'Manager'])) {
+            $cancelledVia = 'Receptionist';
+        } else {
+            $cancelledVia = 'Receptionist';
+        }
+
+        $appointment->update([
+            'status' => 'canceled',
+            'cancelled_via' => $cancelledVia,
+            'cancellation_reason' => $request->cancellation_reason,
+            'cancelled_at' => now(),
+        ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'تم إلغاء الموعد بنجاح.',
+            'message' => 'تم إلغاء الموعد بنجاح',
+            'data' => $appointment,
         ], 200);
     }
-    
+
+public function markAsSeen(Request $request, $id) // تأكدي من استقبال الـ id كمعامل
+    {
+        $userId = session('user_id');
+
+        $appointment = Appointment::where('id', $id)
+            ->where('user_id', $userId)
+            ->first();
+
+        if ($appointment) {
+            $appointment->update([
+                'patient_saw_cancellation' => true,
+                'cancellation_seen_at' => now(),
+            ]);
+            return response()->json(['message' => 'تم التحديث بنجاح']);
+        }
+
+        return response()->json(['message' => 'الموعد غير موجود'], 404);
+    }
 }

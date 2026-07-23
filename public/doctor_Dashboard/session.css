@@ -1,0 +1,461 @@
+/* ===========================
+   ROOT VARIABLES & BASICS
+=========================== */
+:root {
+    --bg-color: #f8f8f8;
+    --white-bg: #ffffff;
+    --text-dark: #2D2A26;
+    --text-muted: #706C61;
+    --main-pink-bg: #f6e5f7;
+    --primary-color: #9C7BA3;
+    --primary-hover: #83628A;
+    --border-grey: #e9ecef;
+    --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-dark);
+    direction: rtl;
+    padding-bottom: 60px;
+}
+
+/* ===========================
+   TOP BAR
+=========================== */
+.top-bar {
+    background-color: var(--white-bg);
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-grey);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.back-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-color);
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 15px;
+    transition: transform 0.2s;
+}
+
+.back-link:hover {
+    color: var(--primary-hover);
+    transform: translateX(4px);
+}
+
+.clinic-brand {
+    text-align: left;
+}
+
+.clinic-brand h2 {
+    font-size: 16px;
+    color: #7D5BA6;
+    letter-spacing: 2px;
+}
+
+.clinic-brand span {
+    font-size: 10px;
+    color: #D4AF37;
+    letter-spacing: 1px;
+}
+
+/* ===========================
+   MAIN CONTAINER
+=========================== */
+.session-container {
+    max-width: 850px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* Patient & Treatment Info Card */
+.info-card {
+    background-color: var(--white-bg);
+    border-radius: 16px;
+    padding: 22px 25px;
+    border: 1px solid var(--border-grey);
+    box-shadow: var(--card-shadow);
+    margin-bottom: 25px;
+}
+
+.patient-main-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 18px;
+    border-bottom: 1px dashed var(--border-grey);
+}
+.info-patient-flex{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+.book-price {
+    background-color: var(--primary-color);
+    padding: 5px 10px;
+    border-radius: 20px;
+    color: var(--white-bg);
+    font-weight: bold;
+    box-shadow: 0px 2px 7px #00000024;
+}
+.patient-avatar {
+    width: 48px;
+    height: 48px;
+    background-color: var(--main-pink-bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.patient-main-info h1 {
+    font-size: 20px;
+    color: var(--text-dark);
+}
+
+.patient-subtext {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 3px;
+}
+
+/* Inline Badges */
+.appointment-details-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 18px;
+}
+
+.detail-badge {
+    background-color: #faf8fb;
+    border: 1px solid var(--border-grey);
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    display: flex;
+    gap: 6px;
+}
+
+.badge-label {
+    color: var(--text-muted);
+}
+
+.detail-badge strong {
+    color: var(--primary-color);
+}
+
+/* ===========================
+   FORM CARDS
+=========================== */
+.form-card {
+    background-color: var(--white-bg);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid var(--border-grey);
+    box-shadow: var(--card-shadow);
+    margin-bottom: 25px;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.card-header h3 {
+    font-size: 17px;
+    color: var(--text-dark);
+}
+
+.card-hint {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+
+/* Materials List */
+.materials-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.material-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 18px;
+    background-color: #fafafa;
+    border: 1px solid var(--border-grey);
+    border-radius: 12px;
+}
+
+.mat-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.mat-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-dark);
+}
+
+.mat-unit-price {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+/* ===========================
+   EXTRA MATERIALS & DYNAMIC ADD
+=========================== */
+
+.price-val {
+    color: var(--primary-color);
+}
+
+.add-material-section {
+    margin-top: 18px;
+    padding-top: 15px;
+    border-top: 1px dashed var(--border-grey);
+}
+
+.add-mat-btn {
+    background: none;
+    border: 2px dashed var(--primary-color);
+    color: var(--primary-color);
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 13.5px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.25s ease;
+}
+
+.add-mat-btn:hover {
+    background-color: var(--main-pink-bg);
+    border-style: solid;
+}
+
+/* Dropdown Add Row */
+.add-material-dropdown-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    animation: fadeIn 0.3s ease;
+}
+
+.select-group {
+    flex-grow: 1;
+}
+
+.custom-select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border-grey);
+    border-radius: 10px;
+    outline: none;
+    font-size: 14px;
+    background-color: #fafafa;
+    color: var(--text-dark);
+}
+
+.custom-select:focus {
+    border-color: var(--primary-color);
+    background-color: var(--white-bg);
+}
+
+.confirm-add-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+
+.confirm-add-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* Qty Buttons */
+.qty-counter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--white-bg);
+    border: 1px solid var(--border-grey);
+    padding: 4px 8px;
+    border-radius: 8px;
+}
+
+.qty-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background-color: var(--main-pink-bg);
+    color: var(--primary-color);
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.qty-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.qty-input {
+    width: 35px;
+    text-align: center;
+    border: none;
+    outline: none;
+    font-weight: bold;
+    font-size: 15px;
+    color: var(--text-dark);
+    background: transparent;
+}
+
+/* Doctor Notes Input */
+textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid var(--border-grey);
+    border-radius: 12px;
+    outline: none;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    transition: border-color 0.2s;
+}
+
+textarea:focus {
+    border-color: var(--primary-color);
+}
+
+/* Action Button */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.finish-session-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(156, 123, 163, 0.3);
+    transition: background 0.3s, transform 0.2s;
+}
+
+.finish-session-btn:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .top-bar {
+        padding: 15px 20px;
+    }
+
+    .appointment-details-inline {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .material-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .qty-counter {
+        align-self: flex-end;
+    }
+
+    .finish-session-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+.goBack{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 7px;
+    width: 100%;
+    padding: 24px 86px 0px;
+}
+ .goBack h2{
+    font-size: 15px;
+    font-weight: 500;
+    text-shadow:1px 1px 1px #2d2a2659;
+ }
+.lavender-button {
+    width: 30px;
+    height: 30px;
+    background-color: var(--primary-color, #9C7BA3); /* بياخد اللون البنفسجي تبعك */
+    border: none;
+    border-radius: 50%; /* ليعطي شكل الدائرة الكاملة */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* تأثير عند تمرير الماوس فوق الزر */
+.lavender-button:hover {
+    background-color: var(--primary-hover, #83628A);
+    transform: scale(1.05); /* حركة تكبير خفيفة بتعطي جمالية */
+}
+
+/* تنسيق السهم داخل الدائرة */
+.lavender-button .icon {
+    width: 20px;
+    height: 20px;
+    stroke: #ffffff; /* لون السهم أبيض ليظهر بوضوح */
+    stroke-width: 7; /* سمك السهم */
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}

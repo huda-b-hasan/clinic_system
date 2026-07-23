@@ -596,14 +596,188 @@ main {
         box-sizing: border-box;
     }
 }
-.cancel-btn{
-    background-color: #d9534f;
-    color: white;
-    padding: 5px 16px;
+/* ==========================================
+   تنسيقات إشعار إلغاء الموعد (مستقلة)
+   ========================================== */
+.cancellation-alert-card {
+    display: none; /* يتم التحكم بها عبر JS */
+    background: linear-gradient(135deg, #fdf2f2 0%, #fef2f2 100%);
+    border: 1px solid rgba(220, 53, 69, 0.2);
+    border-radius: 15px;
+    padding: 15px 25px;
+    margin-bottom: 25px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.05);
+    animation: fadeInCard 0.5s ease-in-out;
+}
+
+.cancellation-alert-card .alert-icon {
+    background-color: var(--white-bg);
+    color: #dc3545;
+    padding: 10px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.cancellation-alert-card .alert-btn {
+    background-color: #dc3545;
+    color: var(--white-bg);
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
     border: none;
-    border-radius: 27px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    white-space: nowrap;
+}
+
+.cancellation-alert-card .alert-btn:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+}
+
+/* التوافق مع شاشات الهواتف */
+@media (max-width: 576px) {
+    .cancellation-alert-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 15px;
+    }
+    .cancellation-alert-card .alert-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+.cancellation-dropdown {
+    position: fixed;
+    top: 80px; /* تحت الهيدر */
+    right: 30px;
+    width: 300px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    z-index: 9999; /* تظهر فوق كل شيء */
+    padding: 15px;
+    border: 1px solid #eee;
+}
+
+.dropdown-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.cancellation-item {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 10px 0;
+}/* كارد التنبيه */
+.cancellation-alert-card {
+    background: #fdf5f7;
+    border: 1px solid #d4af37;
+    padding: 15px 20px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    color: #4a4a4a;
+}
+
+.alert-info { display: flex; align-items: center; gap: 15px; }
+
+.view-btn {
+    background: #d4af37;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
     cursor: pointer;
 }
-.cancel-btn:hover{
-   background-color: #C82333;
+
+/* النافذة المنبثقة */
+.cancellation-modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-backdrop {
+    position: absolute; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}/* خلفية المودل */
+.modal-overlay {
+        z-index: 1001;
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.5);
+    display: flex; justify-content: center; align-items: center;
+}
+
+.modal-container {
+    background: white; width: 400px; border-radius: 20px;
+    padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.modal-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+
+/* تصميم الكارد */
+.cancellation-card {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px; border-bottom: 1px solid #f0f0f0;
+}
+
+.card-info h4 { margin: 0; font-size: 15px; color: #333; }
+.card-info p { margin: 5px 0 0; font-size: 12px; color: #888; }
+
+/* تصميم الزر */
+.btn-rebook {
+    background: var(--dark-pink-accent); color: white; border: none;
+    padding: 8px 15px; border-radius: 8px; font-size: 12px; cursor: pointer;
+}
+
+/* زر حسناً */
+.modal-footer { margin-top: 20px; text-align: center; }
+.btn-ok {
+    background: var(--dark-pink-accent); color: white; padding: 10px 30px;
+    border: none; border-radius: 20px; cursor: pointer;
+}
+.btn-ok:hover{
+    background-color: var(--primary-color);
+}
+.close-icon{
+    background: none;
+    border: none;
+    font-size: 25px;
+}.modal-body {
+    max-height: 400px; /* أو أي ارتفاع تفضلينه */
+    overflow-y: auto;   /* تفعيل التمرير العمودي */
+    padding: 10px;      /* مسافة داخلية لراحة العين */
+    margin: 10px 0;     /* مسافة عن الرأس والقدم */
+}
+
+/* لتحسين شكل شريط التمرير (اختياري، يبدو ألطف) */
+.modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+.modal-body::-webkit-scrollbar-thumb {
+    background-color: var(--border-grey); /* لون ذهبي لشريط التمرير */
+    border-radius: 10px;
 }

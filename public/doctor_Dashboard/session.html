@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lavender Beauty Clinic</title>
+    <link rel="stylesheet" href="../component/toast.css">
+    <link rel="stylesheet" href="session.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪻</text></svg>">
+</head>
+
+<body>
+
+    <!-- ================= TOP BACK BAR ================= -->
+    <div class="goBack">
+        <a href="sessions.html">
+            <button class="lavender-button" title="رجوع">
+                <svg class="icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 50 H80 M80 50 L60 30 M80 50 L60 70" />
+                </svg>
+            </button>
+        </a>
+        <h2>الرجوع الى الخدمات</h2>
+    </div>
+
+    <!-- ================= MAIN CONTAINER ================= -->
+    <div class="session-container">
+
+        <!-- ===== PATIENT & APPOINTMENT INFO CARD ===== -->
+        <section class="info-card">
+            <div class="patient-main-info">
+                <div class="info-patient-flex">
+                    <div class="patient-avatar">🪻</div>
+                    <div>
+                        <h1 id="patientName">سارة أحمد</h1>
+                        <p class="patient-subtext">العمر: 26 سنة • هاتف: 0912345678</p>
+                    </div>
+                </div>
+                <div id="book-price" class="book-price">
+
+                </div>
+            </div>
+
+            <div class="appointment-details-inline">
+                <div class="detail-badge">
+                    <span class="badge-label">العلاج المحجوز:</span>
+                    <strong id="treatmentName">تنظيف بشرة عميق (HydraFacial)</strong>
+                </div>
+                <div class="detail-badge">
+                    <span class="badge-label">الجهاز المستخدم:</span>
+                    <strong id="deviceName">HydraFacial Elite PRO</strong>
+                </div>
+                <div class="detail-badge">
+                    <span class="badge-label">الغرفة:</span>
+                    <strong id="roomName">غرفة رقم 2</strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SESSION FORM ===== -->
+        <form id="clinicSessionForm" class="session-form">
+
+            <!-- 1. MATERIALS CONSUMED -->
+            <div class="form-card">
+                <div class="card-header">
+                    <span class="card-icon">🧪</span>
+                    <h3>المواد المستهلكة في الجلسة</h3>
+                </div>
+                <p class="card-hint">المواد المحددة مسبقاً للجلسة، ويمكنك إضافة أي مواد إضافية استُهلكت أثناء العلاج</p>
+
+                <!-- قائمة المواد المحددة مسبقاً + المواد المضافة -->
+                <div class="materials-grid" id="materialsContainer">
+
+                    <!-- مادة مسبقة التحديد (Default) -->
+                    <div class="material-card">
+                        <div class="mat-details">
+                            <span class="mat-name">ماسك سيروم هيدرا (أساسي)</span>
+                            <span class="mat-unit-price">السعر للوحدة: <strong class="price-val">15.00</strong> $</span>
+                        </div>
+                        <div class="qty-counter">
+                            <button type="button" class="qty-btn minus">-</button>
+                            <input type="number" name="materials[1]" value="1" min="0" readonly class="qty-input"
+                                data-price="15.00">
+                            <button type="button" class="qty-btn plus">+</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- زر إضافة مادة إضافية -->
+                <div class="add-material-section">
+                    <button type="button" id="showAddMaterialBtn" class="add-mat-btn">
+                        <span>+ إضافة مادة إضافية من المخزن</span>
+                    </button>
+
+                    <!-- صندوق اختيار المادة الإضافية (مخفي افتراضياً) -->
+                    <div id="addMaterialDropdownRow" class="add-material-dropdown-row" style="display: none;">
+                        <div class="select-group">
+                            <select id="extraMaterialSelect" class="custom-select">
+                                <option value="" disabled selected>اختر المادة من المخزن...</option>
+                                <!-- يُملأ من قواعد البيانات لاحقاً -->
+                                <option value="2" data-price="40.00">حقنة فيلر Hyaluronic Acid — (40.00 $)</option>
+                                <option value="3" data-price="65.00">أمبول بوتوكس Botox 50u — (65.00 $)</option>
+                                <option value="4" data-price="25.00">خيوط شد شفايف (Monofilament) — (25.00 $)</option>
+                            </select>
+                        </div>
+                        <button type="button" id="confirmAddMaterialBtn" class="confirm-add-btn">إضافة للجلسة</button>
+                    </div>
+                </div>
+            </div>
+            <!-- 2. DOCTOR NOTES -->
+            <div class="form-card">
+                <div class="card-header">
+                    <span class="card-icon">📝</span>
+                    <h3>ملاحظات الطبيب والتقرير الطبي</h3>
+                </div>
+
+                <div class="form-group">
+                    <textarea name="doctor_notes" id="doctorNotes" rows="5"
+                        placeholder="اكتب الملاحظات الطبية عن حالة المريض، نصائح العناية المنزلية، أو توصيات الجلسة القادمة..."></textarea>
+                </div>
+            </div>
+
+            <!-- ===== SUBMIT ACTION ===== -->
+            <div class="form-actions">
+                <button type="submit" class="finish-session-btn">
+                    <span>إنهاء الجلسة وإصدار الفاتورة</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+<div id="toast" class="toast"></div>
+    <script src="session.js"></script>
+</body>
+
+</html>

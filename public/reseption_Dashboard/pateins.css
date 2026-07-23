@@ -64,7 +64,56 @@
     border-bottom: 1px solid var(--border-grey);
     padding-bottom: 12px;
 }
+.details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e2e8f0;
+}
 
+.details-header .details-title {
+    margin-bottom: 0; 
+}
+.details-title{
+    border-bottom: none;
+}
+
+.btn-edit-patient {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: var(--bg-color);
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    border-radius: 18px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-edit-patient:hover {
+    background-color: var(--dark-pink-accent); 
+    color: #ffffff;
+    border-color: var(--dark-pink-accent);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+    transform: translateY(-1px);
+}
+
+.btn-edit-patient:hover .icon-edit {
+    stroke: #ffffff;
+}
+
+.btn-edit-patient:active {
+    transform: translateY(0);
+}
+
+.icon-edit {
+    transition: stroke 0.2s ease;
+}
 .patients-list {
     display: flex;
     flex-direction: column;

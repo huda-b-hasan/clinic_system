@@ -8,6 +8,8 @@
     <title>Lavender Beauty Clinic</title>
 
     <link rel="stylesheet" href="sessions.css">
+    <link rel="stylesheet" href="../component/toast.css">
+    <link rel="stylesheet" href="../component/cancelModel.css">
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪻</text></svg>">
 
@@ -307,75 +309,58 @@
         </main>
 
     </div>
-    <!-- نافذة تأكيد الإلغاء -->
+
     <div id="cancelModal" class="modal">
         <div class="modal-content">
-            <h3>هل أنت متأكد؟</h3>
-            <p>هل تريد حقاً إلغاء هذه الجلسة؟ لا يمكن التراجع عن هذا الإجراء.</p>
-            <div class="modal-actions">
-                <button id="confirmCancel" class="confirm-btn">نعم، قم بالإلغاء</button>
-                <button id="closeModal" class="close-modal-btn">تراجع</button>
+            <span class="close-btn" id="closeModalBtn">&times;</span>
+
+            <div class="modal-body">
+
+                <h3 class="modal-title">هل تود إلغاء موعد المريض؟</h3>
+                <p class="modal-subtitle">الرجاء كتابه السبب لاعلام المريض
+                 </p>
+
+                <form id="cancelAppointmentForm">
+                    <div class="form-group">
+                        <textarea id="cancellation_reason" name="cancellation_reason" rows="3"
+                            placeholder=""></textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" id="backModalBtn" class="back-btn">تراجع</button>
+                        <button type="button" id="confirmCancelBtn" class="cancel-btn">تأكيد الإلغاء</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+    <div id="toastNotification"
+        style="display: none; position: fixed; bottom: 20px; left: 20px; background: #28a745; color: white; padding: 15px 25px; border-radius: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1001; direction: rtl; font-weight: bold;">
+        ✓ تم إلغاء الموعد بنجاح.
+    </div>
     <script>
-        // --- كود القائمة الجانبية الموجود مسبقاً ---
-        const menuBtn = document.querySelector(".menu-toggle");
-        const closeBtn = document.querySelector(".close-menu");
-        const sidebar = document.querySelector("aside");
+        const menuToggle = document.querySelector('.menu-toggle');
+        const closeMenu = document.querySelector('.close-menu');
+        const sidebar = document.querySelector('aside');
 
-        menuBtn.addEventListener("click", () => {
-            sidebar.classList.add("open");
+        menuToggle.addEventListener('click', (e) => {
+            sidebar.classList.toggle('open');
+            e.stopPropagation(); // لمنع تضارب الحدث مع إغلاق القائمة عند الضغط بالخارج
         });
 
-        closeBtn.addEventListener("click", () => {
-            sidebar.classList.remove("open");
+        closeMenu.addEventListener('click', () => {
+            sidebar.classList.remove('open');
         });
 
-        // --- كود نافذة تأكيد الإلغاء الجديد ---
-        const cancelButtons = document.querySelectorAll('.cancel-btn');
-        const modal = document.getElementById('cancelModal');
-        const confirmCancelBtn = document.getElementById('confirmCancel');
-        const closeModalBtn = document.getElementById('closeModal');
-
-        let sessionCardToRemove = null; // متغير لحفظ الكرت المراد حذفه
-
-        // عند الضغط على زر "إلغاء الجلسة" في أي كرت
-        cancelButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                sessionCardToRemove = this.closest('.session-card'); // تحديد الكرت الحالي
-                modal.classList.add('show'); // إظهار النافذة
-            });
-        });
-
-        // عند الضغط على زر "تراجع"
-        closeModalBtn.addEventListener('click', () => {
-            modal.classList.remove('show');
-            sessionCardToRemove = null;
-        });
-
-        // عند الضغط على زر "نعم، قم بالإلغاء"
-        confirmCancelBtn.addEventListener('click', () => {
-            if (sessionCardToRemove) {
-                // إضافة تأثير اختفاء بسيط ثم حذف العنصر (اختياري لكن يضيف لمسة احترافية)
-                sessionCardToRemove.style.opacity = '0';
-                setTimeout(() => {
-                    sessionCardToRemove.remove(); // حذف الكرت من الصفحة
-                }, 300);
-            }
-            modal.classList.remove('show'); // إخفاء النافذة
-            sessionCardToRemove = null;
-        });
-
-        // إغلاق النافذة إذا قام المستخدم بالنقر خارج المربع الأبيض
-        window.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.remove('show');
-                sessionCardToRemove = null;
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
             }
         });
+
     </script>
     <script src="sessions.js"></script>
+    <script src="../component/cancelModel.js"></script>
 </body>
 
 </html>

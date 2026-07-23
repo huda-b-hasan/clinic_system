@@ -4,348 +4,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Lavender Beauty Clinic</title>
-
-    <link rel="stylesheet" href="pateins.css">
+    <title>Lavender Beauty Clinic </title>
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪻</text></svg>">
-
+    <link rel="stylesheet" href="../template.css">
+    <link rel="stylesheet" href="pateins.css">
+    <link rel="stylesheet" href="../component/toast.css">
 </head>
-
 
 <body>
 
-    <!-- ================= HEADER ================= -->
     <header>
-
-
-
         <div class="header-right">
+            <button class="menu-toggle" aria-label="فتح القائمة">☰</button>
 
-            <!-- زر القائمة للموبايل -->
-            <button class="menu-toggle" aria-label="فتح القائمة">
-                ☰
-            </button>
-
-
-            <!-- الشعار -->
             <a href="../auth/home.html" class="logo">
-
                 <svg width="50" height="60" viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-
                     <g stroke="#D4AF37" stroke-width="2.5" fill="none">
-
                         <path d="M60 10 C45 35 50 60 60 80 C70 60 75 35 60 10Z"></path>
-
                         <path d="M40 25 C35 45 40 65 55 80 C58 55 52 40 40 25Z"></path>
-
                         <path d="M80 25 C68 40 62 55 65 80 C80 65 85 45 80 25Z"></path>
-
                         <path d="M20 30 C15 55 30 75 55 80 C40 55 30 40 20 30Z"></path>
-
                         <path d="M100 30 C90 40 80 55 65 80 C90 75 105 55 100 30Z"></path>
-
                         <path d="M5 55 C20 50 40 55 60 80 C35 80 15 70 5 55Z"></path>
-
                         <path d="M115 55 C105 70 85 80 60 80 C80 55 100 50 115 55Z"></path>
-
                     </g>
-
                 </svg>
-
-
-                <!-- نص الشعار -->
                 <div class="logo-text">
-
                     <h2>Lavender</h2>
-
-                    <span>
-                        Beauty Clinic
-                    </span>
-
+                    <span>Beauty Clinic</span>
                 </div>
-
-
             </a>
-
         </div>
-
     </header>
 
-    <!-- END HEADER -->
-
-    <!-- ================= MAIN WRAPPER ================= -->
-
     <div class="main-wrapper">
-
-
-        <!-- ================= SIDEBAR ================= -->
-
+        <!-- السايدبار الأساسي (نفس المظهر) -->
         <aside>
-
-
-            <!-- زر إغلاق القائمة -->
-
-            <div class="sidebar-top">
-
-                <button class="close-menu">
-                    ✕
-                </button>
-            </div>
-
-
-
+            <button class="close-menu">✕</button>
             <nav>
-
                 <ul>
-
-
-                    <!-- الصفحة الرئيسية -->
-
-                    <li>
-
-                        <a href="home.html">
-
-
-                            <span class="icon-nav">
-
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-
-
+                    <li><a href="home.html"><span class="icon-nav"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    class="lucide lucide-layout-dashboard h-4 w-4" aria-hidden="true">
                                     <rect width="7" height="9" x="3" y="3" rx="1"></rect>
-
                                     <rect width="7" height="5" x="14" y="3" rx="1"></rect>
-
                                     <rect width="7" height="9" x="14" y="12" rx="1"></rect>
-
                                     <rect width="7" height="5" x="3" y="16" rx="1"></rect>
-
-
-                                </svg>
-
-                            </span>
-
-
-                            <span>
-                                نظرة عامة
-                            </span>
-
-
-                        </a>
-
-                    </li>
-
-
-
-                    <!-- الجلسات -->
+                                </svg></span><span>نظرة عامة</span></a></li>
 
                     <li>
-
                         <a href="sessions.html">
-
-
                             <span class="icon-nav">
-
-
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-
-
+                                    stroke-linejoin="round" class="lucide lucide-stethoscope h-4 w-4"
+                                    aria-hidden="true">
                                     <path d="M11 2v2"></path>
-
                                     <path d="M5 2v2"></path>
-
                                     <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path>
-
                                     <path d="M8 15a6 6 0 0 0 12 0v-3"></path>
-
                                     <circle cx="20" cy="10" r="2"></circle>
-
-
                                 </svg>
 
-
                             </span>
-
-
-                            <span>
-                                الجلسات
-                            </span>
-
-
+                            <span>الجلسات</span>
                         </a>
-
                     </li>
-
-
-
-
-                    <!-- المرضى -->
-
-                    <li class="active">
-
-                        <a href="pateins.html">
-
-
-                            <span class="icon-nav">
-
+                    <li class="active"><a href="pateins.html"><span class="" icon-nav="">
 
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-
-
+                                    stroke-linejoin="round" class="lucide lucide-users h-5 w-5" aria-hidden="true">
                                     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-
                                     <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
-
                                     <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-
                                     <circle cx="9" cy="7" r="4"></circle>
-
-
                                 </svg>
-
-
-                            </span>
-
-
-                            <span>
-                                المرضى
-                            </span>
-
-
-                        </a>
-
-
-                    </li>
-
-
-
-
-
-                    <!-- الملف الشخصي -->
-
-                    <li>
-
-
-                        <a href="profile.html">
-
-
-                            <span class="icon-nav">
-
-
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-
-
+                            </span><span> المرضى</span></a></li>
+                    <li><a href="profile.html"><span class="" icon-nav=""><svg xmlns="http://www.w3.org/2000/svg"
+                                    width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="lucide lucide-user h-4 w-4" aria-hidden="true">
                                     <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-
                                     <circle cx="12" cy="7" r="4"></circle>
-
-
-                                </svg>
-
-
-                            </span>
-
-
-                            <span>
-                                الملف الشخصي
-                            </span>
-
-
-                        </a>
-
-
-                    </li>
-
-
+                                </svg></span><span>الملف الشخصي</span></a></li>
                 </ul>
-
-
             </nav>
-
-
         </aside>
 
-
-        <!-- END SIDEBAR -->
-
-
-
-        <!-- ================= MAIN CONTENT ================= -->
-
+        <!-- المحتوى الأساسي لصفحة المرضى -->
         <main>
-
-
-            <!-- الترحيب -->
-
-            <div class="welcome-section">
-
-
-                <h1>
-                    المرضى
-                    <span id="patientName"></span>
-                </h1>
-                <p>
-                    البحث ومراجعة وإدارة سجلات المرضى.
-                </p>
-
+            <div class="patients-page-header">
+                <div class="welcome-section">
+                    <h1>إدارة المرضى</h1>
+                    <p>استعرض بيانات المرضى وسجل الملاحظات الطبية بكل سهولة.</p>
+                </div>
 
             </div>
 
-            <!-- جدول المرضى -->
-            <div class="table-container">
+            <!-- شبكة عرض المرضى والتفاصيل جنب لجنب أو تحت بعض بالتجاوب -->
+            <div class="patients-container">
 
-                <table class="patients-table">
+                <!-- قائمة المرضى (الاسم فقط) -->
+                <div class="patients-list-section">
+                    <h3 class="section-title">قائمة المرضى المسجلين</h3>
+                    <div class="patients-list">
+                    </div>
+                </div>
 
-                    <thead>
-                        <tr>
-                            <th>المريضة</th>
-                            <th>العمر</th>
-                            <th>العنوان</th>
-                            <th>رقم الهاتف</th>
-                            <th>الملاحظات الطبية</th>
-                        </tr>
-                    </thead>
+                <!-- لوحة تفاصيل المريض المختار (تظهر ديناميكياً) -->
+                <div class="patient-details-section" id="detailsBox">
+                    <div class="empty-details-state" id="emptyState">
+                        <p>اختر مريضاً من القائمة لعرض بياناته التفصيلية هنا.</p>
+                    </div>
 
-                    <tbody>
+                    <div class="details-content" id="detailsContent" style="display: none;">
+                        <div class="details-header">
+                            <h3 class="details-title">تفاصيل الملف الطبي</h3>
 
-                    </tbody>
-
-                    <!-- <tbody id="patientsTableBody">
-
-           </tbody> -->
-
-
-
-                </table>
+                            <!-- زر تعديل الملف -->
+                            <button class="btn-edit-patient" id="openEditModalBtn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="icon-edit">
+                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+                                    <path d="m15 5 4 4"></path>
+                                </svg>
+                                <span>تعديل الملف</span>
+                            </button>
+                        </div>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">الاسم الكامل:</span>
+                                <span class="info-value" id="detName">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">رقم الهاتف:</span>
+                                <span class="info-value" id="detPhone"
+                                    style="direction: ltr; text-align: right;">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">الجنس:</span>
+                                <span class="info-value" id="detGender">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">العمر الحالي:</span>
+                                <span class="info-value" id="detBirthdate">-</span>
+                            </div>
+                            <div class="info-item full-row">
+                                <span class="info-label">العنوان الحالي:</span>
+                                <span class="info-value" id="detAddress">-</span>
+                            </div>
+                            <div class="info-item full-row">
+                                <span class="info-label">الملاحظات الطبية:</span>
+                                <div class="notes-box" id="detNotes">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
-
         </main>
     </div>
 
-    <script>
-        const menuBtn = document.querySelector(".menu-toggle");
-        const closeBtn = document.querySelector(".close-menu");
-        const sidebar = document.querySelector("aside");
+    <!-- نافذة منبثقة (Modal) لإضافة مريض جديد -->
+    <div class="modal-backdrop" id="addPatientModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>إضافة ملف مريض جديد</h3>
+                <button class="close-modal-btn" id="closeModalBtn">✕</button>
+            </div>
+            <!-- فورم الإضافة متوافق مع المايغريشن -->
+            <form action="#" method="POST" class="modal-form">
+                <div class="form-grid-patients">
 
-        menuBtn.addEventListener("click", () => {
-            sidebar.classList.add("open");
+                    <div class="form-group-p">
+                        <label class="form-label-p" for="name">الاسم الكامل *</label>
+                        <input type="text" id="name" name="name" required class="form-input-p"
+                            placeholder="أدخل اسم المريض الثنائي">
+                    </div>
+
+                    <div class="form-group-p">
+                        <label class="form-label-p" for="phone">رقم الهاتف *</label>
+                        <input type="text" id="phone" name="phone" required class="form-input-p"
+                            placeholder="09xxxxxxxx" style="direction: ltr;">
+                    </div>
+
+                    <div class="form-group-p">
+                        <label class="form-label-p" for="gender">الجنس *</label>
+                        <select id="gender" name="gender" required class="form-select-p">
+                            <option value="" disabled selected>اختر الجنس</option>
+                            <option value="female">أنثى</option>
+                            <option value="male">ذكر</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group-p">
+                        <label class="form-label-p" for="birthdate">تاريخ الميلاد</label>
+                        <input type="date" id="birthdate" name="birthdate" class="form-input-p">
+                    </div>
+
+                    <div class="form-group-p full-width-p">
+                        <label class="form-label-p" for="address">العنوان</label>
+                        <input type="text" id="address" name="address" class="form-input-p"
+                            placeholder="المحافظة، المنطقة، الشارع">
+                    </div>
+
+                    <div class="form-group-p full-width-p">
+                        <label class="form-label-p" for="medical_notes">الملاحظات والقصة الطبية</label>
+                        <textarea id="medical_notes" name="medical_notes" rows="4" class="form-textarea-p"
+                            placeholder="أي حساسيات، أمراض مزمنة، أو توصيات خاصة بجلسات المريض..."></textarea>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-submit-p">حفظ الملف</button>
+                    <button type="button" class="btn-cancel-p" id="cancelModalBtn">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+         <div id="toast" class="toast">تم تحديث ملفكِ الشخصي بنجاح!</div>
+
+
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const closeMenu = document.querySelector('.close-menu');
+        const sidebar = document.querySelector('aside');
+
+        // فتح وإغلاق القائمة عند الضغط على زر الهامبرغر
+        menuToggle.addEventListener('click', (e) => {
+            sidebar.classList.toggle('open');
+            e.stopPropagation(); // لمنع تضارب الحدث مع إغلاق القائمة عند الضغط بالخارج
         });
 
-        closeBtn.addEventListener("click", () => {
-            sidebar.classList.remove("open");
+        // إغلاق القائمة عند الضغط على زر إكس (✕)
+        closeMenu.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+        });
+
+        // ميزة إضافية: إغلاق القائمة تلقائياً عند الضغط في أي مكان خارجها (UX ممتاز)
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+            }
         });
     </script>
-    <script src="pateins.js"></script>
+    <script src="../component/patientData.js"></script>
 </body>
 
 </html>

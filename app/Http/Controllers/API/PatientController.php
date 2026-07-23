@@ -100,50 +100,52 @@ class PatientController extends Controller
             'data' => $appointments,
         ], 200);
     }
+
     public function getRecentTreatmentsForRating()
-{
-    // 1. جلب معرف المستخدم من السيشين
-    $userId = session('user_id');
+    {
+        // 1. جلب معرف المستخدم من السيشين
+        $userId = session('user_id');
 
-    // 2. جلب المريض المرتبط بهذا المستخدم
-    $patient = Patient::where('user_id', $userId)->first();
+        // 2. جلب المريض المرتبط بهذا المستخدم
+        $patient = Patient::where('user_id', $userId)->first();
 
-    if (! $patient) {
+        if (! $patient) {
+            return response()->json([
+                'status' => false,
+                'message' => 'لم يتم العثور على ملف مريض مرتبط بهذا الحساب.',
+                'data' => [],
+            ]);
+        }
+
+        // 3. الاستعلام عن كل الخدمات الفريدة التي تمت جلساتها خلال آخر 30 يوماً ولم تُقيّم بعد
+        $recentTreatments = Treatment::whereHas('appointments', function ($query) use ($patient) {
+            $query->where('patient_id', $patient->id)
+                ->whereHas('clinicSession', function ($q) {
+                    // تمت الجلسة خلال آخر 30 يوماً (شهر أو أقل)
+                    $q->where('created_at', '>=', Carbon::now()->subDays(30));
+                });
+        })
+        // التأكد من أن المستخدم الحالي لم يقم بتقييم هذه الخدمات مسبقاً
+            ->whereDoesntHave('ratings', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->get();
+
+        // 4. تحويل مجموعة البيانات إلى مصفوفة مبسطة (id و name) وإرجاعها
+        $treatmentsArray = $recentTreatments->map(function ($treatment) {
+            return [
+                'treatment_id' => $treatment->id,
+                'treatment_name' => $treatment->name,
+            ];
+        })->values()->all();
+
         return response()->json([
-            'status' => false,
-            'message' => 'لم يتم العثور على ملف مريض مرتبط بهذا الحساب.',
-            'data' => []
+            'status' => true,
+            'count' => count($treatmentsArray),
+            'data' => $treatmentsArray, // مصفوفة الخدمات الجاهزة للتقييم
         ]);
     }
 
-    // 3. الاستعلام عن كل الخدمات الفريدة التي تمت جلساتها خلال آخر 30 يوماً ولم تُقيّم بعد
-    $recentTreatments = Treatment::whereHas('appointments', function ($query) use ($patient) {
-        $query->where('patient_id', $patient->id)
-            ->whereHas('clinicSession', function ($q) {
-                // تمت الجلسة خلال آخر 30 يوماً (شهر أو أقل)
-                $q->where('created_at', '>=', Carbon::now()->subDays(30));
-            });
-    })
-    // التأكد من أن المستخدم الحالي لم يقم بتقييم هذه الخدمات مسبقاً
-    ->whereDoesntHave('ratings', function ($query) use ($userId) {
-        $query->where('user_id', $userId);
-    })
-    ->get();
-
-    // 4. تحويل مجموعة البيانات إلى مصفوفة مبسطة (id و name) وإرجاعها
-    $treatmentsArray = $recentTreatments->map(function ($treatment) {
-        return [
-            'treatment_id' => $treatment->id,
-            'treatment_name' => $treatment->name,
-        ];
-    })->values()->all();
-
-    return response()->json([
-        'status' => true,
-        'count' => count($treatmentsArray),
-        'data' => $treatmentsArray // مصفوفة الخدمات الجاهزة للتقييم
-    ]);
-}
     public function checkPendingRating()
     {
         // 1. جلب معرف المستخدم من السيشين التي قمتِ بالتحقق منها في الميدل وير
@@ -192,176 +194,184 @@ class PatientController extends Controller
         ]);
     }
 
-    /**
-     * جلب إحصائيات المريض: المواعيد القادمة، الجلسات السابقة، والفواتير المستحقة بدالة واحدة
-     */
-    // public function getPatientDashboardData()
-    // {
-    //     // 1. التحقق من السيشين اليدوية
-    //     if (! session()->has('user_id')) {
-    //         return response()->json(['message' => 'غير مصرح لك، الجلسة منتهية'], 403);
-    //     }
-
-    //     $userId = session('user_id');
-    //     $patient = Patient::where('user_id', $userId)->first();
-
-    //     if (! $patient) {
-    //         return response()->json(['message' => 'لم يتم العثور على بيانات المريض'], 404);
-    //     }
-
-    //     // الوقت الحالي للمقارنة (سنة 2026)
-    //     $now = Carbon::now();
-
-    //     // 2. جلب المواعيد القادمة أو المعلقة (حالتها pending وتاريخها مستقبلي أو اليوم)
-    //     $futureAppointments = $patient->appointments()
-    //         ->where(function ($query) use ($now) {
-    //             $query->where('status', 'pending')
-    //                 ->orWhere('appointment_date', '>=', $now);
-    //         })
-    //         ->with(['doctor:id,name', 'treatments:id,name']) // جلب الحقول المحتاجة فقط لتسريع الأداء
-    //         ->orderBy('appointment_date', 'asc')
-    //         ->get();
-
-    //     // 3. جلب الجلسات السابقة (التي أنشئ لها سجل في جدول clinic_sessions)
-    //     // ندخل من المريض للمواعيد المكتملة، ثم نجلب الجلسة والفاتورة بداخلها
-    //     $pastSessions = $patient->appointments()
-    //         ->where('status', 'completed')
-    //         ->whereHas('clinicSession') // نضمن أن لها جلسة مسجلة فعلياً
-    //         ->with(['doctor:id,name', 'treatments:id,name', 'clinicSession.bill'])
-    //         ->orderBy('appointment_date', 'desc')
-    //         ->get();
-
-    //     // 4. جلب وتحليل الفواتير المستحقة (غير المدفوعة)
-    //     // نمر عبر المواعيد المكتملة التي تحتوي على جلسات بها فواتير غير مدفوعة
-    //     $unpaidBills = [];
-    //     $totalUnpaidAmount = 0;
-
-    //     foreach ($pastSessions as $appointment) {
-    //         $session = $appointment->clinicSession;
-    //         if ($session && $session->bill && $session->bill->status === 'unpaid') {
-    //             $unpaidBills[] = [
-    //                 'session_id' => $session->id,
-    //                 'appointment_date' => $appointment->appointment_date,
-    //                 'treatment' => $appointment->treatments->first() ? $appointment->treatments->first()->name : 'جلسة علاجية',
-    //                 'doctor_name' => $appointment->doctor ? $appointment->doctor->name : 'غير محدد',
-    //                 'amount' => $session->bill->amount_paid,
-    //                 'bill_date' => $session->bill->date,
-    //             ];
-    //             $totalUnpaidAmount += (float) $session->bill->amount_paid;
-    //         }
-    //     }
-
-    //     // 5. تجميع كل البيانات والعدادات في مصفوفة واحدة نظيفة للفرونت إند
-    //     return response()->json([
-    //         'status' => 'success',
-    //         'stats' => [
-    //             'future_appointments_count' => $futureAppointments->count(),
-    //             'past_sessions_count' => $pastSessions->count(),
-    //             'unpaid_bills_count' => count($unpaidBills),
-    //             'total_unpaid_amount' => $totalUnpaidAmount,
-    //         ],
-    //         'data' => [
-    //             'future_appointments' => $futureAppointments,
-    //             'past_sessions' => $pastSessions->map(function ($app) {
-    //                 return [
-    //                     'session_id' => $app->clinicSession->id,
-    //                     'appointment_date' => $app->appointment_date,
-    //                     'doctor_name' => $app->doctor ? $app->doctor->name : 'غير محدد',
-    //                     'treatments' => $app->treatments,
-    //                     'doctor_notes' => $app->clinicSession->doctor_notes,
-    //                     'bill' => $app->clinicSession->bill,
-    //                 ];
-    //             }),
-    //             'unpaid_bills' => $unpaidBills,
-    //         ],
-    //     ], 200);
-    // }
     public function getPatientDashboardData()
-{
-    // 1. التحقق من السيشين اليدوية
-    if (! session()->has('user_id')) {
-        return response()->json(['message' => 'غير مصرح لك، الجلسة منتهية'], 403);
-    }
-
-    $userId = session('user_id');
-    $patient = Patient::where('user_id', $userId)->first();
-
-    if (! $patient) {
-        return response()->json(['message' => 'لم يتم العثور على بيانات المريض'], 404);
-    }
-
-    // جلب جميع مواعيد المريض مع العلاقات المطلوبة وترتيبها من الأحدث للأقدم
-    $allAppointments = $patient->appointments()
-        ->with(['doctor:id,name', 'treatments:id,name', 'clinicSession.bill'])
-        ->orderBy('appointment_date', 'desc')
-        ->get();
-
-    // 2. تقسيم المواعيد بناءً على الحالات المطلوبة باستخدام Collection Filtering
-    
-    // أ. المواعيد المعلقة (Pending)
-    $pendingAppointments = $allAppointments->where('status', 'pending')->values();
-
-    // ب. المواعيد الملغاة (Cancelled) - تأكد أن التسمية في الـ Enum تطابق القيمة هنا
-    $cancelledAppointments = $allAppointments->where('status', 'cancelled')->values();
-
-    // ج. الجلسات المكتملة (Completed) والتي تمتلك جلسة مسجلة فعلياً
-    $completedAppointments = $allAppointments->where('status', 'completed')
-        ->filter(function ($app) {
-            return $app->clinicSession !== null;
-        })
-        ->values();
-
-    // 3. تحليل وفحص الفواتير المستحقة (غير المدفوعة) من المواعيد المكتملة
-    $unpaidBills = [];
-    $totalUnpaidAmount = 0;
-
-    foreach ($completedAppointments as $appointment) {
-        $session = $appointment->clinicSession;
-        if ($session && $session->bill && $session->bill->status === 'unpaid') {
-            $unpaidBills[] = [
-                'session_id' => $session->id,
-                'appointment_date' => $appointment->appointment_date,
-                'treatment' => $appointment->treatments->first() ? $appointment->treatments->first()->name : 'جلسة علاجية',
-                'doctor_name' => $appointment->doctor ? $appointment->doctor->name : 'غير محدد',
-                'amount' => $session->bill->amount_paid,
-                'bill_date' => $session->bill->date,
-            ];
-            $totalUnpaidAmount += (float) $session->bill->amount_paid;
+    {
+        // 1. التحقق من السيشين اليدوية
+        if (! session()->has('user_id')) {
+            return response()->json(['message' => 'غير مصرح لك، الجلسة منتهية'], 403);
         }
+
+        $userId = session('user_id');
+        $patient = Patient::where('user_id', $userId)->first();
+
+        if (! $patient) {
+            return response()->json(['message' => 'لم يتم العثور على بيانات المريض'], 404);
+        }
+
+        // جلب جميع مواعيد المريض مع العلاقات المطلوبة وترتيبها من الأحدث للأقدم
+        $allAppointments = $patient->appointments()
+            ->with(['doctor:id,name', 'treatments:id,name', 'clinicSession.bill'])
+            ->orderBy('appointment_date', 'desc')
+            ->get();
+
+        // 2. تقسيم المواعيد بناءً على الحالات المطلوبة باستخدام Collection Filtering
+
+        // أ. المواعيد المعلقة (Pending)
+        $pendingAppointments = $allAppointments->where('status', 'pending')->values();
+
+        // ب. المواعيد الملغاة (Cancelled) - تأكد أن التسمية في الـ Enum تطابق القيمة هنا
+        $cancelledAppointments = $allAppointments->where('status', 'canceled')->values();
+
+        // ج. الجلسات المكتملة (Completed) والتي تمتلك جلسة مسجلة فعلياً
+        $completedAppointments = $allAppointments->where('status', 'completed')
+            ->filter(function ($app) {
+                return $app->clinicSession !== null;
+            })
+            ->values();
+
+        // 3. تحليل وفحص الفواتير المستحقة (غير المدفوعة) من المواعيد المكتملة
+        $unpaidBills = [];
+        $totalUnpaidAmount = 0;
+
+        foreach ($completedAppointments as $appointment) {
+            $session = $appointment->clinicSession;
+            if ($session && $session->bill && $session->bill->status === 'unpaid') {
+                $unpaidBills[] = [
+                    'session_id' => $session->id,
+                    'appointment_date' => $appointment->appointment_date,
+                    'treatment' => $appointment->treatments->first() ? $appointment->treatments->first()->name : 'جلسة علاجية',
+                    'doctor_name' => $appointment->doctor ? $appointment->doctor->name : 'غير محدد',
+                    'amount' => $session->bill->amount_paid,
+                    'bill_date' => $session->bill->date,
+                ];
+                $totalUnpaidAmount += (float) $session->bill->amount_paid;
+            }
+        }
+
+        $unreadCancellations = $allAppointments
+            ->where('status', 'canceled')
+            ->where('patient_saw_cancellation', false)
+            ->values();
+
+        return response()->json([
+            'status' => 'success',
+            'stats' => [
+                'pending_appointments_count' => $pendingAppointments->count(),
+                'cancelled_appointments_count' => $cancelledAppointments->count(),
+                'completed_sessions_count' => $completedAppointments->count(),
+                'unpaid_bills_count' => count($unpaidBills),
+                'total_unpaid_amount' => $totalUnpaidAmount,
+            ],
+            'data' => [
+                // المواعيد المعلقة
+                'pending_appointments' => $pendingAppointments,
+
+                // المواعيد الملغاة
+                'cancelled_appointments' => $cancelledAppointments,
+
+                // المواعيد المكتملة (مهيأة ومحسنة العرض)
+                'completed_appointments' => $completedAppointments->map(function ($app) {
+                    return [
+                        'session_id' => $app->clinicSession->id,
+                        'appointment_date' => $app->appointment_date,
+                        'doctor_name' => $app->doctor ? $app->doctor->name : 'غير محدد',
+                        'treatments' => $app->treatments,
+                        'doctor_notes' => $app->clinicSession->doctor_notes,
+                        'bill' => $app->clinicSession->bill,
+                    ];
+                }),
+
+                // الفواتير غير المدفوعة
+                'unread_cancellations' => $unreadCancellations->map(function ($item) {
+                    return [
+                        'id' => $item->id,
+                        'treatment' => $item->treatments->first()?->name ?? 'جلسة',
+                        'cancelled_via' => $item->cancelled_via,
+                        'cancellation_reason' => $item->cancellation_reason,
+                    ];
+                }),
+            ],
+
+        ], 200);
+    }
+    // ////////////////////////////////////////////////////////////////////////
+
+    public function index()
+    {
+        $patients = Patient::select('id', 'name', 'phone', 'gender', 'birthdate', 'address', 'medical_notes')
+            ->latest()
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'count' => $patients->count(),
+            'data' => $patients,
+        ], 200);
     }
 
-    // 4. تجميع البيانات وتنسيقها لتكون نظيفة ومريحة للفرونت إند
-    return response()->json([
-        'status' => 'success',
-        'stats' => [
-            'pending_appointments_count' => $pendingAppointments->count(),
-            'cancelled_appointments_count' => $cancelledAppointments->count(),
-            'completed_sessions_count' => $completedAppointments->count(),
-            'unpaid_bills_count' => count($unpaidBills),
-            'total_unpaid_amount' => $totalUnpaidAmount,
-        ],
-        'data' => [
-            // المواعيد المعلقة
-            'pending_appointments' => $pendingAppointments,
-            
-            // المواعيد الملغاة
-            'cancelled_appointments' => $cancelledAppointments,
-            
-            // المواعيد المكتملة (مهيأة ومحسنة العرض)
-            'completed_appointments' => $completedAppointments->map(function ($app) {
-                return [
-                    'session_id' => $app->clinicSession->id,
-                    'appointment_date' => $app->appointment_date,
-                    'doctor_name' => $app->doctor ? $app->doctor->name : 'غير محدد',
-                    'treatments' => $app->treatments,
-                    'doctor_notes' => $app->clinicSession->doctor_notes,
-                    'bill' => $app->clinicSession->bill,
-                ];
-            }),
-            
-            // الفواتير غير المدفوعة
-            'unpaid_bills' => $unpaidBills,
-        ],
-    ], 200);
-}
+    public function show($id)
+    {
+        // جلب المريض المحدد مع بيانات حسابه المرتبط (User)
+        $patient = Patient::with('user:id,name,email,phone')->find($id);
+
+        if (! $patient) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'المريض غير موجود في النظام',
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $patient,
+        ], 200);
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'gender' => 'required|in:male,female',
+            'birthdate' => 'nullable|date',
+            'address' => 'nullable|string|max:500',
+            'medical_notes' => 'nullable|string',
+        ]);
+
+        $patient = Patient::create($validated);
+
+        return response()->json([
+            'message' => 'تم حفظ المريض بنجاح',
+            'data' => $patient,
+        ], 201);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $patient = Patient::find($id);
+
+        if (! $patient) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'المريض غير موجود',
+            ], 404);
+        }
+
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'gender' => 'required|in:male,female',
+            'birthdate' => 'nullable|date',
+            'address' => 'nullable|string|max:255',
+            'medical_notes' => 'nullable|string',
+        ]);
+
+        $patient->update($validatedData);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'تم تحديث بيانات المريض بنجاح',
+            'data' => $patient,
+        ], 200);
+    }
 }

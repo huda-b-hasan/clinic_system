@@ -16,9 +16,12 @@ class Appointment extends Model
         'room_id',
         'appointment_date',
         'status',
-        'cancelled_via',       
-        'cancellation_reason',  
-        'cancelled_at',         
+        'cancelled_via',
+        'cancellation_reason',
+        'cancelled_at',
+        'patient_saw_cancellation',
+        'cancellation_seen_at',
+
     ];
 
     public function patient()

@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Lavender Beauty Clinic</title>
     <link rel="stylesheet" href="profile.css">
     <link rel="stylesheet" href="../patient_Dashboard/profile.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪻</text></svg>">
-    
+    <link rel="stylesheet" href="../component/toast.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪻</text></svg>">
+
 </head>
+
 <body>
-    
+
     <header>
         <div class="header-right">
             <button class="menu-toggle" aria-label="فتح القائمة">☰</button>
@@ -35,12 +39,15 @@
         </div>
     </header>
     <!-- end header -->
-     <div class="main-wrapper">
+    <div class="main-wrapper">
         <aside>
             <button class="close-menu">✕</button>
             <nav>
                 <ul>
-                    <li ><a href="home.html"><span class="icon-nav"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard h-4 w-4" aria-hidden="true">
+                    <li><a href="home.html"><span class="icon-nav"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    class="lucide lucide-layout-dashboard h-4 w-4" aria-hidden="true">
                                     <rect width="7" height="9" x="3" y="3" rx="1"></rect>
                                     <rect width="7" height="5" x="14" y="3" rx="1"></rect>
                                     <rect width="7" height="9" x="14" y="12" rx="1"></rect>
@@ -49,29 +56,48 @@
                     <li>
                         <a href="sessions.html">
                             <span class="icon-nav">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-stethoscope h-4 w-4" aria-hidden="true"><path d="M11 2v2"></path><path d="M5 2v2"></path><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path><path d="M8 15a6 6 0 0 0 12 0v-3"></path><circle cx="20" cy="10" r="2"></circle></svg>
-                            
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-stethoscope h-4 w-4"
+                                    aria-hidden="true">
+                                    <path d="M11 2v2"></path>
+                                    <path d="M5 2v2"></path>
+                                    <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path>
+                                    <path d="M8 15a6 6 0 0 0 12 0v-3"></path>
+                                    <circle cx="20" cy="10" r="2"></circle>
+                                </svg>
+
                             </span>
                             <span>الجلسات</span>
                         </a>
                     </li>
                     <li><a href="pateins.html"><span class="" icon-nav="">
-                    
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users h-5 w-5" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg>
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-users h-5 w-5" aria-hidden="true">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                    <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                </svg>
                             </span><span> المرضى</span></a></li>
-                    <li class="active" ><a href="profile.html"><span class="" icon-nav=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user h-4 w-4" aria-hidden="true">
+                    <li class="active"><a href="profile.html"><span class="" icon-nav=""><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-user h-4 w-4" aria-hidden="true">
                                     <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="12" cy="7" r="4"></circle>
                                 </svg></span><span>الملف الشخصي</span></a></li>
                 </ul>
             </nav>
         </aside>
-<!-- end aside -->
+        <!-- end aside -->
 
-          <main>
-    
+        <main>
 
-     <div class="profile-container">
+
+            <div class="profile-container">
 
                 <div class="profile-header">
                     <div class="avatar-section">
@@ -90,23 +116,42 @@
 
                         <div class="form-group">
                             <label class="form-label" for="name">الاسم الكامل</label>
-                            <input type="text" id="name" name="name" class="form-input" placeholder="أدخل/ي اسمكِ الكامل" required="">
+                            <input type="text" id="name" name="name" class="form-input"
+                                placeholder="أدخل/ي اسمكِ الكامل" required="">
                         </div>
 
                         <div class="form-group">
                             <label class="form-label" for="phone">رقم الجوال</label>
-                            <input type="tel" id="phone" name="phone" class="form-input" placeholder="+966 5X XXX XXXX" required="">
+                            <input type="tel" id="phone" name="phone" class="form-input" placeholder="+966 5X XXX XXXX"
+                                required="">
                         </div>
 
                         <div class="form-group">
                             <label class="form-label" for="email">البريد الإلكتروني</label>
-                            <input type="email" id="email" class="form-input" style="background-color: #f5f5f5; cursor: not-allowed;" readonly="">
+                            <input type="email" id="email" class="form-input"
+                                style="background-color: #f5f5f5; cursor: not-allowed;" readonly="">
                         </div>
-                        
+                        <div class="form-group">
+                            <label class="form-label" for="current_password">كلمة المرور الحالية</label>
+                            <input type="password" id="current_password" name="current_password" class="form-input"
+                                >
+                        </div>
 
-                       
+                        <div class="form-group">
+                            <label class="form-label" for="new_password">كلمة المرور الجديدة</label>
+                            <input type="password" id="new_password" name="new_password" class="form-input"
+                                placeholder="8 أحرف على الأقل">
+                        </div>
 
-                      
+                        <div class="form-group">
+                            <label class="form-label" for="new_password_confirmation">تأكيد كلمة المرور الجديدة</label>
+                            <input type="password" id="new_password_confirmation" name="new_password_confirmation"
+                                class="form-input" >
+                        </div>
+
+
+
+
 
 
                     </div>
@@ -117,9 +162,9 @@
                 </form>
 
             </div>
-          </main>
-     </div>
-     <div id="toast" class="toast">تم تحديث ملفكِ الشخصي بنجاح!</div>
+        </main>
+    </div>
+    <div id="toast" class="toast">تم تحديث ملفكِ الشخصي بنجاح!</div>
     <script>
         const menuToggle = document.querySelector('.menu-toggle');
         const closeMenu = document.querySelector('.close-menu');
@@ -143,10 +188,10 @@
             }
         });
     </script>
-    <script src="profile.js" ></script>
+    <script src="profile.js"></script>
 </body>
+
 </html>
 
-            
+
 <!-- =========================== -->
-             

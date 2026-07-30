@@ -1,0 +1,309 @@
+/* ==========================================================================
+   1. شريط البحث والفلترة (Clean Filter Bar)
+   ========================================================================== */
+.admin-welcome p{
+    margin-top: 10px;
+}
+.filter-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.search-input-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #fbf7fc;
+    padding: 10px 16px;
+    border-radius: 20px;
+    flex: 1;
+    min-width: 260px;
+}
+
+.search-input-box svg {
+    color: var(--dark-pink-accent);
+}
+
+.search-input-box input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    font-size: 13.5px;
+    color: var(--text-dark);
+}
+
+.filter-selects {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-selects select {
+    padding: 10px 16px;
+    border-radius: 16px;
+    border: none;
+    background-color: #fbf7fc;
+    color: var(--text-dark);
+    font-size: 13px;
+    outline: none;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   2. خلايا الجدول والشارات (Table Cell Elements & Badges)
+   ========================================================================== */
+.user-info-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: var(--main-pink-bg);
+    color: var(--dark-pink-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.doctor-avatar {
+    background-color: #fdf8e7;
+    color: #D4AF37;
+}
+
+.staff-avatar {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.user-email {
+    display: block;
+    font-size: 11.5px;
+    color: var(--text-grey);
+    margin-top: 2px;
+}
+
+/* شارات الأدوار (Role Badges) */
+.role-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.role-badge.admin {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.role-badge.doctor {
+    background-color: #fdf8e7;
+    color: #b58d19;
+}
+
+.role-badge.receptionist {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.role-badge.inventory {
+    background-color: #efebe9;
+    color: #4e342e;
+}
+
+.badge-status.inactive {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 600;
+}
+.badge-status.active {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+/* أزرار الإجراءات السريعة */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-icon {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    padding: 5px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.btn-icon:hover {
+    background-color: #f4f4f6;
+}
+
+/* ==========================================================================
+   3. النافذة المنبثقة (Modal System)
+   ========================================================================== */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 1000;
+}
+
+.modal-backdrop.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 550px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transform: translateY(-20px);
+    transition: transform 0.25s ease;
+}
+
+.modal-backdrop.active .modal-content {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 {
+    font-size: 18px;
+    color: var(--text-dark);
+}
+
+.btn-close-modal {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: var(--text-grey);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.form-group.full-width {
+    grid-column: span 2;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid #eef0f2;
+    background-color: #fbf7fc;
+    font-size: 13px;
+    outline: none;
+}
+@media (max-width: 576px) {
+    .form-grid {
+        grid-template-columns: 1fr; /* جعل الحقول تحت بعضها بالكامل */
+    }
+    
+    .form-group.full-width {
+        grid-column: span 1;
+    }
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+
+/* ==========================================================================
+   أزرار الإجراءات النظيفة والأنيقة (Action Buttons)
+   ========================================================================== */
+.action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    border: none;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* زر التعديل - بنفسجي اللافندر الهادئ */
+.btn-icon.edit-btn {
+    color: var(--dark-pink-accent);
+}
+
+.btn-icon.edit-btn:hover {
+    background-color: var(--main-pink-bg);
+    transform: translateY(-1px);
+}
+
+/* زر الحذف - أحمر ناعم وفخم */
+.btn-icon.danger-btn {
+    color: #e57373;
+}
+
+.btn-icon.danger-btn:hover {
+    background-color: #fdf2f2;
+    color: #d32f2f;
+    transform: translateY(-1px);
+}

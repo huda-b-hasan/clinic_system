@@ -1,0 +1,87 @@
+/* ==========================================================================
+   1. الكروت المتميزة (Alert & Custom Cards)
+   ========================================================================== */
+.summary-card.alert-accent {
+    border-right: 4px solid #e53935;
+}
+
+.alert-icon {
+    background-color: #ffebee;
+    color: #e53935;
+}
+
+.danger-text {
+    color: #e53935;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   2. تفاصيل خلايا جدول المخزن (Inventory Cell UI)
+   ========================================================================== */
+.item-info-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.item-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.filler-bg { background-color: #fdf8e7; }
+.skin-bg { background-color: #f3e5f5; }
+.medical-bg { background-color: #e8f5e9; }
+
+.item-code {
+    display: block;
+    font-size: 11px;
+    color: var(--text-grey);
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+}
+
+/* كميات ونصوص المادت */
+.quantity-text {
+    font-size: 13.5px;
+    color: var(--text-dark);
+}
+
+.quantity-text.warning-qty {
+    color: #d32f2f;
+}
+
+.expiry-date {
+    font-size: 12.5px;
+    color: var(--text-grey);
+}
+
+.expiry-date.near-expiry {
+    color: #b58d19;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   3. شارات الأقسام والحالات الإضافية
+   ========================================================================== */
+.category-medical {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+/* حالة نقص المخزون */
+.badge-status.low-stock {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 600;
+    display: inline-block;
+}

@@ -37,7 +37,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             localStorage.setItem('user_type', data.user_type);
 
             if (data.user_type === 'Manager') {
-                window.location.href = '../manager/dashboard.html'; 
+                window.location.href = '/admin_Dashboard/home.html'; 
             } else if (data.user_type === 'Doctor') {
                 window.location.href = '/doctor_Dashboard/home.html'; 
             } else if(data.user_type ==="Patient") {

@@ -55,6 +55,21 @@
                                     <rect width="7" height="5" x="3" y="16" rx="1"></rect>
                                 </svg>
                             </span><span>نظرة عامة</span></a></li>
+                    <li>
+                        <a href="appointment.html">
+                            <span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                                    <line x1="16" x2="16" y1="2" y2="6"></line>
+                                    <line x1="8" x2="8" y1="2" y2="6"></line>
+                                    <line x1="3" x2="21" y1="10" y2="10"></line>
+                                </svg>
+                            </span>
+                            <span>المواعيد</span>
+                        </a>
+                    </li>
 
                     <li class="active"><a href="pateins.html"><span class="icon-nav">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -107,6 +122,16 @@
                 <!-- قائمة المرضى (الاسم فقط) -->
                 <div class="patients-list-section">
                     <h3 class="section-title">قائمة المرضى المسجلين</h3>
+                    <!--  صندوق البحث   -->
+                    <div class="search-box-wrapper" style="position: relative; margin-bottom: 15px;">
+                        <input type="text" id="patientSearchInput" class="form-input-p"
+                            placeholder="🔍 ابحث عن مريض بالإسم أو رقم الهاتف..." autocomplete="off">
+
+                        <!-- قائمة النتائج المقترحة (Autocomplete Dropdown) -->
+                        <div id="searchResultsDropdown" class="search-results-dropdown" style="display: none;">
+                            <!-- سيتم توليد العناصر هنا ديناميكياً -->
+                        </div>
+                    </div>
                     <div class="patients-list">
 
                         <!-- كارت مريض 1 (مثال) -->

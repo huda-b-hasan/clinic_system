@@ -1,0 +1,87 @@
+/* ==========================================================================
+   1. تنسيقات خلايا خدمات التجميل (Service Cell UI)
+   ========================================================================== */
+.service-info-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.admin-welcome p{
+    margin-top: 10px;
+}
+.service-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+/* ألوان الخلفيات الخفيفة للخدمات */
+.injection-bg { background-color: #fdf8e7; }
+.skin-bg { background-color: #f3e5f5; }
+.laser-bg { background-color: #e3f2fd; }
+
+.service-desc {
+    display: block;
+    font-size: 11.5px;
+    color: var(--text-grey);
+    margin-top: 3px;
+}
+
+/* ==========================================================================
+   2. شارات التصنيفات والسعر والوقت (Badges & Tags)
+   ========================================================================== */
+.category-badge {
+    padding: 4px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.category-injection {
+    background-color: #fdf8e7;
+    color: #b58d19;
+}
+
+.category-skin {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.category-laser {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+/* السعر والوقت */
+.price-tag {
+    color: var(--text-dark);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.time-tag {
+    font-size: 12px;
+    color: var(--text-grey);
+    background-color: #f8f9fa;
+    padding: 4px 8px;
+    border-radius: 8px;
+}
+
+/* حقل النص الطويل بالفورم */
+.form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid #eef0f2;
+    background-color: #fbf7fc;
+    font-size: 13px;
+    outline: none;
+    resize: vertical;
+    font-family: inherit;
+}

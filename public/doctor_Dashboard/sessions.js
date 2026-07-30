@@ -68,7 +68,30 @@ document.addEventListener("DOMContentLoaded", function () {
         if (e.target.classList.contains("start-btn")) {
             const appointmentId = e.target.getAttribute("data-id");
             if (appointmentId) {
-                // تعديل اسم الملف هنا لـ session.html
+                // تغير حاله الموعد ل in progress 
+                fetch(`/appointments/${appointmentId}/start-session`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('حدث خطأ أثناء إدخال المريض للغرفة');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+
+                        console.log(data.message);
+
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        console.log(error.message);
+                    });
                 window.location.href = `session.html?appointment_id=${appointmentId}`;
             }
         }

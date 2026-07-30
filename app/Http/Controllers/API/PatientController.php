@@ -374,4 +374,18 @@ class PatientController extends Controller
             'data' => $patient,
         ], 200);
     }
+
+public function searchPatients(Request $request)
+{
+    $query = $request->get('q');
+
+    $patients = Patient::where('name', 'LIKE', "%{$query}%")
+        ->orWhere('phone', 'LIKE', "%{$query}%")
+        ->get(['id', 'name', 'phone']);
+
+    return response()->json([
+        'status' => 'success',
+        'data' => $patients
+    ]);
+}
 }

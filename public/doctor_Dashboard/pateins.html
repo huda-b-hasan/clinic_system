@@ -110,6 +110,16 @@
                 <!-- قائمة المرضى (الاسم فقط) -->
                 <div class="patients-list-section">
                     <h3 class="section-title">قائمة المرضى المسجلين</h3>
+                    <!--  صندوق البحث  () -->
+                    <div class="search-box-wrapper" style="position: relative; margin-bottom: 15px;">
+                        <input type="text" id="patientSearchInput" class="form-input-p"
+                            placeholder="🔍 ابحث عن مريض بالإسم أو رقم الهاتف..." autocomplete="off">
+
+                        <!-- قائمة النتائج المقترحة (Autocomplete Dropdown) -->
+                        <div id="searchResultsDropdown" class="search-results-dropdown" style="display: none;">
+                            <!-- سيتم توليد العناصر هنا ديناميكياً -->
+                        </div>
+                    </div>
                     <div class="patients-list">
                     </div>
                 </div>
@@ -226,7 +236,7 @@
             </form>
         </div>
     </div>
-         <div id="toast" class="toast">تم تحديث ملفكِ الشخصي بنجاح!</div>
+    <div id="toast" class="toast">تم تحديث ملفكِ الشخصي بنجاح!</div>
 
 
     <script>

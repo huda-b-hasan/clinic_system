@@ -3,9 +3,31 @@ const profileForm = document.getElementById('profileForm');
 const nameInput = document.getElementById('name');
 const phoneInput = document.getElementById('phone');
 const emailInput = document.getElementById('email');
+
+const currentPasswordInput = document.getElementById('current_password');
+const newPasswordInput = document.getElementById('new_password');
+const newPasswordConfirmInput = document.getElementById('new_password_confirmation');
+
 const userInitials = document.getElementById('userInitials');
 const patientHeaderName = document.getElementById('patientHeaderName');
 const userRoleBadge = document.getElementById('userRoleBadge');
+
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+
+    // مسح أي ألوان/حالات قديمة
+    toast.className = 'toast'; 
+
+    // تعيين الرسالة والكلاس الجديد
+    toast.textContent = message;
+    toast.classList.add(type, 'show');
+
+    // إخفاء التوست بعد 3 ثوانٍ
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
 
 // 1. دالة جلب بيانات الملف الشخصي (عند تحميل الصفحة)
 async function fetchProfileData() {
@@ -37,18 +59,28 @@ async function fetchProfileData() {
 
     } catch (error) {
         console.error('Error:', error);
-        alert('حدث خطأ أثناء تحميل بيانات الملف الشخصي.');
+        showToast('حدث خطأ أثناء تحميل بيانات الملف الشخصي.', 'error');
     }
 }
 
 document.addEventListener('DOMContentLoaded', fetchProfileData);
 
+// 2. دالة حفظ وتحديث البيانات
 profileForm.addEventListener('submit', async (e) => {
     e.preventDefault(); 
+
+    // فحص مطابقة كلمة المرور الجديدة مع التأكيد قبل الإرسال
+    if (newPasswordInput.value && (newPasswordInput.value !== newPasswordConfirmInput.value)) {
+        showToast('كلمة المرور الجديدة غير مطابقة لتأكيد كلمة المرور.', 'warning');
+        return;
+    }
 
     const formData = {
         name: nameInput.value,
         phone: phoneInput.value,
+        current_password: currentPasswordInput.value || null,
+        new_password: newPasswordInput.value || null,
+        new_password_confirmation: newPasswordConfirmInput.value || null,
         birthdate: null,
         address: null,
         medical_notes: null
@@ -68,28 +100,23 @@ profileForm.addEventListener('submit', async (e) => {
         const result = await response.json();
 
         if (response.ok && result.status === 'success') {
-            console.log(result.message);
+            // توست النجاح باللون الأخضر
+            showToast(result.message || 'تم تحديث الملف الشخصي بنجاح!', 'success');
+
+            // تفريغ حقول كلمات المرور
+            currentPasswordInput.value = '';
+            newPasswordInput.value = '';
+            newPasswordConfirmInput.value = '';
+
+            // إعادة جلب البيانات
             fetchProfileData(); 
         } else {
-            console.log(result.message || 'حدث خطأ ما أثناء التحديث.');
-        }
-        if (response.ok && result.status === 'success') {
-            // 
-            const toast = document.getElementById('toast');
-            toast.textContent = result.message; 
-            toast.classList.add('show');
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-
-            fetchProfileData(); 
-        } else {
-            console.log(result.message || 'حدث خطأ ما أثناء التحديث.');
+            // توست الخطأ باللون الأحمر (مثل: كلمة المرور الحالية غير صحيحة)
+            showToast(result.message || 'حدث خطأ ما أثناء التحديث.', 'error');
         }
 
     } catch (error) {
         console.error('Error:', error);
-        console.log('فشل الاتصال بالسيرفر، يرجى المحاولة لاحقاً.');
+        showToast('فشل الاتصال بالسيرفر، يرجى المحاولة لاحقاً.', 'error');
     }
 });

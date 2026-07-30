@@ -1,0 +1,54 @@
+/* ==========================================================================
+   1. تنسيق خلية كود الخصم (Promo Code UI)
+   ========================================================================== */
+.promo-code-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.code-tag {
+    display: inline-block;
+    font-family: monospace, sans-serif;
+    font-weight: 700;
+    font-size: 13.5px;
+    letter-spacing: 1px;
+    background-color: #fbf7fc;
+    color: var(--dark-pink-accent);
+    padding: 4px 10px;
+    border-radius: 8px;
+    border: 1px dashed var(--dark-pink-accent);
+    width: fit-content;
+}
+
+.campaign-title {
+    font-size: 11.5px;
+    color: var(--text-grey);
+}
+
+/* ==========================================================================
+   2. شارات قيمة الخصم وعدد الاستخدامات
+   ========================================================================== */
+.discount-value {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.discount-value.percentage {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.discount-value.fixed {
+    background-color: #fdf8e7;
+    color: #b58d19;
+}
+
+.usage-count {
+    font-size: 12.5px;
+    color: var(--text-dark);
+    font-weight: 600;
+}

@@ -3,7 +3,8 @@
 // ==========================================
 const modal = document.getElementById('addPatientModal');
 const openEditModalBtn = document.getElementById('openEditModalBtn');
-let currentPatientId = null; // تخزين ID المريض المختار حالياً
+const openModalBtn = document.getElementById('openModalBtn'); // زر إضافة مريض جديد
+let currentPatientId = null; // تخزين ID المريض المختار حالياً (null تعني وضع الإضافة)
 let rawBirthdate = null;     // تخزين تاريخ الميلاد الخام للتعديل
 
 // ==========================================
@@ -12,152 +13,70 @@ let rawBirthdate = null;     // تخزين تاريخ الميلاد الخام 
 document.addEventListener('DOMContentLoaded', () => {
     fetchPatientsList();
 
-    // ربط زر "تعديل الملف" مع النافذة المنبثقة
+    // فتح المودال لإضافة مريض جديد
+    if (openModalBtn) {
+        openModalBtn.addEventListener('click', openAddModal);
+    }
+
+    // فتح المودال لتعديل المريض الحالي
     if (openEditModalBtn) {
         openEditModalBtn.addEventListener('click', openEditModal);
     }
 
-    // إرسال الفوّرم عند التعديل أو الحفظ
+    // إدارة إرسال النموذج (تحديد هل هو إضافة أم تعديل)
     const patientForm = modal ? modal.querySelector('.modal-form') : null;
     if (patientForm) {
         patientForm.addEventListener('submit', handleFormSubmit);
     }
 
-    // إغلاق المودال عند الضغط على الإكس أو الخلفية
+    // إغلاق المودال
     const closeModalBtn = document.getElementById('closeModalBtn');
     const cancelModalBtn = document.getElementById('cancelModalBtn');
     if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
     if (cancelModalBtn) cancelModalBtn.addEventListener('click', closeModal);
+
+    // إغلاق المودال عند النقر خارجه
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    // إعداد البحث المباشر
+    initLiveSearch();
 });
 
-// دالة إغلاق المودال
-function closeModal() {
-    if (modal) modal.classList.remove('active');
+// ==========================================
+// 3. إدارة المودال (فتح / إغلاق)
+// ==========================================
+
+// فتح النافذة بوضع الإضافة
+function openAddModal() {
+    currentPatientId = null; // تفريغ الـ ID للتمييز بأنه مريض جديد
+    const form = modal.querySelector('.modal-form');
+    if (form) form.reset();
+
+    // ضبط العناوين
+    modal.querySelector('.modal-header h3').textContent = 'إضافة مريض جديد';
+    const submitBtn = modal.querySelector('.btn-submit-p') || modal.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.textContent = 'حفظ البيانات';
+
+    modal.classList.add('active');
 }
 
-// ==========================================
-// 3. دالة حساب العمر
-// ==========================================
-function calculateAge(birthdateStr) {
-    if (!birthdateStr) return 'غير مسجل';
-    
-    const today = new Date();
-    const birthDate = new Date(birthdateStr);
-
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-    const dayDiff = today.getDate() - birthDate.getDate();
-
-    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-        age--;
-    }
-
-    return age;
-}
-
-// ==========================================
-// 4. جلب ورسم قائمة المرضى
-// ==========================================
-async function fetchPatientsList() {
-    try {
-        const response = await fetch('/patients', {
-            headers: { 'Accept': 'application/json' }
-        });
-        const result = await response.json();
-
-        if (result.status === 'success') {
-            renderPatientsList(result.data);
-        }
-    } catch (error) {
-        console.error('خطأ في جلب بيانات المرضى:', error);
-    }
-}
-
-function renderPatientsList(patients) {
-    const listContainer = document.querySelector('.patients-list');
-    listContainer.innerHTML = '';
-
-    if (patients.length === 0) {
-        listContainer.innerHTML = '<p class="text-muted">لا يوجد مرضى مسجلين حالياً.</p>';
-        return;
-    }
-
-    patients.forEach(patient => {
-        const card = document.createElement('div');
-        card.className = 'patient-card';
-        card.onclick = () => fetchPatientDetails(patient.id, card);
-
-        card.innerHTML = `
-            <span class="patient-name">${patient.name}</span>
-            <button class="btn-view-details">عرض التفاصيل ←</button>
-        `;
-        listContainer.appendChild(card);
-    });
-}
-
-// ==========================================
-// 5. جلب عرض تفاصيل مريض محدد
-// ==========================================
-async function fetchPatientDetails(patientId, cardElement) {
-    try {
-        const response = await fetch(`/patients/${patientId}`, {
-            headers: { 'Accept': 'application/json' }
-        });
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            const p = result.data;
-            
-            // حفظ البيانات بالمتغيرات العامة لاستخدامها في التعديل
-            currentPatientId = p.id;
-            rawBirthdate = p.birthdate;
-
-            document.getElementById('emptyState').style.display = 'none';
-            document.getElementById('detailsContent').style.display = 'block';
-
-            // تعبئة البيانات المفصلة
-            document.getElementById('detName').textContent = p.name;
-            document.getElementById('detPhone').textContent = p.phone || 'غير مسجل';
-            document.getElementById('detGender').textContent = p.gender === 'female' ? 'أنثى' : 'ذكر';
-            
-            // تم تصحيح الـ Variable هنا لـ p.birthdate
-            document.getElementById('detBirthdate').textContent = p.birthdate ? `${calculateAge(p.birthdate)} سنة` : 'غير مسجل';
-            
-            document.getElementById('detAddress').textContent = p.address ? p.address : 'غير مسجل';
-            document.getElementById('detNotes').textContent = p.medical_notes ? p.medical_notes : 'لا توجد ملاحظات طبية مسجلة لهذا المريض.';
-
-            // إضافة التأثير البصري والكلاس النشط
-            document.querySelectorAll('.patient-card').forEach(c => c.classList.remove('active-card'));
-            if (cardElement) cardElement.classList.add('active-card');
-        }
-    } catch (error) {
-        console.error('خطأ في جلب تفاصيل المريض:', error);
-    }
-}
-
-// ==========================================
-// 6. منطق التعديل والـ Modal (جديد)
-// ==========================================
-
-// فتح النافذة بوضع التعديل مع تعبئة القيم
+// فتح النافذة بوضع التعديل
 function openEditModal() {
     if (!currentPatientId) {
-        alert('الرجاء اختيار مريض أولاً للتعديل');
-            const toast = document.getElementById('toast');
-            toast.textContent = 'الرجاء اختيار مريض أولاً للتعديل';
-            toast.classList.add('show');
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+        showToast('الرجاء اختيار مريض أولاً للتعديل', 'error');
         return;
     }
 
-    // تغيير عناوين المودال
+    // ضبط العناوين
     modal.querySelector('.modal-header h3').textContent = 'تعديل بيانات المريض';
-    modal.querySelector('.btn-submit-p').textContent = 'حفظ التعديلات';
+    const submitBtn = modal.querySelector('.btn-submit-p') || modal.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.textContent = 'حفظ التعديلات';
 
-    // تعبئة المدخلات من القيمة المعروضة حالياً
+    // تعبئة البيانات المفصلة في الحقول
     document.getElementById('name').value = document.getElementById('detName').textContent.trim();
     document.getElementById('phone').value = document.getElementById('detPhone').textContent.trim();
     
@@ -172,28 +91,38 @@ function openEditModal() {
     const notesText = document.getElementById('detNotes').textContent.trim();
     document.getElementById('medical_notes').value = (notesText !== 'لا توجد ملاحظات طبية مسجلة لهذا المريض.') ? notesText : '';
 
-    // إظهار المودال
     modal.classList.add('active');
 }
 
-// إرسال طلب التعديل للسيرفر
+// إغلاق المودال وتصفير البيانات
+function closeModal() {
+    if (modal) modal.classList.remove('active');
+    const form = modal ? modal.querySelector('.modal-form') : null;
+    if (form) form.reset();
+}
+
+// ==========================================
+// 4. معالجة حفظ البيانات (إضافة / تعديل)
+// ==========================================
 async function handleFormSubmit(e) {
     e.preventDefault();
 
-    if (!currentPatientId) return;
-
     const formData = {
-        name: document.getElementById('name').value,
-        phone: document.getElementById('phone').value,
+        name: document.getElementById('name').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
         gender: document.getElementById('gender').value,
         birthdate: document.getElementById('birthdate').value || null,
-        address: document.getElementById('address').value || null,
-        medical_notes: document.getElementById('medical_notes').value || null,
+        address: document.getElementById('address').value.trim() || null,
+        medical_notes: document.getElementById('medical_notes').value.trim() || null,
     };
 
+    // تحديد المسار وطريقة الطلب بناءً على وجود ID المريض
+    const isEdit = currentPatientId !== null;
+    const url = isEdit ? `/patients/update/${currentPatientId}` : '/patients/add';
+
     try {
-        const response = await fetch(`/patients/update/${currentPatientId}`, {
-            method: 'POST', // أو PUT بحسب التعريف في الـ Routes
+        const response = await fetch(url, {
+            method: 'POST', 
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -203,137 +132,217 @@ async function handleFormSubmit(e) {
 
         const result = await response.json();
 
-        if (response.ok && result.status === 'success') {
-            console.log('تم تحديث بيانات المريض بنجاح');
-            const toast = document.getElementById('toast');
-            toast.textContent = 'تم تحديث بيانات المريض بنجاح';
-            toast.classList.add('show');
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+        if (response.ok && (result.status === 'success' || result.success)) {
+            showToast(isEdit ? 'تم تحديث بيانات المريض بنجاح' : 'تمت إضافة ملف المريض بنجاح');
             closeModal();
             
-            // تحديث القائمة والتفاصيل بدون إنعاش الصفحة
+            // تحديث قائمة المرضى
             fetchPatientsList();
-            fetchPatientDetails(currentPatientId);
+
+            // إذا كان تعديلاً، ننعش التفاصيل المعروضة
+            if (isEdit) {
+                fetchPatientDetails(currentPatientId);
+            }
         } else {
-            alert('حدث خطأ: ' + (result.message || 'تعذر تحديث البيانات'));
+            alert('حدث خطأ: ' + (result.message || 'تعذر حفظ البيانات'));
         }
     } catch (error) {
         console.error('خطأ في الاتصال بالخادم:', error);
+        alert('تعذر الاتصال بالسيرفر. يرجى المحاولة لاحقاً.');
     }
 }
-// store
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. عناصر النافذة المنبثقة (Modal)
-    const addModal = document.getElementById('addPatientModal');
-    const openModalBtn = document.getElementById('openModalBtn');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const cancelModalBtn = document.getElementById('cancelModalBtn');
-    const addPatientForm = document.querySelector('.modal-form');
+
+// ==========================================
+// 5. حساب العمر ودعم التنبيهات (Toast)
+// ==========================================
+function calculateAge(birthdateStr) {
+    if (!birthdateStr) return 'غير مسجل';
+    const today = new Date();
+    const birthDate = new Date(birthdateStr);
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    const dayDiff = today.getDate() - birthDate.getDate();
+
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+        age--;
+    }
+    return age;
+}
+
+function showToast(message) {
     const toast = document.getElementById('toast');
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
 
-    // فتح النافذة المنبثقة
-    openModalBtn?.addEventListener('click', () => {
-        addModal.classList.add('active'); // أو style.display = 'flex' حسب الـ CSS لديك
-    });
+// ==========================================
+// 6. جلب ورسم قائمة وتفاصيل المرضى
+// ==========================================
+async function fetchPatientsList() {
+    try {
+        const response = await fetch('/patients', {
+            headers: { 'Accept': 'application/json' }
+        });
+        const result = await response.json();
 
-    // دالة إغلاق النافذة المنبثقة وتنظيف البيانات
-    const closeModal = () => {
-        addModal.classList.remove('active');
-        addPatientForm.reset();
-    };
-
-    closeModalBtn?.addEventListener('click', closeModal);
-    cancelModalBtn?.addEventListener('click', closeModal);
-
-    // إغلاق Modal عند النقر خارجه
-    window.addEventListener('click', (e) => {
-        if (e.target === addModal) {
-            closeModal();
+        if (result.status === 'success' || result.success) {
+            renderPatientsList(result.data || []);
         }
-    });
+    } catch (error) {
+        console.error('خطأ في جلب بيانات المرضى:', error);
+    }
+}
 
-    // 2. معالجة تقديم النموذج (Submit Form)
-    addPatientForm?.addEventListener('submit', async (e) => {
-        e.preventDefault();
+function renderPatientsList(patients) {
+    const listContainer = document.querySelector('.patients-list');
+    if (!listContainer) return;
+    listContainer.innerHTML = '';
 
-        // تجميع البيانات من المدخلات
-        const formData = {
-            name: document.getElementById('name').value.trim(),
-            phone: document.getElementById('phone').value.trim(),
-            gender: document.getElementById('gender').value,
-            birthdate: document.getElementById('birthdate').value || null,
-            address: document.getElementById('address').value.trim() || null,
-            medical_notes: document.getElementById('medical_notes').value.trim() || null,
-        };
-
-        try {
-            const response = await fetch('/patients/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    // 'Authorization': `Bearer ${localStorage.getItem('token')}` // في حال وجود مصادقة
-                },
-                body: JSON.stringify(formData)
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                // إغلاق النافذة المنبثقة
-                closeModal();
-
-                // إظهار رسالة النجاح (Toast)
-                showToast("تمت إضافة ملف المريض بنجاح!");
-
-                // إضافة المريض الجديد ديناميكياً لقائمة العرض
-                appendPatientToList(result.data || formData);
-            } else {
-                alert(result.message || 'حدث خطأ أثناء حفظ البيانات.');
-            }
-        } catch (error) {
-            console.error('Error adding patient:', error);
-            alert('تعذر الاتصال بالسيرفر. يرجى المحاولة لاحقاً.');
-        }
-    });
-
-    // دالة إظهار الـ Toast
-    function showToast(message) {
-        if (!toast) return;
-        toast.textContent = message;
-        toast.classList.add('show');
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 3000);
+    if (patients.length === 0) {
+        listContainer.innerHTML = '<p class="text-muted">لا يوجد مرضى مسجلين حالياً.</p>';
+        return;
     }
 
-    // دالة إضافة المريض الجديد إلى القائمة المعروضة بدون إعادة تحميل الصفحة
-    function appendPatientToList(patient) {
-        const patientsList = document.querySelector('.patients-list');
+    patients.forEach(patient => {
         const card = document.createElement('div');
         card.className = 'patient-card';
+        if (currentPatientId === patient.id) card.classList.add('active-card');
         
-        // إعداد الحدث لتمرير بيانات المريض لعرض التفاصيل
-        card.onclick = () => {
-            showPatientDetails(
-                patient.id || '',
-                patient.name,
-                patient.phone,
-                patient.gender === 'female' ? 'أنثى' : 'ذكر',
-                patient.birthdate || 'غير محدد',
-                patient.address || 'غير محدد',
-                patient.medical_notes || 'لا يوجد ملاحظات'
-            );
-        };
+        card.onclick = () => fetchPatientDetails(patient.id, card);
 
         card.innerHTML = `
             <span class="patient-name">${patient.name}</span>
             <button class="btn-view-details">عرض التفاصيل ←</button>
         `;
+        listContainer.appendChild(card);
+    });
+}
 
-        patientsList.prepend(card); // إضافة المريض في أول القائمة
+async function fetchPatientDetails(patientId, cardElement = null) {
+    try {
+        const response = await fetch(`/patients/${patientId}`, {
+            headers: { 'Accept': 'application/json' }
+        });
+        const result = await response.json();
+        
+        if (result.status === 'success' || result.success) {
+            const p = result.data;
+            
+            currentPatientId = p.id;
+            rawBirthdate = p.birthdate;
+
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'block';
+
+            showPatientDetails(
+                p.id,
+                p.name,
+                p.phone,
+                p.gender,
+                p.birthdate ? `${calculateAge(p.birthdate)} سنة` : 'غير مسجل',
+                p.address,
+                p.medical_notes
+            );
+
+            // تحديد الكارت النشط
+            document.querySelectorAll('.patient-card').forEach(c => c.classList.remove('active-card'));
+            if (cardElement) {
+                cardElement.classList.add('active-card');
+            }
+        }
+    } catch (error) {
+        console.error('خطأ في جلب تفاصيل المريض:', error);
     }
-});
+}
+
+function showPatientDetails(id, name, phone, gender, birthdateText, address, notes) {
+    const emptyState = document.getElementById('emptyState');
+    const detailsContent = document.getElementById('detailsContent');
+
+    if (emptyState) emptyState.style.display = 'none';
+    if (detailsContent) detailsContent.style.display = 'block';
+
+    document.getElementById('detName').textContent = name || 'غير مسجل';
+    document.getElementById('detPhone').textContent = phone || 'غير مسجل';
+    document.getElementById('detGender').textContent = (gender === 'female' || gender === 'أنثى') ? 'أنثى' : 'ذكر';
+    document.getElementById('detBirthdate').textContent = birthdateText || 'غير مسجل';
+    document.getElementById('detAddress').textContent = address || 'غير مسجل';
+    document.getElementById('detNotes').textContent = notes || 'لا توجد ملاحظات طبية مسجلة لهذا المريض.';
+}
+
+// ==========================================
+// 7. منطق البحث المباشر (Live Search)
+// ==========================================
+function initLiveSearch() {
+    const searchInput = document.getElementById('patientSearchInput');
+    const dropdown = document.getElementById('searchResultsDropdown');
+    let searchDebounceTimer;
+
+    if (!searchInput || !dropdown) return;
+
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.trim();
+
+        clearTimeout(searchDebounceTimer);
+
+        if (query.length === 0) {
+            dropdown.style.display = 'none';
+            dropdown.innerHTML = '';
+            return;
+        }
+
+        searchDebounceTimer = setTimeout(async () => {
+            try {
+                const response = await fetch(`/get-patients-list?q=${encodeURIComponent(query)}`, {
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                const result = await response.json();
+
+                if (result.status && result.data.length > 0) {
+                    renderSearchResults(result.data);
+                } else {
+                    dropdown.innerHTML = '<div class="no-results-item">لم يتم العثور على مريض بهذا الاسم/الرقم</div>';
+                    dropdown.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error fetching patients:', error);
+            }
+        }, 300);
+    });
+
+    function renderSearchResults(patients) {
+        dropdown.innerHTML = '';
+
+        patients.forEach(patient => {
+            const item = document.createElement('div');
+            item.className = 'search-result-item';
+
+            item.innerHTML = `
+                <span class="search-result-name">${patient.name}</span>
+                <span class="search-result-phone">${patient.phone || ''}</span>
+            `;
+
+            item.addEventListener('click', () => {
+                fetchPatientDetails(patient.id);
+                dropdown.style.display = 'none';
+                searchInput.value = '';
+            });
+
+            dropdown.appendChild(item);
+        });
+
+        dropdown.style.display = 'block';
+    }
+
+    document.addEventListener('click', (e) => {
+        if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+}

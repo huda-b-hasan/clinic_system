@@ -45,13 +45,12 @@ form.addEventListener('submit', async (e) => {
             const targetRole = result.current_role;
 
             if (targetRole === "Manager") {
-                window.location.href = '../manager/dashboard.html';
+                window.location.href = '/admin_Dashboard/home.html'; 
             } else if (targetRole === "Doctor") {
                 window.location.href = '/doctor_Dashboard/home.html';
             } else if (targetRole === "Patient") {
                 window.location.href = '/patient_Dashboard/home.html';
             } else if (targetRole === "Receptionist") {
-                // تأكدي من إزالة /public/ وتعديل إملاء الكلمة لو لزم الأمر
                 window.location.href = '/reseption_Dashboard/home.html';
             }
         }

@@ -379,8 +379,7 @@ function checkCancellationNotification(unreadCancellations) {
                         <p>السبب: ${app.cancellation_reason || 'غير محدد'}</p>
                     </div>
                     <div class="card-action">
-                    <button class="btn-rebook" onclick="markAsSeen(event, '${app.id}')">تم</button>                    </div>
-                </div>
+                    <button type="button" class="btn-rebook" onclick="markAsSeen(event, '${app.id}')">تم</button>                </div>
             `).join('');
 
             // إظهار المودل الجديد
@@ -395,35 +394,54 @@ function checkCancellationNotification(unreadCancellations) {
 function closeDropdown() {
     document.getElementById('cancellationDetailsModal').style.display = 'none';
 }
-function markAsSeen(appointmentId) {
-    if (event) event.preventDefault();
-    // 1. إرسال الطلب للسيرفر
+function markAsSeen(event, appointmentId) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
     fetch(`/appointments/${appointmentId}/mark-as-seen`, {
         method: 'POST',
         headers: {
-         'Content-Type': 'application/json',
-            'Accept': 'application/json'      ,
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-         }
-    })
-    .then(response => response.json())
-    .then(data => {
-        // 2. إزالة الكارد من المودل بعد نجاح العملية
-        // const card = document.querySelector(`.cancellation-card[data-id="${appointmentId}"]`);
-        // if (card) {
-        //     card.remove();
-        // }
-
-        // // 3. تحديث الرقم في التنبيه الرئيسي (اختياري)
-        // const remainingCards = document.querySelectorAll('.cancellation-card');
-        // const countSpan = document.getElementById('noteficationNumber');
-        // countSpan.innerText = remainingCards.length;
-
-        // 4. إذا لم يتبقَ أي كاردات، أخفي التنبيه الرئيسي والمودل
-        if (remainingCards.length === 0) {
-            document.getElementById('cancellation-alert-card').style.display = 'none';
-            document.getElementById('cancellationDetailsModal').style.display = 'none';
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': token || ''
         }
     })
-    .catch(error => console.error('Error:', error));
+    .then(async response => {
+        // إذا كان هناك خطأ، نطبع نص الاستجابة من السيرفر قبل إلقاء الخطأ
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            console.error('تفاصيل خطأ السيرفر (Server Response Error):', response.status, errorData);
+            throw new Error(`خطأ من السيرفر كود: ${response.status} - ${errorData.message || ''}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('تم بنجاح:', data);
+        
+        // إزالة عنصر الكارد بعد النجاح
+        const card = document.querySelector(`.cancellation-card[data-id="${appointmentId}"]`);
+        if (card) {
+            card.remove();
+        }
+
+        // تحديث العداد
+        const remainingCards = document.querySelectorAll('.cancellation-card');
+        const countSpan = document.getElementById('noteficationNumber');
+        if (countSpan) {
+            countSpan.innerText = remainingCards.length;
+        }
+
+        // إخفاء المودال والكارد إذا انتهت الإشعارات
+        if (remainingCards.length === 0) {
+            const alertCard = document.getElementById('cancellation-alert-card');
+            const detailsModal = document.getElementById('cancellationDetailsModal');
+            if (alertCard) alertCard.style.display = 'none';
+            if (detailsModal) detailsModal.style.display = 'none';
+        }
+    })
+    .catch(error => console.error('Error Details:', error));
 }

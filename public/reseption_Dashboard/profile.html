@@ -7,6 +7,7 @@
     <title> Lavender Beauty Clinic</title>
     <link rel="stylesheet" href="profile.css">
     <link rel="stylesheet" href="../patient_Dashboard/profile.css">
+    <link rel="stylesheet" href="../component/toast.css">
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪻</text></svg>">
 
@@ -43,7 +44,7 @@
             <button class="close-menu">✕</button>
             <nav>
                 <ul>
-                    <li ><a href="home.html"><span class="icon-nav">
+                    <li><a href="home.html"><span class="icon-nav">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round" class="lucide lucide-layout-dashboard h-4 w-4">
@@ -53,6 +54,21 @@
                                     <rect width="7" height="5" x="3" y="16" rx="1"></rect>
                                 </svg>
                             </span><span>نظرة عامة</span></a></li>
+                    <li>
+                        <a href="appointment.html">
+                            <span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                                    <line x1="16" x2="16" y1="2" y2="6"></line>
+                                    <line x1="8" x2="8" y1="2" y2="6"></line>
+                                    <line x1="3" x2="21" y1="10" y2="10"></line>
+                                </svg>
+                            </span>
+                            <span>المواعيد</span>
+                        </a>
+                    </li>
 
                     <li><a href="pateins.html"><span class="icon-nav">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -64,10 +80,9 @@
                                     <circle cx="9" cy="7" r="4"></circle>
                                 </svg>
                             </span><span>المرضى</span></a></li>
-                    <li><a href="bills.html"><span class="icon-nav"><svg
-                                    xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
+                    <li><a href="bills.html"><span class="icon-nav"><svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                    height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                     <polyline points="14 2 14 8 20 8"></polyline>
                                     <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -126,7 +141,23 @@
                                 style="background-color: #f5f5f5; cursor: not-allowed;" readonly="">
                         </div>
 
+                        <div class="form-group">
+                            <label class="form-label" for="current_password">كلمة المرور الحالية</label>
+                            <input type="password" id="current_password" name="current_password" class="form-input"
+                              >
+                        </div>
 
+                        <div class="form-group">
+                            <label class="form-label" for="new_password">كلمة المرور الجديدة</label>
+                            <input type="password" id="new_password" name="new_password" class="form-input"
+                                placeholder="8 أحرف على الأقل">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="new_password_confirmation">تأكيد كلمة المرور الجديدة</label>
+                            <input type="password" id="new_password_confirmation" name="new_password_confirmation"
+                                class="form-input" >
+                        </div>
 
 
 

@@ -1,41 +1,98 @@
-/* Toast Notification Base Style */
+/* ==========================================================================
+   Toast Notification & UI Palette
+   ========================================================================== */
+
+/* Toast Base */
 .toast {
     visibility: hidden;
-    min-width: 250px;
-    background-color: #2ecc71; /* اللون الافتراضي (نجاح) */
-    color: #fff;
+    min-width: 280px;
+    background-color: #8e44ad; /* اللون الافتراضي - بنفسجي لافندر */
+    color: #ffffff;
     text-align: center;
-    border-radius: 8px;
-    padding: 16px;
+    border-radius: 10px;
+    padding: 14px 20px;
     position: fixed;
     z-index: 9999;
     left: 30px;
     bottom: 30px;
-    font-size: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: opacity 0.3s ease, bottom 0.3s ease, visibility 0.3s;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 10px 25px rgba(142, 68, 173, 0.25);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
     opacity: 0;
+    transform: translateY(20px);
 }
 
 .toast.show {
     visibility: visible;
     opacity: 1;
-    bottom: 40px; 
+    transform: translateY(0);
 }
 
-/* الألوان الخاصة بكل حالة لتنفيذ التنبيهات في كل الموقع */
+/* Toast Status Colors */
 .toast.success {
-    background-color: #2ecc71; /* أخضر - نجاح */
+    background-color: #2ec4b6; /* أخضر تركوازي ناعم */
+    box-shadow: 0 10px 25px rgba(46, 196, 182, 0.25);
 }
 
 .toast.error {
-    background-color: #e74c3c; /* أحمر - خطأ */
+    background-color: #e74c3c; /* أحمر تحذيري */
+    box-shadow: 0 10px 25px rgba(231, 76, 60, 0.25);
 }
 
 .toast.warning {
-    background-color: #f39c12; /* برتقالي - تحذير */
+    background-color: #f39c12; /* برتقالي دافئ */
+    box-shadow: 0 10px 25px rgba(243, 156, 18, 0.25);
 }
 
 .toast.info {
-    background-color: #8e44ad; /* بنفسجي - لافندر/معلومات */
+    background-color: #8e44ad; /* بنفسجي ملكي */
+    box-shadow: 0 10px 25px rgba(142, 68, 173, 0.25);
+}
+
+/* ==========================================================================
+   Status Badges (شارات حالات المواعيد)
+   ========================================================================== */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+    text-align: center;
+}
+
+/* منتظر */
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+/* حضر */
+.status-arrived {
+    background-color: #cce5ff;
+    color: #004085;
+    border: 1px solid #b8daff;
+}
+
+/* قيد العلاج */
+.status-in-progress {
+    background-color: #e8daef;
+    color: #6c3483;
+    border: 1px solid #d7bde2;
+}
+
+/* مكتمل */
+.status-completed {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* ملغى */
+.status-cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }

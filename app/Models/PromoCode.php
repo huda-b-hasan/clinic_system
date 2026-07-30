@@ -17,7 +17,13 @@ class PromoCode extends Model
         'expiry_date',
         'usage_limit',
         'used_count',
-        'is_active'
+        'is_active',
+    ];
+
+    // لتحويل حقل التاريخ تلقائياً إلى Carbon Instance لسهولة التعامل مع التواريخ
+    protected $casts = [
+        'expiry_date' => 'date',
+        'is_active'   => 'boolean',
     ];
 
     public function treatment()
@@ -28,7 +34,6 @@ class PromoCode extends Model
     public function patients()
     {
         return $this->belongsToMany(Patient::class, 'promo_code_patient')
-                    ->withTimestamps()
                     ->withPivot('used_at');
     }
 }

@@ -4,24 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة المواعيد - Lavender Beauty Clinic</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪻</text></svg>">
-    <link rel="stylesheet" href="../template.css">
+    <title> Lavender Beauty Clinic</title>
     <link rel="stylesheet" href="appointment.css">
+    <link rel="stylesheet" href="../template.css">
+    <link rel="stylesheet" href="../component/cancelModel.css">
     <link rel="stylesheet" href="../component/toast.css">
+    <meta name="csrf-token" content=""> <!-- سيتم تعبئته من الـ Laravel Blade إن وجد -->
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪻</text></svg>">
 </head>
 
 <body>
 
+    <!-- الهيدر العلوي الموحد -->
     <header>
         <div class="header-right">
             <button class="menu-toggle" aria-label="فتح القائمة">☰</button>
+
             <a href="../auth/home.html" class="logo">
                 <svg width="50" height="60" viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g stroke="#D4AF37" stroke-width="2.5" fill="none">
                         <path d="M60 10 C45 35 50 60 60 80 C70 60 75 35 60 10Z"></path>
                         <path d="M40 25 C35 45 40 65 55 80 C58 55 52 40 40 25Z"></path>
-                        <path d="M80 25 C68 40 62 55 65 80 C80 65 85 45 80 25Z"></path>
+                        <path d="M80 25 C68 40 62 55 65 80 C58 55 52 40 40 25Z"></path>
                         <path d="M20 30 C15 55 30 75 55 80 C40 55 30 40 20 30Z"></path>
                         <path d="M100 30 C90 40 80 55 65 80 C90 75 105 55 100 30Z"></path>
                         <path d="M5 55 C20 50 40 55 60 80 C35 80 15 70 5 55Z"></path>
@@ -37,155 +43,279 @@
     </header>
 
     <div class="main-wrapper">
-        <!-- Sidebar -->
-        <aside id="sidebar">
-            <button class="close-menu" id="closeMenu">✕</button>
+        <!-- القائمة الجانبية (Sidebar) -->
+        <aside>
+            <button class="close-menu">✕</button>
             <nav>
                 <ul>
-                    <li><a href="home.html"><span class="icon-nav">📊</span><span>نظرة عامة</span></a></li>
-                    <li><a href="pateins.html"><span class="icon-nav">👥</span><span>المرضى</span></a></li>
-                    <li class="active"><a href="appointments.html"><span class="icon-nav">📅</span><span>المواعيد</span></a></li>
-                    <li><a href="bills.html"><span class="icon-nav">📄</span><span>الفواتير</span></a></li>
-                    <li><a href="profile.html"><span class="icon-nav">👤</span><span>الملف الشخصي</span></a></li>
+                    <li>
+                        <a href="home.html">
+                            <span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+                                    <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+                                    <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+                                    <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+                                </svg>
+                            </span>
+                            <span>نظرة عامة</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="appointment.html">
+                            <span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                                    <line x1="16" x2="16" y1="2" y2="6"></line>
+                                    <line x1="8" x2="8" y1="2" y2="6"></line>
+                                    <line x1="3" x2="21" y1="10" y2="10"></line>
+                                </svg>
+                            </span>
+                            <span>المواعيد</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pateins.html">
+                            <span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                </svg>
+                            </span>
+                            <span>المرضى</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="bills.html">
+                            <span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                            </span>
+                            <span>الفواتير</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="profile.html">
+                            <span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </span>
+                            <span>الملف الشخصي</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </aside>
 
-        <!-- Main Content -->
+        <!-- المحتوى الرئيسي -->
         <main>
             <div class="appointments-page-header">
                 <div class="welcome-section">
                     <h1>إدارة المواعيد</h1>
-                    <p>استعرض، أضف، ونظم مواعيد عيادة لافندر بكل سهولة.</p>
+                    <p>جدولة المواعيد والتصفية المباشرة مع إمكانية التعديل والإلغاء.</p>
                 </div>
-                <button class="btn-add-appointment" id="openAddModalBtn">
+                <button class="btn-add-appointment" onclick="toggleModal(true)">
                     <span>+</span> حجز موعد جديد
                 </button>
             </div>
 
-            <!-- Filter & Search Controls -->
-            <div class="controls-card">
+            <section class="filters-card">
                 <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="بحث باسم المريضة أو رقم الهاتف...">
+                    <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="بحث باسم المريض، الخدمة أو الطبيب..."
+                        oninput="applyFilters()">
                 </div>
-                <div class="filter-box">
-                    <input type="date" id="filterDate">
-                    <select id="filterDoctor">
-                        <option value="all">جميع الطبيبات</option>
-                        <option value="1">د. مريم - حقن وتجميل</option>
-                        <option value="2">د. ليلى - أخصائية جلدية</option>
-                    </select>
-                </div>
-            </div>
 
-            <!-- Tabs Section -->
-            <div class="details-section">
-                <div class="sessions-card">
-                    <h4>فلترة المواعيد</h4>
-                    <div class="appointment-tabs">
-                        <button class="tab-btn active" onclick="switchTab('all')">الكل</button>
-                        <button class="tab-btn" onclick="switchTab('pending')">منتظرة</button>
-                        <button class="tab-btn" onclick="switchTab('completed')">مكتملة</button>
-                        <button class="tab-btn" onclick="switchTab('canceled')">ملغاة</button>
+                <div class="filter-group">
+                    <div class="filter-item">
+                        <label>التاريخ:</label>
+                        <input type="date" id="dateFilter" class="date-input" onchange="applyFilters()">
+                    </div>
+
+                    <div class="filter-item">
+                        <label>الحالة:</label>
+                        <select id="statusFilter" class="status-select" onchange="applyFilters()">
+                            <option value="all">جميع الحالات</option>
+                            <option value="pending">منتظر</option>
+                            <option value="arrived">حضر</option>
+                            <option value="in_progress">قيد العلاج</option>
+                            <option value="completed">مكتمل</option>
+                            <option value="canceled">ملغى</option>
+                        </select>
                     </div>
                 </div>
+            </section>
 
-                <!-- Container for Rendered Appointments -->
-                <div id="appointments-container" class="appointments-list-wrapper">
-                    <!-- Dynamic rendering via JS -->
-                </div>
+            <!-- جدول المواعيد -->
+            <div class="table-container">
+                <table class="appointments-table">
+                    <thead>
+                        <tr>
+                            <th>المريض</th>
+                            <th>الخدمة / الجلسة</th>
+                            <th>الطبيب / الأخصائي</th>
+                            <th>التاريخ والوقت</th>
+                            <th>الحالة</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="appointmentsTableBody">
+                        <!-- سيتم تحميل المواعيد ديناميكياً -->
+                    </tbody>
+                </table>
             </div>
         </main>
     </div>
 
-    <!-- Modal: تفاصيل الموعد كاملة -->
-    <div class="booking-modal-overlay" id="detailsModal">
-        <div class="booking-modal-card">
+    <!-- نافذة حجز موعد جديد -->
+    <div class="modal-backdrop" id="appointmentModal">
+        <div class="modal-box">
             <div class="modal-header">
-                <h3>تفاصيل الموعد الكاملة</h3>
-                <button class="close-modal-btn" onclick="closeModal('detailsModal')">✕</button>
+                <div>
+                    <h3>حجز موعد جديد</h3>
+                </div>
+                <button class="close-modal-btn" onclick="toggleModal(false)">&times;</button>
             </div>
-            <div class="modal-form">
-                <div class="patient-identity">
-                    <span>المريضة: <strong id="det-patient-name">-</strong></span>
+
+            <form class="form-grid-app" id="appointmentForm">
+                <!-- 1. البحث الفوري عن المريض -->
+                <div class="form-group-app full-width">
+                    <label class="form-label-app">بحث عن المريضة <span class="required">*</span></label>
+                    <input type="text" list="patients-list" id="patientSearchInput" class="form-input-app"
+                        placeholder="اكتبي اسم المريضة أو رقم الهاتف..." required>
+                    <input type="hidden" id="selectedPatientId" name="patient_id" required>
+                    <datalist id="patients-list"></datalist>
                 </div>
-                <div class="details-grid">
-                    <div class="detail-item"><strong>الطبيبة:</strong> <span id="det-doctor-name">-</span></div>
-                    <div class="detail-item"><strong>العلاج المحجوز:</strong> <span id="det-treatment">-</span></div>
-                    <div class="detail-item"><strong>التاريخ والوقت:</strong> <span id="det-datetime">-</span></div>
-                    <div class="detail-item"><strong>الحالة:</strong> <span id="det-status" class="status-badge">-</span></div>
-                    <div class="detail-item"><strong>كود الخصم:</strong> <span id="det-promo">-</span></div>
-                    <div class="detail-item full-width" id="cancellation-info-box" style="display: none;">
-                        <strong style="color: #e74c3c;">جهة الإلغاء و السبب:</strong> 
-                        <p id="det-canceled-by" style="color: #666; margin-top: 4px;">-</p>
+
+                <!-- 2. الخدمة -->
+                <div class="form-group-app">
+                    <label class="form-label-app">الخدمات المطلوبة <span class="required">*</span></label>
+                    <select class="form-select-app" id="treatmentSelect" multiple required></select>
+                </div>
+
+                <!-- 3. الطبيبة -->
+                <div class="form-group-app">
+                    <label class="form-label-app">الطبيبة / الأخصائية <span class="required">*</span></label>
+                    <select class="form-select-app" id="doctorSelect" required>
+                        <option value="">اختر الطبيبة...</option>
+                    </select>
+                </div>
+
+                <!-- 4. التاريخ والوقت -->
+                <div class="form-group-app">
+                    <label class="form-label-app">تاريخ الموعد <span class="required">*</span></label>
+                    <input type="date" id="appointmentDate" class="form-input-app" required>
+                </div>
+
+                <div class="form-group-app">
+                    <label class="form-label-app">وقت الموعد <span class="required">*</span></label>
+                    <input type="time" id="appointmentTime" class="form-input-app" required>
+                </div>
+
+                <!-- 5. كود الخصم -->
+                <div class="form-group-app full-width">
+                    <label class="form-label-app">كود الخصم (إن وجد)</label>
+                    <input type="text" id="promoCodeInput" class="form-input-app" placeholder="أدخلي الكود هنا...">
+                </div>
+
+                <!-- ملخص التكلفة -->
+                <div class="price-summary-box full-width" id="priceSummaryBox">
+                    <div class="price-row">
+                        <span>سعر الجلسة الأصلي:</span>
+                        <span id="originalPrice">0 ل.س</span>
                     </div>
-                </div>
-                <div class="modal-actions" style="margin-top: 20px;">
-                    <button type="button" class="confirm-booking-btn" id="editAppBtn">تعديل الموعد</button>
-                    <button type="button" class="cancel-booking-btn" onclick="closeModal('detailsModal')">إغلاق</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: إضافة / تعديل موعد -->
-    <div class="booking-modal-overlay" id="appointmentModal">
-        <div class="booking-modal-card">
-            <div class="modal-header">
-                <h3 id="modalTitle">حجز موعد جديد</h3>
-                <button class="close-modal-btn" onclick="closeModal('appointmentModal')">✕</button>
-            </div>
-            <form class="modal-form" id="appointmentForm">
-                <input type="hidden" id="appointmentId">
-                
-                <div class="form-group">
-                    <label for="patient-name-input">اسم المريضة</label>
-                    <input type="text" id="patient-name-input" required placeholder="أدخل اسم المريضة الكامل">
-                </div>
-
-                <div class="form-group">
-                    <label for="doctor-select">اختر الطبيبة</label>
-                    <div class="select-wrapper">
-                        <select id="doctor-select" required>
-                            <option value="" disabled selected>اختر الطبيبة المتخصصة...</option>
-                            <option value="د. مريم - متخصصة حقن وتجميل">د. مريم - متخصصة حقن وتجميل</option>
-                            <option value="د. ليلى - أخصائية جلدية وعناية بالبشرة">د. ليلى - أخصائية جلدية وعناية بالبشرة</option>
-                        </select>
+                    <div class="price-row discount-row" id="discountRow">
+                        <span>قيمة الخصم:</span>
+                        <span id="discountAmount">0 ل.س</span>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="treatment-input">العلاج / الخدمة</label>
-                    <input type="text" id="treatment-input" required placeholder="مثال: تنظيف بشرة هيدرافيشيال">
-                </div>
-
-                <div class="form-group">
-                    <label for="promoCode">كود الخصم (إن وجد):</label>
-                    <input type="text" id="promoCode" placeholder="000000">
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group flex-1">
-                        <label for="booking-date">التاريخ</label>
-                        <input type="date" id="booking-date" required>
-                    </div>
-                    <div class="form-group flex-1">
-                        <label for="booking-time">الوقت</label>
-                        <input type="time" id="booking-time" required>
+                    <hr class="summary-divider">
+                    <div class="price-row total-row">
+                        <span>المبلغ النهائي المطلوب:</span>
+                        <span id="finalPrice">0 ل.س</span>
                     </div>
                 </div>
 
-                <div class="modal-actions">
-                    <button type="submit" class="confirm-booking-btn">تأكيد الحجز</button>
-                    <button type="button" class="cancel-booking-btn" onclick="closeModal('appointmentModal')">إلغاء</button>
+                <!-- 6. ملاحظات -->
+                <div class="form-group-app full-width">
+                    <label class="form-label-app">ملاحظات / توصيات للجلسة</label>
+                    <textarea id="appointmentNotes" class="form-textarea-app" rows="2"
+                        placeholder="أي ملاحظات خاصة بالمريضة..."></textarea>
+                </div>
+
+                <!-- أزرار الإجراءات -->
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel-app" onclick="toggleModal(false)">إلغاء</button>
+                    <button type="submit" class="btn-submit-app">تأكيد الحجز</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div id="toast" class="toast"></div>
+    <!-- مودال الإلغاء -->
+    <div id="cancelModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModalBtn">&times;</span>
+            <div class="modal-body">
+                <h3 class="modal-title">هل تود إلغاء موعد المريض؟</h3>
+                <p class="modal-subtitle">الرجاء كتابة السبب لإعلام المريض</p>
 
-    <script src="appointments.js"></script>
+                <form id="cancelAppointmentForm">
+                    <input type="hidden" id="cancelAppointmentId">
+                    <div class="form-group">
+                        <textarea id="cancellation_reason" name="cancellation_reason" rows="3"
+                            placeholder="أدخل سبب الإلغاء هنا..." required></textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" id="backModalBtn" class="back-btn">تراجع</button>
+                        <button type="submit" id="confirmCancelBtn" class="cancel-btn">تأكيد الإلغاء</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        (function () {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const closeMenu = document.querySelector('.close-menu');
+            const sidebar = document.querySelector('aside');
+
+            if (menuToggle && closeMenu && sidebar) {
+                menuToggle.addEventListener('click', (e) => {
+                    sidebar.classList.toggle('open');
+                    e.stopPropagation();
+                });
+
+                closeMenu.addEventListener('click', () => {
+                    sidebar.classList.remove('open');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!sidebar.contains(e.target) && sidebar.classList.contains('open')) {
+                        sidebar.classList.remove('open');
+                    }
+                });
+            }
+        })();
+    </script>
+    <script src="../component/cancelModel.js"></script>
+    <script src="appointment.js"></script>
 </body>
 
 </html>

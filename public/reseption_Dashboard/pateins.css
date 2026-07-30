@@ -406,3 +406,54 @@
         padding: 20px;
     }
 }
+/* تنسيق قائمة نتائج البحث المقترحة */
+.search-results-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-height: 260px;
+    overflow-y: auto;
+    margin-top: 5px;
+}
+
+.search-result-item {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background-color 0.2s ease;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item:hover {
+    background-color: #f8f5ff; /* لمسة لافندر خفيفة عند التحويم */
+}
+
+.search-result-name {
+    font-weight: 600;
+    color: #334155;
+}
+
+.search-result-phone {
+    font-size: 0.85rem;
+    color: #64748b;
+    direction: ltr;
+}
+
+.no-results-item {
+    padding: 12px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.9rem;
+}

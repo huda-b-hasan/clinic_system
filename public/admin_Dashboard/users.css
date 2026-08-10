@@ -307,3 +307,133 @@
     color: #d32f2f;
     transform: translateY(-1px);
 }
+.roles-container {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.delete-icon-box {
+    width: 60px;
+    height: 60px;
+    background: #fee2e2;
+    color: #ef4444;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px auto;
+}/* الخلفية ثابتة ومخفية افتراضياً */
+#deleteModal {
+    display: none; /* مخفي تماماً في الحالة العادية */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+/* يظهر فقط عندما نقوم بإضافة كلاس active */
+#deleteModal.active {
+    display: flex !important;
+}
+/* ==========================================================================
+   تنسيق مودال الحذف (Delete Modal Overrides)
+   ========================================================================== */
+
+/* الخلفية المظلمة للمودال */
+#deleteModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+/* حالة التفعيل والإظهار */
+#deleteModal.active {
+    display: flex !important;
+    opacity: 1;
+}
+
+/* محتوى مودال الحذف الداخلي */
+.delete-modal-content {
+    background-color: #ffffff;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 420px;
+    padding: 28px 24px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transform: translateY(-15px);
+    transition: transform 0.25s ease;
+}
+
+#deleteModal.active .delete-modal-content {
+    transform: translateY(0);
+}
+
+.delete-modal-content h3 {
+    font-size: 19px;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.delete-modal-content p {
+    font-size: 13.5px;
+    color: var(--text-grey);
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+/* أزرار الإجراءات داخل مودال الحذف */
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.btn-secondary {
+    background-color: #f4f4f6;
+    color: var(--text-dark);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: #eef0f2;
+}
+
+.btn-danger-confirm {
+    background-color: #ef4444;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-danger-confirm:hover {
+    background-color: #dc2626;
+}

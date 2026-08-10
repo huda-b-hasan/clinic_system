@@ -20,7 +20,7 @@
         <div class="header-right">
             <button class="menu-toggle" aria-label="فتح القائمة">☰</button>
 
-            <a href="admin_dashboard.html" class="logo">
+            <a href="../auth/home.html" class="logo">
                 <svg width="50" height="60" viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g stroke="#D4AF37" stroke-width="2.5" fill="none">
                         <path d="M60 10 C45 35 50 60 60 80 C70 60 75 35 60 10Z"></path>
@@ -70,7 +70,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="treatments.html">
+                        <a href="services.html">
                             <span class="icon-nav">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 14 4-4"></path><path d="M3.34 19a10 10 0 1 1 17.32 0"></path></svg>
                             </span>
@@ -113,10 +113,7 @@
                     <h1>لوحة إحصائيات العيادة 📊</h1>
                     <p>متابعة فورية للأداء المالي، المستلزمات والمواعيد لعيادة Lavender Beauty.</p>
                 </div>
-                <div class="quick-actions">
-                    <button class="btn-primary-action">+ إضافة خدمة جديدة</button>
-                    <button class="btn-secondary-action">+ كود خصم</button>
-                </div>
+
             </div>
 
             <!-- الكروت الإحصائية الرئيسية -->
@@ -126,7 +123,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" x2="12" y1="2" y2="22"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                     </div>
                     <div class="text-content">
-                        <h3>إيرادات الشهر الحالي</h3>
+                        <h3>صافي ارباح الشهر</h3>
                         <p id="monthly_revenue">42,850 $</p>
                     </div>
                 </div>
@@ -137,7 +134,7 @@
                     </div>
                     <div class="text-content">
                         <h3>إجمالي المرضى المسجلين</h3>
-                        <p id="total_patients">384 مريضة</p>
+                        <p id="total_patients">0 مريضة</p>
                     </div>
                 </div>
 
@@ -147,7 +144,7 @@
                     </div>
                     <div class="text-content">
                         <h3>مواد أوشكت على النفاذ</h3>
-                        <p id="low_stock_materials">3 مواد</p>
+                        <p id="low_stock_materials">0 مواد</p>
                     </div>
                 </div>
 
@@ -157,7 +154,7 @@
                     </div>
                     <div class="text-content">
                         <h3>متوسط تقييم الخدمات</h3>
-                        <p id="avg_rating">4.9 / 5.0</p>
+                        <p id="avg_rating">0.0 / 5.0</p>
                     </div>
                 </div>
             </div>
@@ -167,8 +164,8 @@
                 <!-- جدول الخدمات الأكثر طلباً -->
                 <div class="details-section grid-col-8">
                     <div class="section-header-flex">
-                        <h4>الخدمات الأكثر طلباً هذا الشهر (`treatments`)</h4>
-                        <a href="treatments.html" class="link-more">عرض الكل ←</a>
+                        <h4>الخدمات الأكثر طلباً هذا الشهر </h4>
+                        <a href="services.html" class="link-more">عرض الكل ←</a>
                     </div>
                     <table class="admin-table">
                         <thead>
@@ -258,6 +255,7 @@
             }
         });
     </script>
+    <script src="home.js"></script>
 </body>
 
 </html>

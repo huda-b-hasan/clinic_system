@@ -9,6 +9,7 @@ class Material extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name', 'quantity', 'unit_price'];
     public function clinicSessions()
     {
         return $this->belongsToMany(ClinicSessions::class, 'clinic_session_material', 'material_id', 'clinic_session_id')
@@ -16,10 +17,13 @@ class Material extends Model
             ->withTimestamps();
     }
 
-    protected $fillable = ['material_name', 'quantity', 'unit_price'];
 
     public function treatments()
     {
         return $this->belongsToMany(Treatment::class, 'material_treatment');
     }
+    public function invoices()
+{
+    return $this->hasMany(MaterialInvoice::class);
+}
 }

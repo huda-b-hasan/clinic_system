@@ -70,8 +70,17 @@ class User extends Authenticatable
         });
     }
 
+    // تم التعديل
     public function scopeReceptionist($query)
     {
-        return $query->where('role', 'receptionist');
+        return $query->whereHas('roles', function ($q) {
+            $q->where('name', 'receptionist')->orWhere('name', 'Receptionist');
+        });
+    }
+
+    // نطاق يستثني المرضى ويجلب الموظفين فقط
+    public function scopeStaff($query)
+    {
+        return $query->doesntHave('patient');
     }
 }

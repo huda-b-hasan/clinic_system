@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\AppointmentController;
 use App\Http\Controllers\API\BillController;
 use App\Http\Controllers\API\PatientController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\API\PatientSessionController;
 use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\API\RatingController;
 use App\Http\Controllers\API\TreatmentController;
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClinicSessionController;
 use App\Http\Controllers\DoctorController;
@@ -14,6 +16,8 @@ use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\ReceptionController;
 use App\Http\Controllers\RoomController;
 use App\Http\Middleware\CheckAuth;
+use App\Models\Patient;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
@@ -35,13 +39,11 @@ Route::post('/register', [AuthController::class, 'register']);
 // treatments
 Route::get('/treatments', [TreatmentController::class, 'index']);
 
-Route::post('/treatments', [TreatmentController::class, 'store']);
+
 
 Route::get('/treatments/{id}', [TreatmentController::class, 'show']);
 
-Route::put('/treatments/{id}', [TreatmentController::class, 'update']);
 
-Route::delete('/treatments/{id}', [TreatmentController::class, 'destroy']);
 
 // doctor
 
@@ -94,7 +96,7 @@ Route::middleware([CheckAuth::class.':Receptionist'])->group(function () {
     Route::get('/receptionist/bills-summary', [BillController::class, 'getBillsSummary']);
     Route::put('/bills/{id}/pay', [BillController::class, 'pay']);
 });
-Route::middleware([CheckAuth::class.':Doctor,Receptionist'])->group(function () {
+Route::middleware([CheckAuth::class.':Doctor,Receptionist,Manager'])->group(function () {
 
     Route::get('/patients', [PatientController::class, 'index']);
     Route::patch('/appointments/{id}/start-session', [AppointmentController::class, 'startSession']);
@@ -107,32 +109,51 @@ Route::middleware([CheckAuth::class.':Doctor,Receptionist'])->group(function () 
     Route::get('/patients/search', [PatientController::class, 'searchPatients']);
 });
 
-Route::middleware([CheckAuth::class.':Receptionist'])->group(function () {
+Route::middleware([CheckAuth::class.':Receptionist,Manager'])->group(function () {
     Route::get('/appointments/categorized', [AppointmentController::class, 'getCategorizedAppointments']);
     Route::get('/reception/rooms-status', [RoomController::class, 'getReceptionDashboard']);
     Route::put('/appointments/{id}', [AppointmentController::class, 'updateAppointment']);
     // مسارات إدارة الغرف الأساسية
     Route::get('/rooms', [RoomController::class, 'index']);
-    Route::post('/rooms', [RoomController::class, 'store']);  
+    Route::post('/rooms', [RoomController::class, 'store']);
     Route::patch('/rooms/{id}/status', [RoomController::class, 'updateStatus']);
 
     Route::post('/validate-promocode', [AppointmentController::class, 'validatePromoCode']);
 });
-
-Route::get('/get-patients-list', function (\Illuminate\Http\Request $request) {
-    $q = trim($request->get('q', ''));
+Route::middleware([CheckAuth::class.':Manager'])->group(function () {
+    Route::get('/admin/dashboard-data', [AdminController::class, 'getDashboardData']);
+    Route::get('/users', [UserController::class, 'index']);
+    Route::post('/users', [UserController::class, 'store']);
+    Route::put('/users/{id}', [UserController::class, 'update']);
+    Route::delete('/users/{id}', [UserController::class, 'destroy']);
+    Route::apiResource('treatments', TreatmentController::class);
+    Route::patch('treatments/{id}/toggle-status', [TreatmentController::class, 'toggleStatus']);
+    Route::prefix('materials')->group(function () {
+    Route::get('/', [MaterialController::class, 'index']); 
+    Route::post('/', [MaterialController::class, 'store']); 
+    Route::get('/{id}', [MaterialController::class, 'show']); 
+    Route::put('/{id}', [MaterialController::class, 'update']);
+    Route::delete('/{id}', [MaterialController::class, 'destroy']); 
     
+    // عمليات المخزن الخاصة
+    Route::post('/{id}/deduct', [MaterialController::class, 'deductQuantity']); 
+    Route::post('/{id}/restock', [MaterialController::class, 'restock']);
+});
+});
+Route::get('/get-patients-list', function (Request $request) {
+    $q = trim($request->get('q', ''));
+
     if (empty($q)) {
         return response()->json(['status' => true, 'data' => []]);
     }
 
-    $patients = \App\Models\Patient::where('name', 'LIKE', "%{$q}%")
+    $patients = Patient::where('name', 'LIKE', "%{$q}%")
         ->orWhere('phone', 'LIKE', "%{$q}%")
         ->limit(8)
         ->get(['id', 'name', 'phone', 'gender', 'birthdate', 'address', 'medical_notes']);
 
     return response()->json([
         'status' => true,
-        'data' => $patients
+        'data' => $patients,
     ]);
 });

@@ -113,7 +113,11 @@ function renderTable(materials) {
         const catInfo = categoryMap[item.category] || { 
             name: item.category || 'عام', 
             badgeClass: 'category-medical', 
-            icon: '📦', 
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; min-width: 24px; min-height: 24px; display: inline-block;">
+  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+  <line x1="12" y1="22.08" x2="12" y2="12"></line>
+</svg>`, 
             bgClass: 'filler-bg' 
         };
 
@@ -123,7 +127,6 @@ function renderTable(materials) {
             <tr>
                 <td>
                     <div class="item-info-cell">
-                        <div class="item-icon ${catInfo.bgClass}">${catInfo.icon}</div>
                         <div>
                             <strong>${item.name}</strong>
                             <span class="item-code">SKU: ${item.sku || ('MAT-' + item.id)}</span>

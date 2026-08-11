@@ -52,3 +52,14 @@
     color: var(--text-dark);
     font-weight: 600;
 }
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto; /* يضيف شريط سحب أفقي عند الحاجة */
+    -webkit-overflow-scrolling: touch;
+}
+
+.admin-table {
+    width: 100%;
+    min-width: 600px; /* يمنع الجدول من الانغلاق أو التداخل على الشاشات الصغيرة */
+    border-collapse: collapse;
+}

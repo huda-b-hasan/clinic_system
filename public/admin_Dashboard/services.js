@@ -100,7 +100,7 @@ function renderTreatmentsTable(treatments) {
             <td><span class="category-badge">${item.category || 'عام'}</span></td>
             <td><strong class="price-tag original-price">${item.base_price} ل.س</strong></td>
             <td><strong class="price-tag discount-price">${item.discount_price ? item.discount_price + ' ل.س' : '-'}</strong></td>
-            <td><span class="time-tag">⏱️ ${item.duration} دقيقة</span></td>
+            <td><span class="time-tag">⏱️ ${item.duration} </span></td>
             <td>
                 <button onclick="toggleTreatmentStatus(${item.id})" class="badge-status ${item.status === 'active' ? 'active' : 'inactive'}" style="border:none; cursor:pointer;">
                     ${item.status === 'active' ? 'متاحة' : 'غير متاحة'}

@@ -43,8 +43,7 @@
 
         <div class="header-left">
             <div class="admin-profile">
-                <span class="admin-name">د. ليلى أحمد</span>
-                <span class="admin-badge">مدير النظام</span>
+                <span class="admin-name" id="admin-name"> </span>
             </div>
         </div>
     </header>
@@ -113,6 +112,18 @@
                         </a>
                     </li>
                     <li>
+                        <a href="mouny.html">
+                            <span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" x2="12" y1="2" y2="22"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                            </span>
+                            <span>الإدارة المالية والفواتير</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="finance.html">
                             <span class="icon-nav">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
@@ -121,7 +132,7 @@
                                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                 </svg>
                             </span>
-                            <span>المالية وأكواد الخصم</span>
+                            <span> أكواد الخصم</span>
                         </a>
                     </li>
                     <li>
@@ -137,6 +148,14 @@
                             <span>الأجهزة والغرف</span>
                         </a>
                     </li>
+                    <li><a href="profile.html"><span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-user h-4 w-4">
+                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </span><span>الملف الشخصي</span></a></li>
                 </ul>
             </nav>
         </aside>
@@ -146,7 +165,7 @@
             <!-- الهيدر الخاص بالشاشة -->
             <div class="admin-welcome">
                 <div>
-                    <h1>إدارة المخزن والمستلزمات الطبية 📦</h1>
+                    <h1>إدارة المخزن والمستلزمات الطبية </h1>
                     <p>متابعة كميات المواد، تاريخ الصلاحية، وتنبيهات النقص الفوري.</p>
                 </div>
                 <div class="quick-actions">
@@ -218,12 +237,7 @@
                     </div>
 
                     <div class="filter-selects">
-                        <select id="categoryFilter">
-                            <option value="">جميع التصنيفات</option>
-                            <option value="fillers">فيلر وبوتوكس</option>
-                            <option value="skincare">مستحضرات بشرة</option>
-                            <option value="disposables">مستهلكات طبية (إبر/قفازات)</option>
-                        </select>
+
 
                         <select id="stockFilter">
                             <option value="">كل الحالات</option>
@@ -372,7 +386,7 @@
     <div class="modal-backdrop" id="itemModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>إضافة مادة 📦</h3>
+                <h3>إضافة مادة </h3>
                 <button class="btn-close-modal" onclick="closeItemModal()">✕</button>
             </div>
 
@@ -388,7 +402,7 @@
                     <!-- الكمية الأولية -->
                     <div class="form-group">
                         <label for="item_quantity">الكمية الأولية </label>
-                        <input disabled type="number" id="item_quantity" name="quantity"   placeholder=" 0">
+                        <input disabled type="number" id="item_quantity" name="quantity" placeholder=" 0">
                     </div>
 
                     <!-- سعر الشراء للقطعة -->
@@ -485,11 +499,11 @@
 
             <div class="modal-actions">
 
-<button type="button" data-close-modal="deleteModal">إلغاء</button> <button
-                    id="confirmDeleteBtn" class="btn-danger-confirm">حذف الخدمة</button>
+                <button type="button" data-close-modal="deleteModal">إلغاء</button> <button id="confirmDeleteBtn"
+                    class="btn-danger-confirm">حذف الخدمة</button>
             </div>
         </div>
-    </div> بدي حط موديل بيشبه هاد
+    </div>
     <script>
         // التحكم بالسايدبار
         const menuToggle = document.querySelector('.menu-toggle');
@@ -514,6 +528,7 @@
             document.getElementById('itemModal').classList.remove('active');
         }
     </script>
+    <script src="admininfo.js"></script>
     <script src="inventory.js"></script>
 </body>
 

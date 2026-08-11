@@ -71,6 +71,10 @@
     background-color: #f8f9fa;
     padding: 4px 8px;
     border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
 }
 
 /* حقل النص الطويل بالفورم */

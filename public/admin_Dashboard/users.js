@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // حدث حفظ نموذج الإضافة / التعديل
     const userForm = document.getElementById('userForm');
     if (userForm) userForm.addEventListener('submit', handleUserFormSubmit);
-    
+
     // حدث تأكيد الحذف من المودال
     document.getElementById('confirmDeleteBtn')?.addEventListener('click', confirmDeleteUser);
 });
@@ -58,7 +58,7 @@ async function fetchUsers() {
     try {
         const response = await fetch(requestUrl, {
             method: 'GET',
-            headers: { 
+            headers: {
                 'Accept': 'application/json',
                 'X-Requested-With': 'XMLHttpRequest'
             }
@@ -68,7 +68,7 @@ async function fetchUsers() {
 
         if (response.ok) {
             const resData = result.data || result;
-            
+
             console.log(resData)
             if (resData.stats) {
                 updateStatsCards(resData.stats);
@@ -121,10 +121,10 @@ function renderUsersTable(users) {
     for (let i = 0; i < users.length; i++) {
         const user = users[i];
         const initials = getInitials(user.name);
-        
+
         const rolesList = user.roles && user.roles.length > 0 ? user.roles : ['staff'];
         let rolesHtml = '<div class="roles-container" style="display: flex; gap: 5px; flex-wrap: wrap;">';
-        
+
         for (let j = 0; j < rolesList.length; j++) {
             const roleInfo = getRoleBadge(rolesList[j]);
             rolesHtml += '<span class="role-badge ' + roleInfo.badgeClass + '">' + roleInfo.label + '</span>';
@@ -135,27 +135,27 @@ function renderUsersTable(users) {
 
         rowsHtml += '<tr>' +
             '<td>' +
-                '<div class="user-info-cell">' +
-                    '<div class="user-avatar">' + initials + '</div>' +
-                    '<div>' +
-                        '<strong>' + (user.name || '') + '</strong>' +
-                        '<span class="user-email">' + (user.email || '') + '</span>' +
-                    '</div>' +
-                '</div>' +
+            '<div class="user-info-cell">' +
+            '<div class="user-avatar">' + initials + '</div>' +
+            '<div>' +
+            '<strong>' + (user.name || '') + '</strong>' +
+            '<span class="user-email">' + (user.email || '') + '</span>' +
+            '</div>' +
+            '</div>' +
             '</td>' +
             '<td>' + rolesHtml + '</td>' +
             '<td>' + (user.phone || '-') + '</td>' +
             '<td>' +
-                '<div class="action-buttons">' +
-                    '<button class="btn-icon edit-btn" title="تعديل الموظف" onclick="openEditUserModal(' + userJson + ')">' +
-                        '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>' +
-                    '</button>' +
-                    '<button class="btn-icon danger-btn" title="حذف الموظف" onclick="deleteUser(' + user.id + ')">' +
-                        '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>' +
-                    '</button>' +
-                '</div>' +
+            '<div class="action-buttons">' +
+            '<button class="btn-icon edit-btn" title="تعديل الموظف" onclick="openEditUserModal(' + userJson + ')">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>' +
+            '</button>' +
+            '<button class="btn-icon danger-btn" title="حذف الموظف" onclick="deleteUser(' + user.id + ')">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>' +
+            '</button>' +
+            '</div>' +
             '</td>' +
-        '</tr>';
+            '</tr>';
     }
 
     tbody.innerHTML = rowsHtml;
@@ -167,12 +167,18 @@ function renderUsersTable(users) {
 async function handleUserFormSubmit(e) {
     e.preventDefault();
 
+    const roleValue = getInputValue('userRole');
+
     const payload = {
         name: getInputValue('userName'),
         email: getInputValue('userEmail'),
         phone: getInputValue('userPhone'),
-        role: getInputValue('userRole')
     };
+
+    // نرسل الدور فقط إذا اختارت المستخدم دوراً جديداً من القائمة
+    if (roleValue !== '') {
+        payload.role = roleValue;
+    }
 
     const passwordVal = getInputValue('userPassword');
     if (passwordVal !== '') {
@@ -181,7 +187,7 @@ async function handleUserFormSubmit(e) {
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
     const isEdit = editingUserId !== null;
-    
+
     let targetUrl = isEdit ? '/users/' + editingUserId : '/users';
     const methodType = isEdit ? 'PUT' : 'POST';
 
@@ -202,12 +208,11 @@ async function handleUserFormSubmit(e) {
         if (response.ok) {
             closeUserModal();
             fetchUsers();
-            
-            // إظهار التوست المناسب
+
             if (isEdit) {
-                showToast("تم تعديل بيانات الموظف بنجاح ", "success");
+                showToast("تم تعديل بيانات الموظف بنجاح", "success");
             } else {
-                showToast("تم إضافة الموظف بنجاح ", "success");
+                showToast("تم إضافة الموظف بنجاح", "success");
             }
         } else {
             showToast(result.message || "فشلت عملية الحفظ، يرجى التأكد من البيانات", "error");
@@ -216,7 +221,6 @@ async function handleUserFormSubmit(e) {
         showToast("حدث خطأ في الاتصال بالسيرفر", "error");
     }
 }
-
 // ==========================================
 // 6. دوال الحذف والـ Modal والتأكيد مع Toast
 // ==========================================
@@ -240,7 +244,7 @@ async function confirmDeleteUser() {
     try {
         const response = await fetch('/users/' + userIdToDelete, {
             method: 'DELETE',
-            headers: { 
+            headers: {
                 'Accept': 'application/json',
                 'X-CSRF-TOKEN': csrfToken,
                 'X-Requested-With': 'XMLHttpRequest'
@@ -267,16 +271,14 @@ async function confirmDeleteUser() {
 function openEditUserModal(user) {
     editingUserId = user.id;
 
-    const modalTitle = document.querySelector('#userModal .modal-header h3');
-    if (modalTitle) modalTitle.textContent = 'تعديل بيانات الموظف ';
-
+    // ... (تغيير عنوان المودال وعرض الاسم والإيميل ورقم الهاتف) ...
     setInputValue('userName', user.name || '');
     setInputValue('userEmail', user.email || '');
     setInputValue('userPhone', user.phone || '');
-    
-    const currentRole = Array.isArray(user.roles) && user.roles.length > 0 ? user.roles[0] : (user.role || '');
-    setInputValue('userRole', currentRole);
-    
+
+    // 💡 إفراغ حقل الدور عند فتح التعديل لكي لا يُجبَرَ المستخدم على اختيار دور جديد
+    setInputValue('userRole', '');
+
     const passInput = document.getElementById('userPassword');
     if (passInput) {
         passInput.value = '';
@@ -293,8 +295,17 @@ function openUserModal() {
     if (form) form.reset();
 
     const modalTitle = document.querySelector('#userModal .modal-header h3');
-    if (modalTitle) modalTitle.textContent = 'إضافة موظف جديد 👤';
-
+    if (modalTitle) {
+        modalTitle.innerHTML = `
+    <span style="display: inline-flex; align-items: center; gap: 8px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; display: inline-block;">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+      إضافة موظف جديد
+    </span>
+  `;
+    }
     const passInput = document.getElementById('userPassword');
     if (passInput) passInput.required = true;
 
@@ -309,7 +320,7 @@ function closeUserModal() {
 
 function getRoleBadge(role) {
     const normalizedRole = (role || '').toString().toLowerCase();
-    
+
     if (normalizedRole === 'admin' || normalizedRole === 'manager') {
         return { label: 'مدير ', badgeClass: 'admin' };
     } else if (normalizedRole === 'doctor') {

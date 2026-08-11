@@ -167,9 +167,9 @@ function getButtonsByStatus(status, appointmentId) {
             <button class="btn-cancel-session" data-id="${appointmentId}">إلغاء الموعد</button>
         `;
     } else if (status === 'arrived') {
+        // <button class="btn-start-session" style="background-color: #28a745; color: white;" onclick="startSession(${appointmentId}, this)">إدخال للغرفة</button>
+        // <button class="btn-cancel-session" onclick="cancelAppointment(${appointmentId}, this)">إلغاء</button>
         return `
-            <button class="btn-start-session" style="background-color: #28a745; color: white;" onclick="startSession(${appointmentId}, this)">إدخال للغرفة</button>
-            <button class="btn-cancel-session" onclick="cancelAppointment(${appointmentId}, this)">إلغاء</button>
         `;
     } else if (status === 'in_progress') {
         return `<span class="status-in-progress" style="color: #0d6efd; font-weight: bold;">تُنفذ الآن بداخل الغرفة...</span>`;

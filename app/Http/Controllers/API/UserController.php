@@ -103,7 +103,7 @@ class UserController extends Controller
     /**
      * تعديل بيانات الموظف ودوره
      */
-    public function update(Request $request, $id)
+public function update(Request $request, $id)
     {
         $user = User::staff()->findOrFail($id);
 
@@ -112,7 +112,7 @@ class UserController extends Controller
             'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
             'password' => 'nullable|string|min:6',
             'phone' => 'nullable|string',
-            'role' => 'required|string',
+            'role' => 'nullable|string', // جعلناه اختيارياً nullable
         ]);
 
         // 1. تحديث البيانات الأساسية
@@ -128,10 +128,13 @@ class UserController extends Controller
 
         $user->update($data);
 
-        // 2. تحديث الدور في جدول role_user (sync تحذف القديم وتضيف الجديد)
-        $role = Role::where('name', $request->role)->first();
-        if ($role) {
-            $user->roles()->sync([$role->id]);
+        // 2. إذا تم اختيار دور جديد، قم بإضافته بجانب الأدوار القديمة دون حذفها
+        if ($request->filled('role')) {
+            $role = Role::where('name', $request->role)->first();
+            if ($role) {
+                // syncWithoutDetaching تضيف الدور الجديد فوق الأدوار القديمة ولا تحذف شيئاً
+                $user->roles()->syncWithoutDetaching([$role->id]);
+            }
         }
 
         return response()->json([

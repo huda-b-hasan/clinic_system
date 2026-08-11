@@ -4,11 +4,12 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bill;
-use App\Models\Patient;
-use App\Models\Treatment;
 use App\Models\Material;
-use App\Models\Rating;
 use App\Models\MaterialInvoice;
+use App\Models\Patient;
+use App\Models\Rating;
+use App\Models\Treatment;
+use App\Models\User;
 use Carbon\Carbon;
 
 class AdminController extends Controller
@@ -17,7 +18,7 @@ class AdminController extends Controller
     {
         try {
             // الحصول على السنة والشهر الحاليين
-            $currentYear  = Carbon::now()->year;
+            $currentYear = Carbon::now()->year;
             $currentMonth = Carbon::now()->month;
 
             // 1. حساب إجمالي الإيرادات للشهر الحالي
@@ -36,7 +37,7 @@ class AdminController extends Controller
 
             // تنسيق المبلغ للعرض (سواء كان موجباً أم سالباً)
             // في حال القيمة سالبة ستظهر مثل: -500,000 ل.س
-            $formattedRevenue = number_format($netProfit, 0) . ' ل.س';
+            $formattedRevenue = number_format($netProfit, 0).' ل.س';
 
             // 4. إجمالي عدد المرضى
             $totalPatients = Patient::count();
@@ -49,7 +50,7 @@ class AdminController extends Controller
             $lowStockMaterials = Material::where('quantity', '<=', 10)->get([
                 'id',
                 'name',
-                'quantity'
+                'quantity',
             ]);
 
             // 7. الخدمات الأكثر طلباً
@@ -63,26 +64,63 @@ class AdminController extends Controller
                 'status' => 'success',
                 'data' => [
                     'stats' => [
-                        'total_revenue'   => $formattedRevenue, // يظهر السالب بشكل صريح إن وجد
-                        'raw_revenue'     => $netProfit,        // القيمة الرقمية الخام (موجبة أو سالبة)
-                        
-                        'gross_revenue'   => $totalRevenue,     // إجمالي المداخيل
-                        'total_expenses'  => $totalExpenses,    // إجمالي المصاريف
-                        
-                        'total_patients'  => $totalPatients,
-                        'average_rating'  => $averageRatingFormatted,
+                        'total_revenue' => $formattedRevenue, // يظهر السالب بشكل صريح إن وجد
+                        'raw_revenue' => $netProfit,        // القيمة الرقمية الخام (موجبة أو سالبة)
+
+                        'gross_revenue' => $totalRevenue,     // إجمالي المداخيل
+                        'total_expenses' => $totalExpenses,    // إجمالي المصاريف
+
+                        'total_patients' => $totalPatients,
+                        'average_rating' => $averageRatingFormatted,
                         'low_stock_count' => $lowStockMaterials->count(),
                     ],
                     'low_stock_materials' => $lowStockMaterials,
-                    'top_services'        => $topServices,
-                ]
+                    'top_services' => $topServices,
+                ],
             ], 200);
 
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'حدث خطأ أثناء جلب بيانات لوحة التحكم: ' . $e->getMessage()
+                'message' => 'حدث خطأ أثناء جلب بيانات لوحة التحكم: '.$e->getMessage(),
             ], 500);
         }
+    }
+
+
+    public function getAdminProfile()
+    {
+        // 1. جلب معرف المستخدم من الجلسة
+        $adminId = session('user_id');
+
+        // التأكد من وجود جلسة نشطة
+        if (! $adminId) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'غير مصرح: لم يتم تسجيل الدخول',
+            ], 401);
+        }
+
+        // 2. البحث عن المستخدم في قاعدة البيانات
+        $admin = User::find($adminId);
+
+        // التأكد من وجود المستخدم في قاعدة البيانات
+        if (! $admin) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'المستخدم غير موجود',
+            ], 404);
+        }
+
+        // 3. إرجاع البيانات المطلوبة (مع الاسم بشكل أساسي)
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'id' => $admin->id,
+                'name' => $admin->name,  // اسم الآدمن
+                'email' => $admin->email,
+                'role' => $admin->role ?? 'admin',
+            ],
+        ], 200);
     }
 }

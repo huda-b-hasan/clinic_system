@@ -11,8 +11,10 @@ use App\Http\Controllers\API\TreatmentController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClinicSessionController;
+use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\PromoCodeController;
 use App\Http\Controllers\ReceptionController;
 use App\Http\Controllers\RoomController;
 use App\Http\Middleware\CheckAuth;
@@ -37,13 +39,10 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
 // treatments
-Route::get('/treatments', [TreatmentController::class, 'index']);
-
-
-
+Route::get('/treatments-all', [TreatmentController::class, 'index']);
+    Route::apiResource('treatments', TreatmentController::class);
+    Route::patch('treatments/{id}/toggle-status', [TreatmentController::class, 'toggleStatus']);
 Route::get('/treatments/{id}', [TreatmentController::class, 'show']);
-
-
 
 // doctor
 
@@ -121,24 +120,43 @@ Route::middleware([CheckAuth::class.':Receptionist,Manager'])->group(function ()
     Route::post('/validate-promocode', [AppointmentController::class, 'validatePromoCode']);
 });
 Route::middleware([CheckAuth::class.':Manager'])->group(function () {
+    Route::get('/admin/financial-summary', [BillController::class, 'getFinancialCardsAndBills']);
+    Route::get('/admin/profile', [AdminController::class, 'getAdminProfile']);
+    // مسارات الغرف
+    Route::get('/rooms', [RoomController::class, 'index']);
+    Route::post('/rooms', [RoomController::class, 'store']);
+    Route::put('/rooms/{id}', [RoomController::class, 'update']);
+    Route::patch('/rooms/{id}/status', [RoomController::class, 'updateStatus']);
+    Route::delete('/rooms/{id}', [RoomController::class, 'destroy']);
+    // مسارات الأجهزة
+    Route::get('/devices', [DeviceController::class, 'index']);
+    Route::post('/devices', [DeviceController::class, 'store']);
+    Route::put('/devices/{id}', [DeviceController::class, 'update']);
+    Route::delete('/devices/{id}', [DeviceController::class, 'destroy']);
+    Route::get('/promo-codes/stats', [PromoCodeController::class, 'stats']);
+    Route::get('/promo-codes', [PromoCodeController::class, 'index']);
+    Route::post('/promo-codes', [PromoCodeController::class, 'store']);
+    Route::get('/promo-codes/{id}', [PromoCodeController::class, 'show']);
+    Route::put('/promo-codes/{id}', [PromoCodeController::class, 'update']);
+    Route::delete('/promo-codes/{id}', [PromoCodeController::class, 'destroy']);
     Route::get('/admin/dashboard-data', [AdminController::class, 'getDashboardData']);
     Route::get('/users', [UserController::class, 'index']);
     Route::post('/users', [UserController::class, 'store']);
     Route::put('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
-    Route::apiResource('treatments', TreatmentController::class);
-    Route::patch('treatments/{id}/toggle-status', [TreatmentController::class, 'toggleStatus']);
+
     Route::prefix('materials')->group(function () {
-    Route::get('/', [MaterialController::class, 'index']); 
-    Route::post('/', [MaterialController::class, 'store']); 
-    Route::get('/{id}', [MaterialController::class, 'show']); 
-    Route::put('/{id}', [MaterialController::class, 'update']);
-    Route::delete('/{id}', [MaterialController::class, 'destroy']); 
-    
-    // عمليات المخزن الخاصة
-    Route::post('/{id}/deduct', [MaterialController::class, 'deductQuantity']); 
-    Route::post('/{id}/restock', [MaterialController::class, 'restock']);
-});
+        Route::get('/', [MaterialController::class, 'index']);
+        Route::post('/', [MaterialController::class, 'store']);
+        Route::get('/{id}', [MaterialController::class, 'show']);
+        Route::put('/{id}', [MaterialController::class, 'update']);
+        Route::delete('/{id}', [MaterialController::class, 'destroy']);
+
+        // عمليات المخزن الخاصة
+        Route::post('/{id}/deduct', [MaterialController::class, 'deductQuantity']);
+        Route::post('/{id}/restock', [MaterialController::class, 'restock']);
+
+    });
 });
 Route::get('/get-patients-list', function (Request $request) {
     $q = trim($request->get('q', ''));

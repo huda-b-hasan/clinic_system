@@ -4,18 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lavender Beauty Clinic</title>
-    <link rel="stylesheet" href="home.css">
+    <title> Lavender Beauty Clinic</title>
+    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="../patient_Dashboard/profile.css">
     <link rel="stylesheet" href="../component/toast.css">
-    <link rel="stylesheet" href="../template.css">
-
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪻</text></svg>">
+
 </head>
 
 <body>
-
-    <!-- الهيدر العلوي -->
     <header>
         <div class="header-right">
             <button class="menu-toggle" aria-label="فتح القائمة">☰</button>
@@ -46,21 +44,22 @@
         </div>
     </header>
 
+    <!-- end header -->
     <div class="main-wrapper">
-        <!-- القائمة الجانبية للشاشات الست -->
         <aside>
             <button class="close-menu">✕</button>
             <nav>
                 <ul>
-                    <li class="active">
-                        <a href="admin_dashboard.html">
+                    <li>
+                        <a href="home.html">
                             <span class="icon-nav">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2">
                                     <rect width="7" height="9" x="3" y="3" rx="1"></rect>
                                     <rect width="7" height="5" x="14" y="3" rx="1"></rect>
-                                    <rect width="7" height="9" x="14" y="12" rx="1"></rect>
-                                    <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+                                    <rect width="7" height="9" x="14" y="12" rx="1">
+                                        </rx>
+                                        <rect width="7" height="5" x="3" y="16" rx="1"></rect>
                                 </svg>
                             </span>
                             <span>الرئيسية والإحصائيات</span>
@@ -80,8 +79,8 @@
                             <span>الموظفين والأدوار</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="services.html">
+                    <li class="active">
+                        <a href="treatments.html">
                             <span class="icon-nav">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2">
@@ -145,7 +144,7 @@
                             <span>الأجهزة والغرف</span>
                         </a>
                     </li>
-                    <li><a href="profile.html"><span class="icon-nav">
+                    <li class="active"><a href="profile.html"><span class="icon-nav">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round" class="lucide lucide-user h-4 w-4">
@@ -156,178 +155,106 @@
                 </ul>
             </nav>
         </aside>
+        <!-- end aside -->
 
-        <!-- المحتوى الرئيسي -->
         <main>
-            <!-- قسم الترحب والإجراء السريع -->
-            <div class="welcome-section admin-welcome">
-                <div>
-                    <h1>لوحة إحصائيات العيادة </h1>
 
-                    <p>متابعة فورية للأداء المالي، المستلزمات والمواعيد لعيادة Lavender Beauty.</p>
-                </div>
 
-            </div>
+            <div class="profile-container">
 
-            <!-- الكروت الإحصائية الرئيسية -->
-            <div class="summary-cards">
-                <div class="summary-card gold-accent">
-                    <div class="icon-box gold-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
-                            <line x1="12" x2="12" y1="2" y2="22"></line>
-                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                        </svg>
-                    </div>
-                    <div class="text-content">
-                        <h3>صافي ارباح الشهر</h3>
-                        <p id="monthly_revenue">42,850 $</p>
-                    </div>
-                </div>
-
-                <div class="summary-card">
-                    <div class="icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                        </svg>
-                    </div>
-                    <div class="text-content">
-                        <h3>إجمالي المرضى المسجلين</h3>
-                        <p id="total_patients">0 مريضة</p>
-                    </div>
-                </div>
-
-                <div class="summary-card warning-accent">
-                    <div class="icon-box alert-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
-                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
-                            <line x1="12" y1="9" x2="12" y2="13"></line>
-                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                        </svg>
-                    </div>
-                    <div class="text-content">
-                        <h3>مواد أوشكت على النفاذ</h3>
-                        <p id="low_stock_materials">0 مواد</p>
-                    </div>
-                </div>
-
-                <div class="summary-card">
-                    <div class="icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
-                            <polygon
-                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                            </polygon>
-                        </svg>
-                    </div>
-                    <div class="text-content">
-                        <h3>متوسط تقييم الخدمات</h3>
-                        <p id="avg_rating">0.0 / 5.0</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- شبكة التفاصيل والإحصائيات الجانبية -->
-            <div class="admin-grid-section">
-                <!-- جدول الخدمات الأكثر طلباً -->
-                <div class="details-section grid-col-8">
-                    <div class="section-header-flex">
-                        <h4>الخدمات الأكثر طلباً هذا الشهر </h4>
-                        <!-- <a href="services.html" class="link-more">عرض الكل ←</a> -->
-                    </div>
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>اسم الخدمة</th>
-                                <th>الفئة</th>
-                                <th>السعر الأساسي</th>
-                                <th>عدد الجلسات</th>
-                                <th>الحالة</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>تنظيف بشرة هيدرافيشيال</strong></td>
-                                <td>عناية بالبشرة</td>
-                                <td>80 $</td>
-                                <td>142 جلسة</td>
-                                <td><span class="badge-status active">نشط</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>حقن بوتوكس للوجه</strong></td>
-                                <td>حقن وتجميل</td>
-                                <td>150 $</td>
-                                <td>98 جلسة</td>
-                                <td><span class="badge-status active">نشط</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>جلسة ليزر كربوني</strong></td>
-                                <td>علاج بالليزر</td>
-                                <td>110 $</td>
-                                <td>76 جلسة</td>
-                                <td><span class="badge-status active">نشط</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- التنبيهات السريعة للمخزن والأجهزة -->
-                <div class="details-section grid-col-4">
-                    <h4>تنبيهات المخزن والأجهزة ⚠️</h4>
-                    <div class="alerts-list">
-                        <div class="alert-item warning">
-                            <div class="alert-info">
-                                <h5>سيروم هيدرافيشيال Pro</h5>
-                                <p>المتبقي في المخزن: <strong>2 عبوة فقط</strong></p>
-                            </div>
-                            <button class="btn-small">تزويد</button>
-                        </div>
-                        <div class="alert-item warning">
-                            <div class="alert-info">
-                                <h5>فيلر Juvederm Ultra</h5>
-                                <p>المتبقي في المخزن: <strong>5 إبر</strong></p>
-                            </div>
-                            <button class="btn-small">تزويد</button>
-                        </div>
-                        <div class="alert-item danger">
-                            <div class="alert-info">
-                                <h5>جهاز ليزر Candela GentleMax</h5>
-                                <p>حالة الجهاز: <strong>يحتاج صيانة دورية</strong></p>
-                            </div>
-                            <button class="btn-small danger-btn">صيانة</button>
+                <div class="profile-header">
+                    <div class="avatar-section">
+                        <div class="avatar-circle" id="userInitials">ر</div>
+                        <div class="avatar-info">
+                            <h3 id="patientHeaderName">استقبال لافندر</h3>
+                            <span class="role-badge" id="userRoleBadge">موظف/ة استقبال</span>
                         </div>
                     </div>
+                    <h1>ملفكِ الشخصي</h1>
+                    <p>إدارة بياناتكِ في لافندر</p>
                 </div>
+
+                <form id="profileForm">
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label class="form-label" for="name">الاسم الكامل</label>
+                            <input type="text" id="name" name="name" class="form-input"
+                                placeholder="أدخل/ي اسمكِ الكامل" required="">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="phone">رقم الجوال</label>
+                            <input type="tel" id="phone" name="phone" class="form-input" placeholder="+966 5X XXX XXXX"
+                                required="">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="email">البريد الإلكتروني</label>
+                            <input type="email" id="email" class="form-input"
+                                style="background-color: #f5f5f5; cursor: not-allowed;" readonly="">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="current_password">كلمة المرور الحالية</label>
+                            <input type="password" id="current_password" name="current_password" class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="new_password">كلمة المرور الجديدة</label>
+                            <input type="password" id="new_password" name="new_password" class="form-input"
+                                placeholder="8 أحرف على الأقل">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="new_password_confirmation">تأكيد كلمة المرور الجديدة</label>
+                            <input type="password" id="new_password_confirmation" name="new_password_confirmation"
+                                class="form-input">
+                        </div>
+
+
+
+
+
+                    </div>
+
+                    <div class="actions-section">
+                        <button type="submit" class="btn-submit">حفظ التعديلات</button>
+                    </div>
+                </form>
+
             </div>
         </main>
     </div>
-
+    <div id="toast" class="toast">تم تحديث ملفكِ الشخصي بنجاح!</div>
     <script>
-        // التحكم بالسايدبار
         const menuToggle = document.querySelector('.menu-toggle');
         const closeMenu = document.querySelector('.close-menu');
         const sidebar = document.querySelector('aside');
 
+        // فتح وإغلاق القائمة عند الضغط على زر الهامبرغر
         menuToggle.addEventListener('click', (e) => {
             sidebar.classList.toggle('open');
-            e.stopPropagation();
+            e.stopPropagation(); // لمنع تضارب الحدث مع إغلاق القائمة عند الضغط بالخارج
         });
 
+        // إغلاق القائمة عند الضغط على زر إكس (✕)
         closeMenu.addEventListener('click', () => {
             sidebar.classList.remove('open');
         });
 
+        // ميزة إضافية: إغلاق القائمة تلقائياً عند الضغط في أي مكان خارجها (UX ممتاز)
         document.addEventListener('click', (e) => {
             if (!sidebar.contains(e.target) && sidebar.classList.contains('open')) {
                 sidebar.classList.remove('open');
             }
         });
     </script>
+    <script src="profile.js"></script>
     <script src="admininfo.js"></script>
-    <script src="home.js"></script>
 </body>
 
 </html>
+
+
+<!-- =========================== -->

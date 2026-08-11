@@ -204,4 +204,125 @@ class BillController extends Controller
             'data' => $bill,
         ], 200);
     }
+public function getFinancialCardsAndBills(Request $request)
+    {
+        try {
+            $currentYear = now()->year;
+            $currentMonth = now()->month;
+            $today = now()->toDateString();
+
+            // 1. الإيرادات
+            $yearlyRevenue = (float) Bill::whereYear('date', $currentYear)
+                ->where('status', 'paid')
+                ->sum('amount_paid');
+
+            $monthlyRevenue = (float) Bill::whereYear('date', $currentYear)
+                ->whereMonth('date', $currentMonth)
+                ->where('status', 'paid')
+                ->sum('amount_paid');
+
+            $dailyRevenue = (float) Bill::whereDate('date', $today)
+                ->where('status', 'paid')
+                ->sum('amount_paid');
+
+            // 2. المصروفات (تأمين في حال عدم وجود جدول المشتريات لتجنب الـ 500)
+            $yearlyExpenses = 0;
+            $monthlyExpenses = 0;
+            if (\Schema::hasTable('material_invoices')) {
+                $yearlyExpenses = (float) \DB::table('material_invoices')->whereYear('invoice_date', $currentYear)->sum('total_price');
+                $monthlyExpenses = (float) \DB::table('material_invoices')->whereYear('invoice_date', $currentYear)->whereMonth('invoice_date', $currentMonth)->sum('total_price');
+            }
+
+            $yearlyNetProfit = $yearlyRevenue - $yearlyExpenses;
+            $monthlyNetProfit = $monthlyRevenue - $monthlyExpenses;
+
+            $totalUnpaid = (float) Bill::whereIn('status', ['unpaid', 'partially_paid'])
+                ->sum('amount_paid');
+
+            // 3. فواتير المشتريات (إن وجدت)
+            $purchaseInvoices = collect();
+            if (\Schema::hasTable('material_invoices') && \Schema::hasTable('materials')) {
+                $purchaseInvoices = \DB::table('material_invoices')
+                    ->join('materials', 'material_invoices.material_id', '=', 'materials.id')
+                    ->select('material_invoices.id', 'material_invoices.total_price', 'material_invoices.invoice_date', 'material_invoices.quantity_added', 'materials.name as material_name')
+                    ->orderBy('material_invoices.invoice_date', 'desc')
+                    ->get()
+                    ->map(function ($invoice) {
+                        return [
+                            'id' => $invoice->id,
+                            'bill_number' => 'PUR-'.str_pad($invoice->id, 4, '0', STR_PAD_LEFT),
+                            'patient_name' => $invoice->material_name,
+                            'session_name' => $invoice->quantity_added, // تم إزالة القوس والرمز الزائد ليظهر العدد فقط
+                            'amount' => number_format($invoice->total_price, 0).' ل.س',
+                            'date' => $invoice->invoice_date,
+                            'status_text' => 'مشتريات',
+                            'data_status' => 'expense',
+                        ];
+                    });
+            }
+
+            // 4. فواتير المرضى
+            $patientBills = Bill::orderBy('created_at', 'desc')
+                ->get()
+                ->map(function ($bill) {
+                    $patientName = 'مريض غير معروف';
+
+                    try {
+                        if ($bill->clinicSession) {
+                            if ($bill->clinicSession->patient) {
+                                $patientName = $bill->clinicSession->patient->name;
+                            } elseif ($bill->clinicSession->appointment && $bill->clinicSession->appointment->patient) {
+                                $patientName = $bill->clinicSession->appointment->patient->name;
+                            }
+                        }
+                    } catch (\Exception $ex) {
+                        // تجاوز أي خطأ علاقة لتجنب توقف السيرفر
+                    }
+
+                    $statusText = 'مدفوعة';
+                    $dataStatus = 'paid';
+
+                    if ($bill->status === 'unpaid') {
+                        $statusText = 'غير مدفوعة';
+                        $dataStatus = 'unpaid';
+                    } elseif ($bill->status === 'partially_paid') {
+                        $statusText = 'مستحقة';
+                        $dataStatus = 'pending';
+                    }
+
+                    return [
+                        'id' => $bill->id,
+                        'bill_number' => '#'.str_pad($bill->id, 4, '0', STR_PAD_LEFT),
+                        'patient_name' => $patientName,
+                        'session_name' => '- ',
+                        'amount' => number_format($bill->amount_paid, 0).' ل.س',
+                        'date' => $bill->date,
+                        'status_text' => $statusText,
+                        'data_status' => $dataStatus,
+                    ];
+                });
+
+            $allFinancialRecords = $patientBills->concat($purchaseInvoices);
+
+            return response()->json([
+                'status' => 'success',
+                'data' => [
+                    'cards' => [
+                        'yearly_revenue' => number_format($yearlyNetProfit, 0).' ل.س',
+                        'monthly_revenue' => number_format($monthlyNetProfit, 0).' ل.س',
+                        'daily_revenue' => number_format($dailyRevenue, 0).' ل.س',
+                        'unpaid_total' => number_format($totalUnpaid, 0).' ل.س',
+                    ],
+                    'bills' => $allFinancialRecords,
+                ],
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'خطأ في السيرفر: '.$e->getMessage(),
+            ], 500);
+        }
+    }
 }
+

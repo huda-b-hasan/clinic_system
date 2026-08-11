@@ -4,13 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lavender Beauty Clinic</title>
-    <link rel="stylesheet" href="home.css">
-    <link rel="stylesheet" href="../component/toast.css">
-    <link rel="stylesheet" href="../template.css">
-
+    <title>Lavender Beauty Clinic - الإدارة المالية</title>
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪻</text></svg>">
+    <link rel="stylesheet" href="mouny.css">
+    <link rel="stylesheet" href="../template.css">
 </head>
 
 <body>
@@ -19,9 +17,8 @@
     <header>
         <div class="header-right">
             <button class="menu-toggle" aria-label="فتح القائمة">☰</button>
-
             <a href="../auth/home.html" class="logo">
-                <svg width="50" height="60" viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="45" height="55" viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g stroke="#D4AF37" stroke-width="2.5" fill="none">
                         <path d="M60 10 C45 35 50 60 60 80 C70 60 75 35 60 10Z"></path>
                         <path d="M40 25 C35 45 40 65 55 80 C58 55 52 40 40 25Z"></path>
@@ -47,15 +44,15 @@
     </header>
 
     <div class="main-wrapper">
-        <!-- القائمة الجانبية للشاشات الست -->
+        <!-- القائمة الجانبية للتيمبلت تماماً -->
         <aside>
             <button class="close-menu">✕</button>
             <nav>
                 <ul>
-                    <li class="active">
-                        <a href="admin_dashboard.html">
+                    <li>
+                        <a href="home.html">
                             <span class="icon-nav">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2">
                                     <rect width="7" height="9" x="3" y="3" rx="1"></rect>
                                     <rect width="7" height="5" x="14" y="3" rx="1"></rect>
@@ -69,12 +66,10 @@
                     <li>
                         <a href="users.html">
                             <span class="icon-nav">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="9" cy="7" r="4"></circle>
-                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                                    <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
                                 </svg>
                             </span>
                             <span>الموظفين والأدوار</span>
@@ -83,7 +78,7 @@
                     <li>
                         <a href="services.html">
                             <span class="icon-nav">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="m12 14 4-4"></path>
                                     <path d="M3.34 19a10 10 0 1 1 17.32 0"></path>
@@ -95,20 +90,18 @@
                     <li>
                         <a href="inventory.html">
                             <span class="icon-nav">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="m7.5 4.27 9 5.15"></path>
                                     <path
                                         d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z">
                                     </path>
-                                    <path d="m3.3 7 8.7 5 8.7-5"></path>
-                                    <path d="M12 22V12"></path>
                                 </svg>
                             </span>
                             <span>المخزن والمستلزمات</span>
                         </a>
                     </li>
-                    <li>
+                    <li class="active">
                         <a href="mouny.html">
                             <span class="icon-nav">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
@@ -135,7 +128,7 @@
                     <li>
                         <a href="clinic_resources.html">
                             <span class="icon-nav">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2">
                                     <rect width="18" height="18" x="3" y="3" rx="2"></rect>
                                     <path d="M3 9h18"></path>
@@ -159,154 +152,145 @@
 
         <!-- المحتوى الرئيسي -->
         <main>
-            <!-- قسم الترحب والإجراء السريع -->
-            <div class="welcome-section admin-welcome">
-                <div>
-                    <h1>لوحة إحصائيات العيادة </h1>
-
-                    <p>متابعة فورية للأداء المالي، المستلزمات والمواعيد لعيادة Lavender Beauty.</p>
-                </div>
-
+            <!-- عنوان الصفحة -->
+            <div class="admin-welcome">
+                <h1>الإدارة المالية والتقارير</h1>
+                <p>متابعة إيرادات العيادة، الأرباح السنوية والشهرية، وسجل الفواتير الكامل.</p>
             </div>
 
-            <!-- الكروت الإحصائية الرئيسية -->
+            <!-- الكروت الإحصائية المالية -->
             <div class="summary-cards">
                 <div class="summary-card gold-accent">
                     <div class="icon-box gold-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2">
-                            <line x1="12" x2="12" y1="2" y2="22"></line>
-                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
                         </svg>
                     </div>
                     <div class="text-content">
-                        <h3>صافي ارباح الشهر</h3>
-                        <p id="monthly_revenue">42,850 $</p>
+                        <h3>صافي الارباح العام </h3>
+                        <p>0</p>
                     </div>
                 </div>
 
                 <div class="summary-card">
                     <div class="icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
+                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                            <line x1="16" x2="16" y1="2" y2="6"></line>
+                            <line x1="8" x2="8" y1="2" y2="6"></line>
+                            <line x1="3" x2="21" y1="10" y2="10"></line>
                         </svg>
                     </div>
                     <div class="text-content">
-                        <h3>إجمالي المرضى المسجلين</h3>
-                        <p id="total_patients">0 مريضة</p>
+                        <h3>صافي الارباح الشهر</h3>
+                        <p>0</p>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="icon-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <div class="text-content">
+                        <h3>إيرادات اليوم</h3>
+                        <p>0</p>
                     </div>
                 </div>
 
                 <div class="summary-card warning-accent">
                     <div class="icon-box alert-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2">
-                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                            <path
+                                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                            </path>
                             <line x1="12" y1="9" x2="12" y2="13"></line>
                             <line x1="12" y1="17" x2="12.01" y2="17"></line>
                         </svg>
                     </div>
                     <div class="text-content">
-                        <h3>مواد أوشكت على النفاذ</h3>
-                        <p id="low_stock_materials">0 مواد</p>
-                    </div>
-                </div>
-
-                <div class="summary-card">
-                    <div class="icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
-                            <polygon
-                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                            </polygon>
-                        </svg>
-                    </div>
-                    <div class="text-content">
-                        <h3>متوسط تقييم الخدمات</h3>
-                        <p id="avg_rating">0.0 / 5.0</p>
+                        <h3>فواتير غير مسددة</h3>
+                        <p>0</p>
                     </div>
                 </div>
             </div>
 
-            <!-- شبكة التفاصيل والإحصائيات الجانبية -->
-            <div class="admin-grid-section">
-                <!-- جدول الخدمات الأكثر طلباً -->
-                <div class="details-section grid-col-8">
-                    <div class="section-header-flex">
-                        <h4>الخدمات الأكثر طلباً هذا الشهر </h4>
-                        <!-- <a href="services.html" class="link-more">عرض الكل ←</a> -->
+            <!-- جدول عرض الفواتير مع أزرار الفلترة -->
+            <div class="details-section">
+                <div class="section-header-flex">
+                    <h4>سجل الفواتير والمعاملات المالية</h4>
+
+                    <!-- أزرار الفلترة -->
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">الكل</button>
+                        <button class="filter-btn" data-filter="paid">مدفوعة</button>
+                        <button class="filter-btn" data-filter="unpaid">غير مدفوعة</button>
+                        <button class="filter-btn" data-filter="pending">شراء</button>
                     </div>
+                </div>
+
+                <div class="table-wrapper">
                     <table class="admin-table">
                         <thead>
                             <tr>
-                                <th>اسم الخدمة</th>
-                                <th>الفئة</th>
-                                <th>السعر الأساسي</th>
-                                <th>عدد الجلسات</th>
-                                <th>الحالة</th>
+                                <th>رقم الفاتورة</th>
+                                <th>المريضة / الماده</th>
+                                <th>العدد </th>
+                                <th>المبلغ</th>
+                                <th>التاريخ</th>
+                                <th>حالة الدفع</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>تنظيف بشرة هيدرافيشيال</strong></td>
-                                <td>عناية بالبشرة</td>
-                                <td>80 $</td>
-                                <td>142 جلسة</td>
-                                <td><span class="badge-status active">نشط</span></td>
+                        <tbody id="invoiceTableBody">
+                            <tr data-status="paid">
+                                <td><strong>#1042</strong></td>
+                                <td>سارة أحمد</td>
+                                <td>جلسة #301</td>
+                                <td>150.00 $</td>
+                                <td>2026/08/11</td>
+                                <td><span class="badge-status active">مدفوعة</span></td>
                             </tr>
-                            <tr>
-                                <td><strong>حقن بوتوكس للوجه</strong></td>
-                                <td>حقن وتجميل</td>
-                                <td>150 $</td>
-                                <td>98 جلسة</td>
-                                <td><span class="badge-status active">نشط</span></td>
+                            <tr data-status="paid">
+                                <td><strong>#1041</strong></td>
+                                <td>نور محمد</td>
+                                <td>جلسة #298</td>
+                                <td>80.00 $</td>
+                                <td>2026/08/10</td>
+                                <td><span class="badge-status active">مدفوعة</span></td>
                             </tr>
-                            <tr>
-                                <td><strong>جلسة ليزر كربوني</strong></td>
-                                <td>علاج بالليزر</td>
-                                <td>110 $</td>
-                                <td>76 جلسة</td>
-                                <td><span class="badge-status active">نشط</span></td>
+                            <tr data-status="unpaid">
+                                <td><strong>#1040</strong></td>
+                                <td>ريم خالد</td>
+                                <td>جلسة #295</td>
+                                <td>200.00 $</td>
+                                <td>2026/08/09</td>
+                                <td><span class="badge-status unpaid">غير مدفوعة</span></td>
+                            </tr>
+                            <tr data-status="pending">
+                                <td><strong>#1039</strong></td>
+                                <td>لجين عمر</td>
+                                <td>جلسة #290</td>
+                                <td>110.00 $</td>
+                                <td>2026/08/08</td>
+                                <td><span class="badge-status pending">مستحقة</span></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-
-                <!-- التنبيهات السريعة للمخزن والأجهزة -->
-                <div class="details-section grid-col-4">
-                    <h4>تنبيهات المخزن والأجهزة ⚠️</h4>
-                    <div class="alerts-list">
-                        <div class="alert-item warning">
-                            <div class="alert-info">
-                                <h5>سيروم هيدرافيشيال Pro</h5>
-                                <p>المتبقي في المخزن: <strong>2 عبوة فقط</strong></p>
-                            </div>
-                            <button class="btn-small">تزويد</button>
-                        </div>
-                        <div class="alert-item warning">
-                            <div class="alert-info">
-                                <h5>فيلر Juvederm Ultra</h5>
-                                <p>المتبقي في المخزن: <strong>5 إبر</strong></p>
-                            </div>
-                            <button class="btn-small">تزويد</button>
-                        </div>
-                        <div class="alert-item danger">
-                            <div class="alert-info">
-                                <h5>جهاز ليزر Candela GentleMax</h5>
-                                <p>حالة الجهاز: <strong>يحتاج صيانة دورية</strong></p>
-                            </div>
-                            <button class="btn-small danger-btn">صيانة</button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </main>
     </div>
-
+    <script src="admininfo.js"></script>
+    <script src="mouny.js"></script>
     <script>
-        // التحكم بالسايدبار
+        // التحكم بالسايدبار للشاشات الصغيرة
         const menuToggle = document.querySelector('.menu-toggle');
         const closeMenu = document.querySelector('.close-menu');
         const sidebar = document.querySelector('aside');
@@ -325,9 +309,30 @@
                 sidebar.classList.remove('open');
             }
         });
+
+        // فلترة الجدول حسب حالة الفاتورة
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const invoiceRows = document.querySelectorAll('#invoiceTableBody tr');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // إزالة الكلاس النشط من جميع الأزرار وإضافته للزر الحالي
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                const filterValue = button.getAttribute('data-filter');
+
+                invoiceRows.forEach(row => {
+                    const rowStatus = row.getAttribute('data-status');
+                    if (filterValue === 'all' || rowStatus === filterValue) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
     </script>
-    <script src="admininfo.js"></script>
-    <script src="home.js"></script>
 </body>
 
 </html>

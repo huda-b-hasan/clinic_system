@@ -83,7 +83,6 @@ function renderLowStockAlerts(materials) {
                 <h5>${item.name}</h5>
                 <p>المتبقي في المخزن: <strong>${item.quantity} قطعة</strong></p>
             </div>
-            <button class="btn-small">تزويد</button>
         </div>
     `).join('');
 }

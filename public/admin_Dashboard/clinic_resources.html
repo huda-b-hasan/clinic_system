@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="users.css">
     <link rel="stylesheet" href="clinic_resources.css">
+    <link rel="stylesheet" href="../component/toast.css">
     <link rel="stylesheet" href="../template.css">
 
     <link rel="icon"
@@ -21,7 +22,7 @@
         <div class="header-right">
             <button class="menu-toggle" aria-label="فتح القائمة">☰</button>
 
-            <a href="admin_dashboard.html" class="logo">
+            <a href="../auth/home.html" class="logo">
                 <svg width="50" height="60" viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g stroke="#D4AF37" stroke-width="2.5" fill="none">
                         <path d="M60 10 C45 35 50 60 60 80 C70 60 75 35 60 10Z"></path>
@@ -42,8 +43,7 @@
 
         <div class="header-left">
             <div class="admin-profile">
-                <span class="admin-name">د. ليلى أحمد</span>
-                <span class="admin-badge">مدير النظام</span>
+                <span id="admin-name" class="admin-name"> </span>
             </div>
         </div>
     </header>
@@ -57,7 +57,14 @@
                     <li>
                         <a href="home.html">
                             <span class="icon-nav">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rx><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+                                    <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+                                    <rect width="7" height="9" x="14" y="12" rx="1">
+                                        </rx>
+                                        <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+                                </svg>
                             </span>
                             <span>الرئيسية والإحصائيات</span>
                         </a>
@@ -65,15 +72,25 @@
                     <li>
                         <a href="users.html">
                             <span class="icon-nav">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+                                </svg>
                             </span>
                             <span>الموظفين والأدوار</span>
                         </a>
                     </li>
                     <li>
-                        <a href="treatments.html">
+                        <a href="services.html">
                             <span class="icon-nav">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 14 4-4"></path><path d="M3.34 19a10 10 0 1 1 17.32 0"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="m12 14 4-4"></path>
+                                    <path d="M3.34 19a10 10 0 1 1 17.32 0"></path>
+                                </svg>
                             </span>
                             <span>إدارة خدمات التجميل</span>
                         </a>
@@ -81,27 +98,64 @@
                     <li>
                         <a href="inventory.html">
                             <span class="icon-nav">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7.5 4.27 9 5.15"></path><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="m3.3 7 8.7 5 8.7-5"></path><path d="M12 22V12"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="m7.5 4.27 9 5.15"></path>
+                                    <path
+                                        d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z">
+                                    </path>
+                                    <path d="m3.3 7 8.7 5 8.7-5"></path>
+                                    <path d="M12 22V12"></path>
+                                </svg>
                             </span>
                             <span>المخزن والمستلزمات</span>
                         </a>
                     </li>
                     <li>
+                        <a href="mouny.html">
+                            <span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" x2="12" y1="2" y2="22"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                            </span>
+                            <span>الإدارة المالية والفواتير</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="finance.html">
                             <span class="icon-nav">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" x2="12" y1="2" y2="22"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" x2="12" y1="2" y2="22"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
                             </span>
-                            <span>المالية وأكواد الخصم</span>
+                            <span> أكواد الخصم</span>
                         </a>
                     </li>
                     <li class="active">
                         <a href="clinic_resources.html">
                             <span class="icon-nav">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                                    <path d="M3 9h18"></path>
+                                    <path d="M9 21V9"></path>
+                                </svg>
                             </span>
                             <span>الأجهزة والغرف</span>
                         </a>
                     </li>
+                    <li><a href="profile.html"><span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-user h-4 w-4">
+                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </span><span>الملف الشخصي</span></a></li>
                 </ul>
             </nav>
         </aside>
@@ -111,7 +165,7 @@
             <!-- الهيدر الخاص بالشاشة -->
             <div class="admin-welcome">
                 <div>
-                    <h1>إدارة الأجهزة وغرف العلاج 🛋️⚡</h1>
+                    <h1>إدارة الأجهزة وغرف العلاج </h1>
                     <p>جدولة العيادات والغرف، متابعة حالة الأجهزة، وجداول الصيانة.</p>
                 </div>
                 <div class="quick-actions">
@@ -123,7 +177,12 @@
             <div class="summary-cards">
                 <div class="summary-card">
                     <div class="icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                            <path d="M3 9h18"></path>
+                            <path d="M9 21V9"></path>
+                        </svg>
                     </div>
                     <div class="text-content">
                         <h3>إجمالي الغرف والمرافق</h3>
@@ -133,7 +192,12 @@
 
                 <div class="summary-card gold-accent">
                     <div class="icon-box gold-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 22H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v9"></path><path d="M13 2v20"></path><path d="M2 12h20"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M13 22H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v9"></path>
+                            <path d="M13 2v20"></path>
+                            <path d="M2 12h20"></path>
+                        </svg>
                     </div>
                     <div class="text-content">
                         <h3>الأجهزة الطبية الفعالة</h3>
@@ -143,7 +207,12 @@
 
                 <div class="summary-card alert-accent">
                     <div class="icon-box alert-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path
+                                d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z">
+                            </path>
+                        </svg>
                     </div>
                     <div class="text-content">
                         <h3>أجهزة قيد الصيانة</h3>
@@ -157,7 +226,11 @@
                 <!-- شريط البحث والتصفية -->
                 <div class="filter-bar">
                     <div class="search-input-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.3-4.3"></path>
+                        </svg>
                         <input type="text" placeholder="البحث برقم الغرفة أو اسم الجهاز..." id="searchInput">
                     </div>
 
@@ -208,10 +281,22 @@
                                 <td>
                                     <div class="action-buttons">
                                         <button class="btn-icon edit-btn" title="تعديل المرفق">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M12 20h9"></path>
+                                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z">
+                                                </path>
+                                            </svg>
                                         </button>
                                         <button class="btn-icon danger-btn" title="حذف المرفق">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M3 6h18"></path>
+                                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                                            </svg>
                                         </button>
                                     </div>
                                 </td>
@@ -234,10 +319,22 @@
                                 <td>
                                     <div class="action-buttons">
                                         <button class="btn-icon edit-btn" title="تعديل المرفق">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M12 20h9"></path>
+                                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z">
+                                                </path>
+                                            </svg>
                                         </button>
                                         <button class="btn-icon danger-btn" title="حذف المرفق">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M3 6h18"></path>
+                                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                                            </svg>
                                         </button>
                                     </div>
                                 </td>
@@ -260,10 +357,22 @@
                                 <td>
                                     <div class="action-buttons">
                                         <button class="btn-icon edit-btn" title="تعديل المرفق">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M12 20h9"></path>
+                                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z">
+                                                </path>
+                                            </svg>
                                         </button>
                                         <button class="btn-icon danger-btn" title="حذف المرفق">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M3 6h18"></path>
+                                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                                            </svg>
                                         </button>
                                     </div>
                                 </td>
@@ -279,19 +388,20 @@
     <div class="modal-backdrop" id="resourceModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>إضافة غرفة أو جهاز جديد 🏢</h3>
+                <h3 id="resourceModalTitle">إضافة غرفة أو جهاز جديد 🏢</h3>
                 <button class="btn-close-modal" onclick="closeResourceModal()">✕</button>
             </div>
-            <form id="resourceForm" onsubmit="event.preventDefault(); closeResourceModal();">
+            <form id="resourceForm">
                 <div class="form-grid">
                     <div class="form-group full-width">
                         <label>الاسم (اسم الغرفة أو الجهاز) *</label>
-                        <input type="text" required placeholder="مثال: جهاز هايفو شيد / غرفة كشف 2">
+                        <input type="text" id="resourceNameInput" required
+                            placeholder="مثال: جهاز هايفو شيد / غرفة كشف 2">
                     </div>
 
                     <div class="form-group">
                         <label>النوع *</label>
-                        <select required>
+                        <select id="resourceTypeSelect" required>
                             <option value="">اختر النوع...</option>
                             <option value="room">غرفة علاجية / جناح</option>
                             <option value="device">جهاز / معدات طبية</option>
@@ -299,22 +409,22 @@
                     </div>
 
                     <div class="form-group">
-                        <label>الموقع / التبعية</label>
-                        <input type="text" placeholder="مثال: الطابق الثاني - Room 201">
+                        <label>الموقع / الموديل</label>
+                        <input type="text" id="resourceLocationInput" placeholder="مثال: الطابق الثاني / Model X">
                     </div>
 
                     <div class="form-group">
                         <label>الحالة التشغيلية *</label>
-                        <select required>
+                        <select id="resourceStatusSelect" required>
                             <option value="available">متاح (Available)</option>
                             <option value="busy">قيد الاستخدام (In Use)</option>
                             <option value="maintenance">تحت الصيانة (Under Maintenance)</option>
                         </select>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="maintenanceGroup" style="display:none;">
                         <label>تاريخ آخر صيانة</label>
-                        <input type="date">
+                        <input type="date" id="resourceMaintenanceInput">
                     </div>
                 </div>
 
@@ -325,7 +435,31 @@
             </form>
         </div>
     </div>
+    <!-- Modal تأكيد الحذف المخصص -->
+    <div class="modal-backdrop" id="deleteModal">
+        <div class="delete-modal-content">
+            <div class="delete-icon-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 6h18"></path>
+                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+            </div>
+            <h3>تأكيد حذف </h3>
+            <p id="deleteModalMessage">هل أنتِ متأكدة من رغبتك في حذف هذا المرفق نهائياً؟ قد يؤدي ذلك لإلغاء ربطه
+                بالمواعيد والجلسات الحالية.</p>
 
+            <div class="modal-actions">
+                <button type="button" class="btn-secondary" onclick="closeDeleteModal()">إلغاء</button>
+                <button type="button" class="btn-danger-confirm" id="confirmDeleteBtn">تأكيد الحذف</button>
+            </div>
+        </div>
+    </div>
+    <script src="clinic_resources.js"></script>
+    <script src="admininfo.js"></script>
     <script>
         // التحكم بالسايدبار
         const menuToggle = document.querySelector('.menu-toggle');

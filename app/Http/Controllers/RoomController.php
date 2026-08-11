@@ -118,5 +118,39 @@ class RoomController extends Controller
             'data'    => $room,
         ], 200);
     }
-    
+    /**
+     * تحديث بيانات الغرفة
+     */
+    public function update(Request $request, $id)
+    {
+        $room = Room::findOrFail($id);
+
+        $validated = $request->validate([
+            'name'   => 'sometimes|required|string|max:255',
+            'status' => 'nullable|string',
+            'type'   => 'nullable|string',
+        ]);
+
+        $room->update($validated);
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'تم تحديث بيانات الغرفة بنجاح',
+            'data'    => $room,
+        ], 200);
+    }
+
+    /**
+     * حذف غرفة
+     */
+    public function destroy($id)
+    {
+        $room = Room::findOrFail($id);
+        $room->delete();
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'تم حذف الغرفة بنجاح'
+        ], 200);
+    }
 }

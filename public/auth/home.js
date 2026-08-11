@@ -37,7 +37,7 @@ async function loadTreatments() {
     if (!container) return;
 
     try {
-        const response = await fetch('/treatments');
+        const response = await fetch('/treatments-all');
         if (!response.ok) throw new Error('فشل في جلب البيانات من السيرفر');
 
         const treatments = await response.json();

@@ -79,12 +79,12 @@ async function loadTreatmentDetails() {
 
         document.querySelector('.service-title').innerText = treatment.name;
         document.querySelector('.service-description').innerText = treatment.description || 'لا يوجد وصف متاح.';
-        document.querySelector('.duration-badge').innerHTML = `🕒 ${treatment.duration || 30} دقيقة`;
+        document.querySelector('.duration-badge').innerHTML = `🕒 ${treatment.duration || 0} دقيقة`;
 
         const bookNowBtn = document.querySelector('.book-now-btn');
         if (bookNowBtn) {
             bookNowBtn.dataset.treatmentId = treatment.id;
-            bookNowBtn.dataset.roomId = treatment.room_id || "1"; 
+            bookNowBtn.dataset.roomId = treatment.room_id || ""; 
         }
 
         const priceNumContainer = document.querySelector('.price-num');
@@ -311,7 +311,7 @@ if (appointmentForm) {
             }
 
             // 3. حالة النجاح التام -> عرض div أخضر متناسق وإعادة تهيئة الحقول
-            showAlertInDiv('✨ ' + result.message, 'success');
+            showAlertInDiv('' + result.message, 'success');
             appointmentForm.reset(); 
 
             // (اختياري) إغلاق المودال تلقائياً بعد ثانيتين لكي يرى المستخدم رسالة النجاح أولاً
@@ -324,7 +324,7 @@ if (appointmentForm) {
         } catch (error) {
             // 4. حالة خطأ الشبكة أو السيرفر -> عرض div أحمر
             console.error(error);
-            showAlertInDiv('❌ تعذر الاتصال بالسيرفر، يرجى التحقق من الشبكة.', 'error');
+            showAlertInDiv(' تعذر الاتصال بالسيرفر، يرجى التحقق من الشبكة.', 'error');
         }
     });
 }

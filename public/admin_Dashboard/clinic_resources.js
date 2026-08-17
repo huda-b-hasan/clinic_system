@@ -1,3 +1,4 @@
+// ==================== المتغيرات العامة ====================
 const API_URL = ''; 
 
 let allResources = [];
@@ -8,29 +9,33 @@ let editingResourceType = null;
 let itemToDeleteId = null;
 let itemToDeleteType = null;
 
+
+// ==================== تهيئة الصفحة عند التحميل ====================
 document.addEventListener('DOMContentLoaded', () => {
-    // التأكد من وجود عنصر Toast في الشاشة
+    // التأكد من وجود عنصر التنبيه (Toast)
     ensureToastElementExists();
 
+    // جلب البيانات الأولية للجدول
     loadResources();
 
-    // ربط نموذج الإضافة والبحث والفلترة
+    // ربط الأحداث (الإرسال، البحث، والفلترة)
     document.getElementById('resourceForm').addEventListener('submit', handleFormSubmit);
     document.getElementById('searchInput').addEventListener('input', filterResources);
     document.getElementById('typeFilter').addEventListener('change', filterResources);
     document.getElementById('statusFilter').addEventListener('change', filterResources);
 
-    // إظهار/إخفاء حقل الصيانة والنموذج حسب النوع
+    // إظهار/إخفاء حقل الصيانة بناءً على نوع المرفق المختار
     document.getElementById('resourceTypeSelect').addEventListener('change', toggleMaintenanceField);
 
-    // ربط زر التأكيد داخل مودال الحذف
+    // ربط زر تأكيد الحذف
     const confirmBtn = document.getElementById('confirmDeleteBtn');
     if (confirmBtn) {
         confirmBtn.addEventListener('click', executeDelete);
     }
 });
 
-// ---------------- دالة التحكم بالـ Toast ----------------
+
+// ==================== إدارة التنبيهات (Toast) ====================
 function ensureToastElementExists() {
     if (!document.getElementById('toast')) {
         const toastDiv = document.createElement('div');
@@ -47,13 +52,14 @@ function showToast(message, type = 'info') {
     toast.textContent = message;
     toast.className = `toast ${type} show`;
 
-    // إخفاء التوست تلقائياً بعد 3 ثوانٍ
+    // إخفاء التنبيه تلقائياً بعد 3 ثوانٍ
     setTimeout(() => {
         toast.classList.remove('show');
     }, 3000);
 }
 
-// ---------------- جلب وتحميل البيانات ----------------
+
+// ==================== جلب البيانات (Load Data) ====================
 async function loadResources() {
     try {
         const [roomsRes, devicesRes] = await Promise.all([
@@ -64,6 +70,7 @@ async function loadResources() {
         const roomsData = await roomsRes.json();
         const devicesData = await devicesRes.json();
 
+        // تنسيق بيانات الغرف
         const rooms = (roomsData.data || []).map(r => ({
             id: r.id,
             name: r.name,
@@ -75,6 +82,7 @@ async function loadResources() {
             status: r.status || 'available'
         }));
 
+        // تنسيق بيانات الأجهزة
         const devices = (devicesData.data || []).map(d => ({
             id: d.id,
             name: d.name,
@@ -96,7 +104,8 @@ async function loadResources() {
     }
 }
 
-// تحديث الكروت العلوية بالإحصائيات
+
+// ==================== تحديث الكروت الإحصائية ====================
 function updateSummaryCards(rooms, devices) {
     const totalRooms = rooms.length;
     const activeDevices = devices.filter(d => d.status !== 'maintenance').length;
@@ -108,7 +117,8 @@ function updateSummaryCards(rooms, devices) {
     if (cards[2]) cards[2].textContent = `${maintenanceDevices} أجهزة قيد الصيانة`;
 }
 
-// رسم الجدول ديناميكياً
+
+// ==================== رسم وتعبئة الجدول ====================
 function renderTable(resources) {
     const tbody = document.querySelector('.admin-table tbody');
     tbody.innerHTML = '';
@@ -124,6 +134,7 @@ function renderTable(resources) {
         const iconBg = isRoom ? 'room-bg' : 'device-bg';
         const categoryBadge = isRoom ? 'category-room' : 'category-device';
 
+        // تحديد الحالة وتنسيقها
         let statusBadgeClass = 'active';
         let statusText = 'متاحة';
 
@@ -165,7 +176,8 @@ function renderTable(resources) {
     });
 }
 
-// التصفية والبحث
+
+// ==================== البحث والفلترة ====================
 function filterResources() {
     const searchVal = document.getElementById('searchInput').value.toLowerCase();
     const typeVal = document.getElementById('typeFilter').value;
@@ -182,7 +194,8 @@ function filterResources() {
     renderTable(filtered);
 }
 
-// إظهار وإخفاء حقل الصيانة بناءً على النوع
+
+// ==================== حقل الصيانة (إظهار/إخفاء) ====================
 function toggleMaintenanceField() {
     const type = document.getElementById('resourceTypeSelect').value;
     const maintenanceGroup = document.getElementById('maintenanceGroup');
@@ -191,7 +204,8 @@ function toggleMaintenanceField() {
     }
 }
 
-// معالجة إضافة أو تعديل العنصر
+
+// ==================== إضافة أو تعديل البيانات (Form Submit) ====================
 async function handleFormSubmit(e) {
     e.preventDefault();
 
@@ -245,7 +259,24 @@ async function handleFormSubmit(e) {
     }
 }
 
-// فتح نموذج التعديل
+
+// ==================== إدارة النوافذ المنبثقة (Modals) ====================
+
+// فتح نافذة الإضافة/التعديل
+function openResourceModal() {
+    document.getElementById('resourceModal').classList.add('active');
+}
+
+// إغلاق وتصفية نافذة الإضافة/التعديل
+function closeResourceModal() {
+    editingResourceId = null;
+    editingResourceType = null;
+    document.getElementById('resourceForm').reset();
+    document.getElementById('resourceModalTitle').textContent = 'إضافة غرفة أو جهاز جديد 🏢';
+    document.getElementById('resourceModal').classList.remove('active');
+}
+
+// فتح نافذة التعديل وتعبئة الحقول ببيانات العنصر
 function openEditModal(resourceType, id) {
     const item = allResources.find(r => r.resource_type === resourceType && r.id === id);
     if (!item) return;
@@ -268,8 +299,7 @@ function openEditModal(resourceType, id) {
     openResourceModal();
 }
 
-// ---------------- إدارة مودال الحذف ----------------
-
+// فتح نافذة تأكيد الحذف
 function openDeleteModal(resourceType, id) {
     itemToDeleteId = id;
     itemToDeleteType = resourceType;
@@ -284,12 +314,14 @@ function openDeleteModal(resourceType, id) {
     document.getElementById('deleteModal').classList.add('active');
 }
 
+// إغلاق نافذة الحذف
 function closeDeleteModal() {
     itemToDeleteId = null;
     itemToDeleteType = null;
     document.getElementById('deleteModal').classList.remove('active');
 }
 
+// تنفيذ عملية الحذف عبر API
 async function executeDelete() {
     if (!itemToDeleteId || !itemToDeleteType) return;
 
@@ -304,7 +336,7 @@ async function executeDelete() {
         if (response.ok) {
             closeDeleteModal();
             loadResources();
-            showToast('تم الحذف بنجاح ', 'warning');
+            showToast('تم الحذف بنجاح 🗑️', 'warning');
         } else {
             const result = await response.json();
             showToast(result.message || 'حدث خطأ أثناء عملية الحذف', 'error');
@@ -313,18 +345,4 @@ async function executeDelete() {
         console.error('خطأ في الاتصال أثناء الحذف:', error);
         showToast('تعذر الاتصال بالسيرفر أثناء الحذف', 'error');
     }
-}
-
-// ---------------- إدارة مودال الإضافة والتعديل ----------------
-
-function openResourceModal() {
-    document.getElementById('resourceModal').classList.add('active');
-}
-
-function closeResourceModal() {
-    editingResourceId = null;
-    editingResourceType = null;
-    document.getElementById('resourceForm').reset();
-    document.getElementById('resourceModalTitle').textContent = 'إضافة غرفة أو جهاز جديد ';
-    document.getElementById('resourceModal').classList.remove('active');
 }

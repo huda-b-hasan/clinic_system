@@ -17,109 +17,104 @@ class SessionSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. جلب سجلات المرضى باستخدام الـ Model
-        $patients = Patient::select('id', 'user_id')->get()->toArray();
-        
-        // 2. جلب معرفات الأطباء باستخدام الـ Scope
-        $doctorIds = User::doctor()->pluck('id')->toArray();
+        // 1. جلب المواعيد الموجودة مسبقاً مع العلاقة
+        $appointments = Appointment::with('treatments')->get();
 
-        // 3. إذا لم يكن هناك أطباء، ننشئهم باستخدام الـ Model مع إضافة رقم الهاتف
+        // 2. التحقق من وجود أطباء
+        $doctorIds = User::doctor()->pluck('id')->toArray();
         if (empty($doctorIds)) {
             $doctorRole = Role::firstOrCreate(['name' => 'Doctor']);
-
             $defaultDoctors = [
-                ['name' => 'د. رنا الخطيب', 'email' => 'dr.rana@clinic.com','phone'=>"09888696958"],
-                ['name' => 'د. سارة الأحمد', 'email' => 'dr.sara@clinic.com','phone'=>"09999999999"],
-                ['name' => 'د. أحمد منصور', 'email' => 'dr.ahmed@clinic.com','phone'=>"09886666958"],
+                ['name' => 'هلا فندو', 'email' => 'dr.hala@clinic.com', 'phone' => '0922222222'],
+                ['name' => 'د. سارة الأحمد', 'email' => 'dr.sara@clinic.com', 'phone' => '09999999999'],
             ];
 
             foreach ($defaultDoctors as $doc) {
-                $newDoc = User::create([
-                    'name' => $doc['name'],
-                    'email' => $doc['email'],
-                    'phone'=>$doc['phone'],
-                    'password' => Hash::make('password123'),
-                ]);
-                
-                $newDoc->roles()->attach($doctorRole->id);
+                $newDoc = User::updateOrCreate(
+                    ['email' => $doc['email']],
+                    [
+                        'name' => $doc['name'],
+                        'phone' => $doc['phone'],
+                        'password' => Hash::make('12341234'),
+                    ]
+                );
+                $newDoc->roles()->sync([$doctorRole->role_id ?? $doctorRole->id]);
                 $doctorIds[] = $newDoc->id;
             }
         }
 
-        // 4. جلب الغرفة أو إنشائها باستخدام موديل Room 🌟
         $room = Room::first();
-        if (!$room) {
-            $room = Room::create([
-                'name' => 'غرفة الفحص العامة'
-            ]);
-        }
-        $roomId = $room->id;
+        $roomId = $room ? ($room->room_id ?? $room->id) : Room::create(['name' => 'غرفة رقم 1', 'type' => 'الحقن التجميلي', 'status' => 'available'])->id;
 
-        // 5. جلب الخدمات أو إنشائها باستخدام موديل Treatment 🌟
         $treatments = Treatment::all();
-        if ($treatments->isEmpty()) {
-            $defaultTreatments = [
-                ['name' => 'تقشير كيميائي', 'base_price' => 200.00, 'discount_price' => 150.00],
-                ['name' => 'هيدرافيشيال', 'base_price' => 300.00, 'discount_price' => null],
-                ['name' => 'حقن بوتوكس', 'base_price' => 500.00, 'discount_price' => 450.00],
-            ];
+        $treatmentIds = $treatments->pluck('id')->toArray();
+        $treatmentList = $treatments->keyBy('id')->toArray();
 
-            foreach ($defaultTreatments as $dt) {
-                Treatment::create([
-                    'name' => $dt['name'],
-                    'base_price' => $dt['base_price'],
-                    'discount_price' => $dt['discount_price'],
-                    'duration' => 30,
+        $patients = Patient::all();
+
+        // في حال لم تكن هناك مواعيد كافية، ننشئها استدراكياً
+        if ($appointments->isEmpty() && $patients->isNotEmpty() && !empty($doctorIds) && !empty($treatmentIds)) {
+            for ($i = 0; $i < 25; $i++) {
+                $patient = $patients->random();
+                $doctorId = fake()->randomElement($doctorIds);
+
+                $appointment = Appointment::create([
+                    'patient_id'       => $patient->patient_id ?? $patient->id,
+                    'user_id'          => $patient->user_id, 
+                    'doctor_id'        => $doctorId, 
+                    'room_id'          => $roomId, 
+                    'appointment_date' => fake()->dateTimeBetween('-15 days', 'now')->format('Y-m-d H:i:s'),
+                    'status'           => 'completed', 
                 ]);
+
+                $tId = fake()->randomElement($treatmentIds);
+                $treatmentData = $treatmentList[$tId];
+                $bookedPrice = $treatmentData['discount_price'] ?? $treatmentData['base_price'] ?? 100;
+
+                $appointment->treatments()->attach($tId, [
+                    'booked_price' => $bookedPrice
+                ]);
+
+                $appointments->push($appointment);
             }
-            $treatments = Treatment::all();
         }
 
-        $treatmentList = $treatments->keyBy('id')->toArray();
-        $treatmentIds = $treatments->pluck('id')->toArray();
+        // 3. المرور على المواعيد لإنشاء جلسات وفواتير باستخدام amount_paid
+        foreach ($appointments as $appointment) {
+            if (in_array($appointment->status, ['completed', 'confirmed'])) {
+                
+                $session = ClinicSessions::firstOrCreate(
+                    ['appointment_id' => $appointment->id],
+                    [
+                        'doctor_notes' => 'تمت الجلسة بنجاح وتم تقديم التوجيهات الطبية للمريضة.',
+                        'created_at' => $appointment->appointment_date,
+                        'updated_at' => now(),
+                    ]
+                );
 
-        // بدء توليد البيانات
-        if (!empty($patients)) {
-            for ($i = 0; $i < 35; $i++) {
-                // تحويل المريض إلى كائن (Object) ليتوافق مع الاستدعاء بالسهم ->
-                $currentPatient = (object) (($i < 5) ? $patients[0] : fake()->randomElement($patients));
-                $randomDoctorId = fake()->randomElement($doctorIds);
-
-                // أ) إنشاء الموعد باستخدام موديل Appointment
-                $appointment = Appointment::create([
-                    'patient_id'       => $currentPatient->id,
-                    'user_id'          => $currentPatient->user_id, 
-                    'doctor_id'        => $randomDoctorId, 
-                    'room_id'          => $roomId, 
-                    'appointment_date' => fake()->dateTimeBetween('-1 month', '+1 month')->format('Y-m-d H:i:s'),
-                    'status'           => fake()->randomElement(['pending', 'completed', 'canceled']), 
-                ]);
-
-                // ب) ربط الموعد بالعلاجات عشوائياً عبر علاقة الـ الـ Eloquent (Treatments)
-                $randomTreatments = fake()->randomElements($treatmentIds, fake()->numberBetween(1, 2));
-                foreach ($randomTreatments as $tId) {
-                    $treatmentData = $treatmentList[$tId];
-                    $bookedPrice = $treatmentData['discount_price'] ?? $treatmentData['base_price'] ?? 100.00;
-
-                    // استخدام علاقة الموديل الجاهزة للربط بالجدول الوسيط
-                    $appointment->treatments()->attach($tId, [
-                        'booked_price' => $bookedPrice
-                    ]);
+                $totalAmount = 0;
+                if ($appointment->treatments->isNotEmpty()) {
+                    foreach ($appointment->treatments as $treatment) {
+                        $totalAmount += $treatment->pivot->booked_price ?? ($treatment->discount_price ?? $treatment->base_price);
+                    }
+                } else {
+                    $totalAmount = 100.00;
                 }
 
-                // ج) إنشاء الجلسة باستخدام موديل ClinicSessions (بصيغة الجمع كما في مشروعكِ)
-                $session = ClinicSessions::create([
-                    'appointment_id' => $appointment->id,
-                    'created_at'     => fake()->dateTimeBetween('-1 month', 'now'),
-                ]);
+                $billStatus = ($appointment->status === 'completed') ? 'paid' : fake()->randomElement(['paid', 'unpaid']);
+                $amountToStore = ($billStatus === 'paid') ? $totalAmount : 0.00;
 
-                // د) إنشاء الفاتورة باستخدام موديل Bill
-                Bill::create([
-                    'clinic_session_id' => $session->id,
-                    'amount_paid'       => fake()->randomFloat(2, 50, 950), 
-                    'date'              => fake()->dateTimeBetween('-1 month', 'now')->format('Y-m-d'), 
-                    'status'            => fake()->randomElement(['paid', 'unpaid']),
-                ]);
+                // استخدام الحقل 'amount_paid' المطابق للموديل والكونترولر
+                Bill::updateOrCreate(
+                    ['clinic_session_id' => $session->id],
+                    [
+                        'amount_paid' => $amountToStore, 
+                        'date'        => date('Y-m-d', strtotime($appointment->appointment_date)), 
+                        'status'      => $billStatus,
+                        'created_at'  => $session->created_at,
+                        'updated_at'  => now(),
+                    ]
+                );
             }
         }
     }

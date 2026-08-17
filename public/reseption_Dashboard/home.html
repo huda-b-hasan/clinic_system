@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="../template.css">
     <link rel="stylesheet" href="../component/toast.css">
-    <link rel="stylesheet" href="../component//cancelModel.css">
+    <link rel="stylesheet" href="../component/cancelModel.css">
     <link rel="stylesheet" href="../component/logout.css">
 
     <link rel="icon"
@@ -101,7 +101,7 @@
                                 </svg>
                             </span><span>الملف الشخصي</span></a></li>
                 </ul>
-                                <ul>
+                <ul>
                     <li class="logout" id="logout-btn">
                         <a href="#" id="logout-link">
                             <span class="icon-nav">
@@ -127,7 +127,7 @@
                 <p>إليكِ متابعة حية ومباشرة لحركة العيادة والمواعيد اليوم.</p>
             </div>
 
-            <!-- الكروت العلوية-->
+            <!-- الكروت العلوية (مصفّرة) -->
             <div class="summary-cards">
                 <!-- كرت مواعيد اليوم -->
                 <div class="summary-card">
@@ -144,7 +144,7 @@
                     </div>
                     <div class="text-content">
                         <h3>مواعيد اليوم</h3>
-                        <p id="today_appointments">12</p>
+                        <p id="today_appointments">0</p>
                     </div>
                 </div>
 
@@ -161,7 +161,7 @@
                     </div>
                     <div class="text-content">
                         <h3>الغرف المشغولة</h3>
-                        <p id="occupied_rooms">3 / 6 </p>
+                        <p id="occupied_rooms">0 / 0</p>
                     </div>
                 </div>
 
@@ -177,11 +177,11 @@
                     </div>
                     <div class="text-content">
                         <h3>في الانتظار</h3>
-                        <p id="waiting_patients">4 </p>
+                        <p id="waiting_patients">0</p>
                     </div>
                 </div>
 
-                <!-- كرت الفواتير المكتملة -->
+                <!-- كرت الفواتير الغير مسددة -->
                 <div class="summary-card alt-bg">
                     <div class="icon-box">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -193,7 +193,7 @@
                     </div>
                     <div class="text-content">
                         <h3>الفواتير الغير المسددة</h3>
-                        <p id="paid_bills">5 </p>
+                        <p id="paid_bills">0</p>
                     </div>
                 </div>
             </div>
@@ -206,128 +206,63 @@
                         <button class="tab-btn active" onclick="switchTab('pending')">منتظرة</button>
                         <button class="tab-btn" onclick="switchTab('in_progress')">قائمة</button>
                         <button class="tab-btn" onclick="switchTab('arrived')">حضور</button>
-
                         <button class="tab-btn" onclick="switchTab('completed')">مكتملة</button>
                         <button class="tab-btn" onclick="switchTab('canceled')">ملغاة</button>
                     </div>
                 </div>
 
-                <!-- محتوى التبويبات المتعددة -->
+                <!-- محتوى التبويبات المتعددة (فارغة بانتظار تعبئة الجافاسكريبت) -->
 
                 <!-- تبويب المواعيد المنتظرة -->
                 <div id="pending-appointments" class="full tab-content">
-                    <div class="action-card-one">
-                        <div class="first-date">
-                            <h5>هدى حسن</h5>
-                            <p>تنظيف بشرة هيدرافيشيال · 10:30 · غرفة الورد</p>
-                        </div>
-                        <!-- الأزرار الجديدة المضافة للموعد المنتظر -->
-                        <div class="appointment-actions">
-                            <button class="btn-start-session">حضور</button>
-                            <button class="btn-cancel-session">إلغاء الموعد</button>
-                        </div>
-                    </div>
+                    <div style="text-align: center; color: #888; padding: 30px;">لا توجد موعد منتظرة حالياً</div>
                 </div>
 
                 <!-- تبويب المواعيد القائمة -->
-                <!-- <div id="active-appointments" class="full tab-content" style="display: none;">
-                    <div class="action-card-one active-session-card">
-                        <div class="first-date">
-                            <h5>نورا الفهد</h5>
-                            <p>جلسة بوتوكس · د. سارة · 10:00 · جناح اللؤلؤ</p>
-                        </div>
-                        الأزرار الجديدة للموعد القائم حالياً
-                        <div class="appointment-actions">
-                            <span class="status-in-progress">تُنفذ الآن...</span>
-                            <button class="btn-complete-session">إنهاء الجلسة</button>
-                        </div>
-                    </div>
-                </div> -->
+                <div id="in_progress-appointments" class="full tab-content" style="display: none;">
+                    <div style="text-align: center; color: #888; padding: 30px;">لا توجد مواعيد قائمة حالياً</div>
+                </div>
+
+                <!-- تبويب الحضور -->
+                <div id="arrived-appointments" class="full tab-content" style="display: none;">
+                    <div style="text-align: center; color: #888; padding: 30px;">لا توجد مواعيد مسجلة حضور حالياً</div>
+                </div>
 
                 <!-- تبويب المواعيد المكتملة -->
                 <div id="completed-appointments" class="full tab-content" style="display: none;">
-                    <div class="action-card-one completed-card">
-                        <div class="first-date">
-                            <h5>ريم العبدالله</h5>
-                            <p>ليزر كربوني · 09:15 · جناح الياسمين</p>
-                        </div>
-                        <span class="status-completed">مكتملة ومسددة</span>
-                    </div>
+                    <div style="text-align: center; color: #888; padding: 30px;">لا توجد مواعيد مكتملة اليوم</div>
                 </div>
 
                 <!-- تبويب المواعيد الملغاة -->
                 <div id="canceled-appointments" class="full tab-content" style="display: none;">
-                    <div class="action-card-one canceled-card">
-                        <div class="first-date">
-                            <h5><del>أمل الشمري</del></h5>
-                            <p>تقشير بارد · 11:00 · غرفة الورد</p>
-                        </div>
-                        <span class="status-canceled">تم الإلغاء</span>
-                    </div>
+                    <div style="text-align: center; color: #888; padding: 30px;">لا توجد مواعيد ملغاة</div>
                 </div>
             </div>
 
-            <!-- جدول أو قسم مراقبة الغرف الحية -->
+            <!-- جدول أو قسم مراقبة الغرف الحية (فارغ) -->
             <div class="rooms-status-section">
                 <div class="section-title">
                     <h4>المتابعة للغرف</h4>
                     <span class="live-pulse"></span>
                 </div>
-                <div class="rooms-grid">
-                    <!-- غرفة مشغولة -->
-                    <div class="room-status-card occupied">
-                        <div class="room-header">
-                            <h5>جناح اللؤلؤ</h5>
-                            <span class="badge">مشغولة</span>
-                        </div>
-                        <div class="room-body">
-                            <p><strong>المريضة:</strong> نورا الفهد</p>
-                            <p><strong>الطبيبة:</strong> د. سارة أحمد</p>
-                            <p><strong>الإجراء:</strong> جلسة بوتوكس علاجية</p>
-                        </div>
-                    </div>
-
-                    <!-- غرفة متاحة -->
-                    <div class="room-status-card available">
-                        <div class="room-header">
-                            <h5>غرفة الورد</h5>
-                            <span class="badge">متاحة</span>
-                        </div>
-                        <div class="room-body">
-                            <p class="empty-status">جاهزة لاستقبال المريضة التالية</p>
-                        </div>
-                    </div>
-
-                    <!-- غرفة مشغولة ثانية -->
-                    <div class="room-status-card occupied">
-                        <div class="room-header">
-                            <h5>جناح الياسمين</h5>
-                            <span class="badge">مشغولة</span>
-                        </div>
-                        <div class="room-body">
-                            <p><strong>المريضة:</strong> رنا يوسف</p>
-                            <p><strong>الطبيبة:</strong> د. رانيا علي</p>
-                            <p><strong>الإجراء:</strong> فيلر شفايف</p>
-                        </div>
-                    </div>
+                <div class="rooms-grid" id="rooms_container">
+                    <div style="grid-column: 1 / -1; text-align: center; color: #888; padding: 20px;">جاري تحميل حالة الغرف...</div>
                 </div>
             </div>
         </main>
     </div>
+
     <div id="cancelModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" id="closeModalBtn">&times;</span>
 
             <div class="modal-body">
-
                 <h3 class="modal-title">هل تود إلغاء موعد المريض؟</h3>
-                <p class="modal-subtitle">الرجاء كتابه السبب لاعلام المريض
-                </p>
+                <p class="modal-subtitle">الرجاء كتابه السبب لاعلام المريض</p>
 
                 <form id="cancelAppointmentForm">
                     <div class="form-group">
-                        <textarea id="cancellation_reason" name="cancellation_reason" rows="3"
-                            placeholder=""></textarea>
+                        <textarea id="cancellation_reason" name="cancellation_reason" rows="3" placeholder=""></textarea>
                     </div>
 
                     <div class="modal-footer">
@@ -338,6 +273,7 @@
             </div>
         </div>
     </div>
+    
     <div class="toast" id="toast"></div>
 
     <script>
@@ -359,7 +295,6 @@
                 sidebar.classList.remove('open');
             }
         });
-
     </script>
     <script src="../component/cancelModel.js"></script>
     <script src="home.js"></script>

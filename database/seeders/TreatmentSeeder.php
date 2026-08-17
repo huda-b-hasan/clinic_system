@@ -10,108 +10,87 @@ class TreatmentSeeder extends Seeder
     public function run(): void
     {
         $treatments = [
-            // [
-            //     'name' => 'بوتوكس كامل الوجه', 
-            //     'description' => 'جلسة حقن البوتوكس للتخلص من تجاعيد الجبهة وحول العينين بالكامل.', 
-            //     'base_price' => 250.00, 
-            //     'discount_price' => 220.00, // مضاف
-            //     'category' => 'Injections', 
-            //     'duration' => 30,
-            //     'image' => 'auth/images/botox.png' // مضاف
-            // ],
             [
-                'name' => 'فيلر شفايف 1 مل', 
-                'description' => 'تعبئة وتكبير الشفايف وتصحيح التناظر باستخدام حمض الهيالورونيك.', 
-                'base_price' => 180.00, 
-                'discount_price' => null, // بدون خصم
-                'category' => 'Injections', 
-                'duration' => 45,
-                'image' => 'auth/images/lips_filler.png'
-            ],
-            // [
-            //     'name' => 'ليزر كامل الجسم', 
-            //     'description' => 'جلسة إزالة الشعر بالليزر لجميع مناطق الجسم باستخدام جهاز كانديلا الحديث.', 
-            //     'base_price' => 120.00, 
-            //     'discount_price' => 99.00, 
-            //     'category' => 'Laser', 
-            //     'duration' => 60,
-            //     'image' => '/home/hudahasan/Documents/clinic_system/public/auth/images/laser.png',
-            // ],
-            [
-                'name' => 'تنظيف بشرة عميق (هيدرافيشيال)', 
-                'description' => 'جلسة هيدرافيشيال طبية متكاملة لتنظيف المسام، تقشير خلايا الجلد الميت وترطيب البشرة.', 
-                'base_price' => 60.00, 
-                'discount_price' => 50.00, 
-                'category' => 'Skin Care', 
-                'duration' => 45,
-                'image' => 'auth/images/hydrafacial.png'
+                'name' => 'إزالة الشعر بالليزر كامل الجسم',
+                'description' => 'جلسة إزالة شعر متكاملة باستخدام أحدث أجهزة الليزر مع تقنية التبريد.',
+                'base_price' => 500.00,
+                'discount_price' => 400.00,
+                'duration' => 60,
+                'category' => 'ليزر',
+                'status' => 'active',
+                'image' => 'auth/images/laser_ body.png',
+                'features' => ['تقنية تبريد متطورة', 'بدون ألم تقريباً', 'نتائج طويلة الأمد']
             ],
             [
-                'name' => 'ميزوثيرابي لنضارة الوجه', 
-                'description' => 'حقن فيتامينات ومواد مغذية مخصصة لإعادة الحيوية، النضارة والإشراق للبشرة المتعبة.', 
-                'base_price' => 85.00, 
-                'discount_price' => null, 
-                'category' => 'Injections', 
+                'name' => 'حقن بوتوكس للوجه',
+                'description' => 'علاج تجاعيد الجبهة وحول العينين بنتائج طبيعية ومميزة.',
+                'base_price' => 300.00,
+                'discount_price' => null,
                 'duration' => 30,
-                'image' => 'auth/images/mesotherapy.png'
+                'category' => 'حقن تجميلي',
+                'status' => 'active',
+                'image' => 'auth/images/dermapen.png',
+                'features' => ['نتائج طبيعية', 'إجراء سريع (لا يتطلب وقتاً للتعافي)', 'مواد مرخصة وآمنة']
             ],
             [
-                'name' => 'جلسة بلازما للوجه والشعر', 
-                'description' => 'حقن البلازما الغنية بالصفائح الدموية (PRP) لتجديد خلايا البشرة وتحفيز نمو الشعر.', 
-                'base_price' => 90.00, 
-                'discount_price' => 75.00, 
-                'category' => 'Skin Care', 
+                'name' => 'جلسة هيدرافيشيال (تنظيف بشرة عميق)',
+                'description' => 'تنظيف، تقشير، ترطيب وتغذية البشرة بأحدث التقنيات.',
+                'base_price' => 200.00,
+                'discount_price' => 175.00,
                 'duration' => 45,
-                'image' => 'auth/images/plasma.png'
+                'category' => 'عناية بالبشرة',
+                'status' => 'active',
+                'image' => 'auth/images/hydrafacial.png',
+                'features' => ['تنظيف المسام بعمق', 'نضارة فورية للبشرة', 'مناسب لجميع أنواع البشرة']
             ],
             [
-                'name' => 'ديرما بن (Dermapen)', 
-                'description' => 'جلسة علاج ندبات حب الشباب، تحسين ملمس البشرة، وتضييق المسام الواسعة.', 
-                'base_price' => 75.00, 
-                'discount_price' => null, 
-                'category' => 'Skin Care', 
-                'duration' => 45,
-                'image' => 'auth/images/dermapen.png'
+                'name' => 'حقن فيلر الشفاه',
+                'description' => 'تحديد وتكبير الشفاه باستخدام أجود أنواع الفيلر المرخص.',
+                'base_price' => 450.00,
+                'discount_price' => 400.00,
+                'duration' => 40,
+                'category' => 'حقن تجميلي',
+                'status' => 'active',
+                'image' => 'auth/images/lips_filler.png',
+                'features' => ['رسم وتحديد دقيق', 'مظهر طبيعي وجذاب', 'ترطيب عالي للمنطقة']
             ],
             [
-                'name' => 'تقشير كيميائي طبي للوجه', 
-                'description' => 'تقشير طبي متخصص لتجديد خلايا الجلد والتخلص من التصبغات والبقع الداكنة.', 
-                'base_price' => 70.00, 
-                'discount_price' => 60.00, 
-                'category' => 'Skin Care', 
+                'name' => 'تقشير كربوني للنضارة',
+                'description' => 'جلسة الليزر الكربوني لإزالة الرؤوس السوداء وتفتيح البشرة.',
+                'base_price' => 150.00,
+                'discount_price' => 120.00,
                 'duration' => 30,
-                'image' => 'auth/images/peeling.png'
+                'category' => 'ليزر',
+                'status' => 'active',
+                'image' => 'auth/images/facial_care.png',
+                'features' => ['إزالة الخلايا الميتة', 'تصغير المسام الواسعة', 'تفتيح وتوحيد لون البشرة']
             ],
             [
-                'name' => 'فيلر تحت العين (علاج الهالات)', 
-                'description' => 'تعبئة تجاويف غائر العين للتخلص من المظهر المتعب وعلاج الهالات السوداء.', 
-                'base_price' => 200.00,'discount_price' => null, 
-                'category' => 'Injections', 
-                'duration' => 45,
-                'image' => 'auth/images/under_eye_filler.png'
-            ],
-            [
-                'name' => 'التقشير الكربوني بالليزر', 
-                'description' => 'جلسة ليزر كربوني (هوليوود بيل) لنضارة فورية، تنظيف البشرة وتفتيحها.', 
-                'base_price' => 80.00, 
-                'discount_price' => 65.00, 
-                'category' => 'Laser', 
-                'duration' => 45,
-                'image' => 'auth/images/carbon_peel.png'
+                'name' => 'نحت الجسم (تخسيس موضعي)',
+                'description' => 'جلسة تفتيت الدهون الموضعية باستخدام أجهزة النحت المتطورة.',
+                'base_price' => 600.00,
+                'discount_price' => 500.00,
+                'duration' => 50,
+                'category' => 'تخسيس',
+                'status' => 'active',
+                'image' => 'auth/images/peeling.png',
+                'features' => ['تفتيت الدهون المتركزة', 'شد الجلد وتحسين ملمسه', 'بدون جراحة أو تدخل جراحي']
             ],
         ];
 
         foreach ($treatments as $treatment) {
             DB::table('treatments')->insert([
-                'name' => $treatment['name'],
-                'description' => $treatment['description'],
-                'base_price' => $treatment['base_price'],
-                'discount_price' => $treatment['discount_price'], 
-                'category' => $treatment['category'], 
-                'duration' => $treatment['duration'], 
-                'image' => $treatment['image'], 
-                'created_at' => now(),
-                'updated_at' => now(),
+                'name'           => $treatment['name'],
+                'description'    => $treatment['description'],
+                'base_price'     => $treatment['base_price'],
+                'discount_price' => $treatment['discount_price'],
+                'duration'       => $treatment['duration'],
+                'category'       => $treatment['category'],
+                'status'         => $treatment['status'],
+                'image'          => $treatment['image'],
+                'features'       => json_encode($treatment['features'], JSON_UNESCAPED_UNICODE),
+                'created_at'     => now(),
+                'updated_at'     => now(),
             ]);
         }
     }

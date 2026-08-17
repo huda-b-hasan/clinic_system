@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
-$table->foreignId('clinic_session_id')->constrained()->onDelete('restrict');
+            $table->foreignId('clinic_session_id')->constrained()->onDelete('restrict');
+            $table->decimal('amount_paid', 8, 2)->default(0); // هنا الإضافة
             $table->date('date');
             $table->string('status')->default('unpaid');
             $table->timestamps();

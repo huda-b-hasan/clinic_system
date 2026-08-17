@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\User;
 use App\Models\Role;
+use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -16,41 +16,45 @@ class UserSeeder extends Seeder
         $doctorRole = Role::where('name', 'Doctor')->first();
         $receptionistRole = Role::where('name', 'Receptionist')->first();
 
-        // 2. إنشاء مستخدم مديـر وتعيين دور المدير له
+        // 2. إنشاء مستخدم مدير (هدى حسن)
         $manager = User::updateOrCreate(
             ['email' => 'manager@clinic.com'],
             [
-                'name' => 'Dr. Hala (Manager)',
-                'password' => Hash::make('password'),
+                'name' => 'هدى حسن',
+                'phone' => '0911111111',
+                'password' => Hash::make('12341234'),
             ]
         );
         if ($managerRole) {
-            // التعديل هنا: يضمن جلب الـ ID الصحيح سواء كان اسمه id أو role_id
-            $manager->roles()->sync([$managerRole->role_id ?? $managerRole->id]); 
+            $manager->roles()->sync([$managerRole->role_id ?? $managerRole->id]);
         }
 
-        // 3. إنشاء مستخدم طبيب وتعيين دور الطبيب له
+        // 3. إنشاء مستخدم طبيب (هلا فندو)
         $doctor = User::updateOrCreate(
             ['email' => 'doctor@clinic.com'],
             [
-                'name' => 'John Doe (Doctor)',
-                'password' => Hash::make('password'),
+                'name' => 'هلا فندو',
+                'phone' => '0922222222',
+                'password' => Hash::make('12341234'),
             ]
         );
         if ($doctorRole) {
             $doctor->roles()->sync([$doctorRole->role_id ?? $doctorRole->id]);
         }
 
-        // 4. إنشاء مستخدم موظف استقبال
+        // 4. إنشاء مستخدم موظف استقبال (ديمة قسام)
         $receptionist = User::updateOrCreate(
             ['email' => 'reception@clinic.com'],
             [
-                'name' => 'Jane Smith',
-                'password' => Hash::make('password'),
+                'name' => 'ديمة قسام',
+                'phone' => '0933333333',
+                'password' => Hash::make('12341234'),
             ]
         );
         if ($receptionistRole) {
             $receptionist->roles()->sync([$receptionistRole->role_id ?? $receptionistRole->id]);
         }
+
+
     }
 }

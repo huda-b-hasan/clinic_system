@@ -4,35 +4,37 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\ClinicSessions;
+use App\Models\Bill;
 
 class BillSeeder extends Seeder
 {
     public function run(): void
     {
-        // جلب جميع السجلات المتاحة في جدول جلسات العيادة لتوزيع الفواتير عليها تكرارياً
-        $sessions = DB::table('clinic_sessions')->get();
+        // 1. جلب كافة الجلسات لضمان تغطية كل الجلسات الموجودة
+        $sessions = ClinicSessions::all();
 
-        // التأكد من وجود جلسات أولاً لتجنب أي خطأ أثناء الـ Seeding
         if ($sessions->isNotEmpty()) {
-            
             foreach ($sessions as $session) {
                 
-                DB::table('bills')->insert([
-                    // 💡 تم اعتماد $session->id كمعرّف صحيح ومباشر بناءً على ملاحظتكِ في السطر 17
-                    'clinic_session_id' => $session->id, 
-                    
-                    // أسعار فواتير عشوائية وموزعة بناءً على أسعار الخدمات والعلاجات بالعيادة
-                    'amount_paid' => fake()->randomElement([60.00, 85.00, 120.00, 150.00, 180.00, 250.00, 500.00]),
-                    
-                    // توليد تاريخ فاتورة عشوائي منطقي خلال الشهر الماضي وحتى اليوم
-                    'date' => fake()->dateTimeBetween('-1 month', 'now')->format('Y-m-d'),
-                    
-                    // حالات الدفع المعتمدة (مدفوع / غير مدفوع / مدفوع جزئياً)
-                    'status' => fake()->randomElement(['paid', 'unpaid', 'partially_paid']),
-                    
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                // تحديد حالة دفع منطقية
+                $status = fake()->randomElement(['paid', 'unpaid', 'partially_paid']);
+                
+                // حساب مبلغ منطقي بناءً على الحالة
+                $amount = fake()->randomElement([150.00, 300.00, 500.00, 750.00]);
+                $paid = ($status === 'paid') ? $amount : (($status === 'partially_paid') ? ($amount / 2) : 0.00);
+
+                // استخدام updateOrCreate لمنع التكرار (في حال تم تشغيل السييدر أكثر من مرة)
+                Bill::updateOrCreate(
+                    ['clinic_session_id' => $session->id],
+                    [
+                        'amount_paid' => $paid,
+                        'date'        => $session->created_at->format('Y-m-d'), // الفاتورة بتاريخ الجلسة
+                        'status'      => $status,
+                        'created_at'  => $session->created_at,
+                        'updated_at'  => now(),
+                    ]
+                );
             }
         }
     }

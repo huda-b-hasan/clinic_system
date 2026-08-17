@@ -126,71 +126,83 @@ class BillController extends Controller
     /**
      * جلب ملخص فواتير الآدمن مقسمة (مدفوعة / غير مدفوعة) مع الإحصائيات
      */
-    public function getBillsSummary(Request $request)
-    {
-        try {
-            $paidBillsCount = Bill::where('status', 'paid')->count();
-            $unpaidBillsCount = Bill::where('status', 'unpaid')->count();
+public function getBillsSummary(Request $request)
+{
+    try {
+        $search = trim($request->query('search', '')); // استقبال نص البحث وتنظيفه
 
-            $allBills = Bill::orderBy('created_at', 'desc')->get();
+        $allBills = Bill::orderBy('created_at', 'desc')->get();
 
-            $paidBillsList = [];
-            $unpaidBillsList = [];
+        $paidBillsList = [];
+        $unpaidBillsList = [];
 
-            foreach ($allBills as $bill) {
-                // جلب اسم المريض بأمان من الجلسة أو الموعد المرتبط
-                $patientName = 'مريض غير معروف';
+        foreach ($allBills as $bill) {
+            $patientName = 'مريض غير معروف';
 
-                if (method_exists($bill, 'clinicSession') && $bill->clinicSession) {
-                    $session = $bill->clinicSession;
-                    if ($session->patient) {
-                        $patientName = $session->patient->name;
-                    } elseif ($session->appointment && $session->appointment->patient) {
-                        $patientName = $session->appointment->patient->name;
-                    }
-                } else {
-                    $patientName = 'جلسة عيادة رقم (#'.$bill->clinic_session_id.')';
+            if (method_exists($bill, 'clinicSession') && $bill->clinicSession) {
+                $session = $bill->clinicSession;
+                if ($session->patient) {
+                    $patientName = $session->patient->name;
+                } elseif ($session->appointment && $session->appointment->patient) {
+                    $patientName = $session->appointment->patient->name;
                 }
+            } else {
+                $patientName = 'جلسة عيادة رقم (#'.$bill->clinic_session_id.')';
+            }
 
-                $billData = [
-                    'id' => $bill->id,
-                    'bill_number' => '#'.$bill->id,
-                    'patient_name' => $patientName,
-                    'amount' => $bill->amount_paid, 
-                    'status' => $bill->status,     
-                    'date' => $bill->date,          
-                ];
+            $billNumber = '#'.$bill->id;
 
-                // تصنيف الفواتير بناءً على حالتها
-                if ($bill->status === 'paid') {
-                    $paidBillsList[] = $billData;
-                } else {
-                    $unpaidBillsList[] = $billData;
+            // فلترة البحث محلياً وبشكل دقيق (برقم الفاتورة أو اسم المريضة)
+            if (!empty($search)) {
+                $matchesId = stripos($billNumber, $search) !== false || stripos((string)$bill->id, $search) !== false;
+                $matchesPatient = stripos($patientName, $search) !== false;
+                
+                if (!$matchesId && !$matchesPatient) {
+                    continue; // تجاوز الفاتورة إن لم تطابق بحث المستخدم
                 }
             }
 
-            return response()->json([
-                'status' => 'success',
-                'data' => [
-                    'stats' => [
-                        'paid_count' => $paidBillsCount,
-                        'unpaid_count' => $unpaidBillsCount,
-                    ],
-                    'bills' => [
-                        'paid' => $paidBillsList,
-                        'unpaid' => $unpaidBillsList,
-                    ],
-                ],
-            ], 200);
+            $billData = [
+                'id' => $bill->id,
+                'bill_number' => $billNumber,
+                'patient_name' => $patientName,
+                'amount' => $bill->amount_paid, 
+                'status' => $bill->status,     
+                'date' => $bill->date,          
+            ];
 
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'حدث خطأ في السيرفر: '.$e->getMessage(),
-            ], 500);
+            if ($bill->status === 'paid') {
+                $paidBillsList[] = $billData;
+            } else {
+                $unpaidBillsList[] = $billData;
+            }
         }
-    }
 
+        // الإحصائيات الكلية بغض النظر عن نتائج البحث
+        $paidBillsCount = Bill::where('status', 'paid')->count();
+        $unpaidBillsCount = Bill::where('status', 'unpaid')->count();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'stats' => [
+                    'paid_count' => $paidBillsCount,
+                    'unpaid_count' => $unpaidBillsCount,
+                ],
+                'bills' => [
+                    'paid' => $paidBillsList,
+                    'unpaid' => $unpaidBillsList,
+                ],
+            ],
+        ], 200);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'حدث خطأ في السيرفر: '.$e->getMessage(),
+        ], 500);
+    }
+}
     /**
      * تسوية فواتير المريض وتغيير حالتها إلى مدفوعة (Paid)
      */

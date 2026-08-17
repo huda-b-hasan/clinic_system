@@ -169,52 +169,58 @@ class MaterialController extends Controller
     /**
      * 8. إعادة تزويد المخزن بشحنة جديدة وتسجيل فاتورة المشتريات
      */
-    public function restock(Request $request, $id): JsonResponse
-    {
-        $request->validate([
-            'quantity_added' => 'required|integer|min:1',
-            'unit_price' => 'required|numeric|min:0',
-            'invoice_date' => 'nullable|date',
-        ]);
+public function restock(Request $request, $id): JsonResponse
+{
+    $request->validate([
+        'quantity_added' => 'required|integer|min:1',
+        // جعلناه nullable ونسمح بالصفر أو القيم الموجبة
+        'unit_price' => 'nullable|numeric|min:0',
+        'invoice_date' => 'nullable|date',
+    ]);
 
-        try {
-            $result = DB::transaction(function () use ($request, $id) {
-                $material = Material::findOrFail($id);
+    try {
+        $result = DB::transaction(function () use ($request, $id) {
+            $material = Material::findOrFail($id);
 
-                $quantityAdded = $request->quantity_added;
-                $unitPrice = $request->unit_price;
-                $totalPrice = $quantityAdded * $unitPrice;
-                $invoiceDate = $request->invoice_date ?? now()->toDateString();
+            $quantityAdded = $request->quantity_added;
+            
+            // المنطق الذكي: إذا لم يتم إدخال سعر جديد أو كان صفرًا، نعتمد السعر الافتراضي للمادة
+            $unitPrice = ($request->filled('unit_price') && $request->unit_price > 0) 
+                         ? $request->unit_price 
+                         : $material->unit_price; // أو default_price حسب اسم الحقل لديك في جدول المواد
 
-                // أ. إنشاء فاتورة التوريد والشراء
-                $invoice = $material->invoices()->create([
-                    'quantity_added' => $quantityAdded,
-                    'unit_price' => $unitPrice,
-                    'total_price' => $totalPrice,
-                    'invoice_date' => $invoiceDate,
-                ]);
+            $totalPrice = $quantityAdded * $unitPrice;
+            $invoiceDate = $request->invoice_date ?? now()->toDateString();
 
-                // ب. زيادة الكمية الكلية وتحديث سعر الوحدة الحالي للمادة
-                $material->increment('quantity', $quantityAdded);
-                $material->update(['unit_price' => $unitPrice]);
+            // أ. إنشاء فاتورة التوريد والشراء بالسعر المعتمد
+            $invoice = $material->invoices()->create([
+                'quantity_added' => $quantityAdded,
+                'unit_price' => $unitPrice,
+                'total_price' => $totalPrice,
+                'invoice_date' => $invoiceDate,
+            ]);
 
-                return [
-                    'material' => $material,
-                    'invoice' => $invoice,
-                ];
-            });
+            // ب. زيادة الكمية الكلية وتحديث سعر الوحدة الحالي للمادة بالسعر المعتمد
+            $material->increment('quantity', $quantityAdded);
+            $material->update(['unit_price' => $unitPrice]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'تمت إضافة الشحنة وتسجيل فاتورة المشتريات بنجاح',
-                'data' => $result,
-            ], 200);
+            return [
+                'material' => $material,
+                'invoice' => $invoice,
+            ];
+        });
 
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'حدث خطأ أثناء حفظ الفاتورة: '.$e->getMessage(),
-            ], 500);
-        }
+        return response()->json([
+            'success' => true,
+            'message' => 'تمت إضافة الشحنة وتسجيل فاتورة المشتريات بنجاح',
+            'data' => $result,
+        ], 200);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'حدث خطأ أثناء حفظ الفاتورة: '.$e->getMessage(),
+        ], 500);
     }
+}
 }

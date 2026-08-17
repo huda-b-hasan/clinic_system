@@ -7,9 +7,9 @@
     <title>Lavender Beauty Clinic </title>
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="bills.css">
-    <link rel="stylesheet" href="../component/template.css">
     <link rel="stylesheet" href="../component/toast.css">
     <link rel="stylesheet" href="../component/logout.css">
+    <link rel="stylesheet" href="../template.css">
 
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪻</text></svg>">
@@ -102,7 +102,7 @@
                                 </svg>
                             </span><span>الملف الشخصي</span></a></li>
                 </ul>
-                                <ul>
+                <ul>
                     <li class="logout" id="logout-btn">
                         <a href="#" id="logout-link">
                             <span class="icon-nav">
@@ -175,8 +175,13 @@
                         <button class="tab-btn active" id="tabPending" onclick="switchTab('unpaid')">المعلقة</button>
                         <button class="tab-btn" id="tabPaid" onclick="switchTab('paid')">المدفوعة</button>
                     </div>
-                </div>
 
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <input type="text" id="billSearchInput" placeholder="ابحث برقم الفاتورة أو اسم المريضة..."
+                        style="width: 100%; padding: 12px 18px; border: 1px solid #e2e8f0; border-radius: 8px; font-family: inherit; outline: none; transition: border-color 0.3s; background-color: #fff;"
+                        oninput="handleSearchInput()">
+                </div>
                 <!-- العناوين الثابتة من فوق محاذية تماماً لمحتوى الكروت -->
                 <div class="bills-grid-header">
                     <div>رقم الفاتورة والجلسة</div>

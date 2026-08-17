@@ -380,6 +380,9 @@
     
     .patients-list-section, .patient-details-section {
         min-height: auto;
+    }   
+    .patients-list-section {      
+          order: 2;
     }
 }
 

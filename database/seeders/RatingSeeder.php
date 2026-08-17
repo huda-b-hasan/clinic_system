@@ -9,11 +9,11 @@ class RatingSeeder extends Seeder
 {
     public function run(): void
     {
-        // جلب كل المعرفات (IDs) المتاحة في جدولي المستخدمين والعلاجات لربطها عشوائياً
+        // جلب المعرفات
         $userIds = DB::table('users')->pluck('id')->toArray();
         $treatmentIds = DB::table('treatments')->pluck('id')->toArray();
 
-        // مصفوفة تعليقات مخصصة لتبدو المراجعات واقعية وتجعل لوحة التحكم مذهلة
+        // التعليقات
         $comments = [
             'الخدمة كانت ممتازة جداً، والتعامل راقٍ ومحترف.',
             'نتائج رائعة من أول جلسة، أنصح بالتعامل مع العيادة بشدة.',
@@ -26,17 +26,15 @@ class RatingSeeder extends Seeder
             'جلسة سريعة وغير مؤلمة والنتيجة بدأت بالظهور فوراً.'
         ];
 
-        // التأكد من أن قاعدة البيانات تحتوي بالفعل على مستخدمين وعلاجات لمنع أي خطأ
+        // التحقق من وجود بيانات للربط
         if (!empty($userIds) && !empty($treatmentIds)) {
-            
-            // يمكنك تغيير الرقم (30) لتوليد كمية التقييمات التي تفضلينها
             for ($i = 0; $i < 30; $i++) {
                 DB::table('ratings')->insert([
                     'user_id' => fake()->randomElement($userIds),
                     'treatment_id' => fake()->randomElement($treatmentIds),
-                    'stars_number' => fake()->numberBetween(3, 5), // توليد نجوم عشوائية بين 3 و 5 لتقييمات إيجابية واقعية
-                    'comment' => fake()->randomElement($comments),   // اختيار تعليق عشوائي من المصفوفة
-                    'created_at' => fake()->dateTimeBetween('-1 month', 'now'), // توزيع تواريخ التقييمات عشوائياً عبر الشهر الماضي
+                    'stars_number' => fake()->numberBetween(3, 5),
+                    'comment' => fake()->randomElement($comments),
+                    'created_at' => fake()->dateTimeBetween('-1 month', 'now'),
                     'updated_at' => now(),
                 ]);
             }

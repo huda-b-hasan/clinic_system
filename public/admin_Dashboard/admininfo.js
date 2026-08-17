@@ -1,27 +1,28 @@
-// دالة لجلب بيانات الأدمن وعرضها في الهيدر
+
 async function loadAdminProfile() {
     try {
-        const response = await fetch(`/admin/profile`); 
+        const response = await fetch('/admin/profile');
         const result = await response.json();
 
-        if (response.ok && result.status === 'success') {
-            const adminNameElement = document.getElementById('admin-name');
-            console.log(adminNameElement)
-            if (adminNameElement) {
-                adminNameElement.textContent = ` اهلا ${result.data.name}` ; 
+        // التحقق من نجاح الطلب وتوفر البيانات
+        if (response.ok && result?.status === 'success') {
+            const adminNameEl = document.getElementById('admin-name');
+            
+            // تحديث اسم الأدمن إذا وجد العنصر في الصفحة
+            if (adminNameEl) {
+                adminNameEl.textContent = `أهلاً ${result.data.name}`;
             }
         }
-        console.log(result)
     } catch (error) {
-        console.error('خطأ في جلب بيانات الأدمن:', error);
-        const adminNameElement = document.getElementById('adminName');
-        if (adminNameElement) {
-            adminNameElement.textContent = 'مسؤول النظام'; // قيمة احتياطية في حال الخطأ
+        console.error('Error loading admin profile:', error);
+        
+        // عرض اسم افتراضي في حالة فشل الاتصال
+        const adminNameEl = document.getElementById('admin-name');
+        if (adminNameEl) {
+            adminNameEl.textContent = 'مسؤول النظام';
         }
     }
 }
 
-// استدعاء الدالة عند تحميل الصفحة مباشرة
-document.addEventListener('DOMContentLoaded', () => {
-    loadAdminProfile();
-});
+// تنفيذ الدالة بمجرد تحميل هيكل الصفحة
+document.addEventListener('DOMContentLoaded', loadAdminProfile);

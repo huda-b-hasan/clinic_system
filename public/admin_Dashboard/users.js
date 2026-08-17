@@ -68,6 +68,7 @@ async function fetchUsers() {
 
         if (response.ok) {
             const resData = result.data || result;
+            console.log(resData)
 
             if (resData.stats) {
                 updateStatsCards(resData.stats);

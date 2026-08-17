@@ -14,13 +14,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 3. جلب البيانات من الـ API وتحديث الصفحة
-async function fetchBillsData() {
+async function fetchBillsData(searchQuery = '') {
     const container = document.getElementById('billsCardsContainer');
-    // استخدام رسالة تحميل بسيطة بنفس خط وتصميم العيادة
-    container.innerHTML = `<div style="text-align: center; padding: 40px; color: var(--text-muted); font-weight: 600;">جاري تحميل الفواتير...</div>`;
+    
+    // إظهار تحميل فقط في حال لم تكن عملية بحث فوري سريعة
+    if(!searchQuery) {
+        container.innerHTML = `<div style="text-align: center; padding: 40px; color: var(--text-muted); font-weight: 600;">جاري تحميل الفواتير...</div>`;
+    }
 
     try {
-        const response = await fetch(API_URL, {
+        let url = API_URL;
+        if (searchQuery) {
+            url += `?search=${encodeURIComponent(searchQuery)}`;
+        }
+
+        const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -31,7 +39,6 @@ async function fetchBillsData() {
 
         const result = await response.json();
 
-        // مطابقة الهيكل الراجع من Laravel Controller بدقة
         if (result.status === 'success' && result.data) {
             billsData = result.data;
             updateSummaryCards();
@@ -51,6 +58,18 @@ async function fetchBillsData() {
     }
 }
 
+// دالة لمعالجة إدخال البحث مع ميزة (Debouncing) لتقليل عدد الطلبات للسيرفر
+let searchTimeout = null;
+function handleSearchInput() {
+    clearTimeout(searchTimeout);
+    const query = document.getElementById('billSearchInput').value.trim();
+    
+    // الانتظار 300 ميلي ثانية بعد توقف المستخدم عن الكتابة لإرسال الطلب
+    searchTimeout = setTimeout(() => {
+        fetchBillsData(query);
+    }, 300);
+}
+
 // 4. تحديث الكروت العلوية (العدد والمبالغ المعلقة)
 function updateSummaryCards() {
     const pendingCountEl = document.getElementById('pendingInvoicesCount');
@@ -66,7 +85,8 @@ function updateSummaryCards() {
         return sum + (parseFloat(bill.amount) || 0);
     }, 0);
 
-    totalUnpaidEl.textContent = `${totalUnpaidAmount.toLocaleString('ar-SA')} ر.س`;
+    console.log(totalUnpaidAmount)
+    totalUnpaidEl.textContent = `${totalUnpaidAmount} ل.س`;
 }
 
 // 5. بناء وعرض كروت الفواتير بناءً على التبويب المختار

@@ -308,3 +308,6 @@
         opacity: 0; 
     }
 }
+aside nav .logo{
+    display: none;
+}

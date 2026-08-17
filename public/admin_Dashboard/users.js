@@ -69,7 +69,6 @@ async function fetchUsers() {
         if (response.ok) {
             const resData = result.data || result;
 
-            console.log(resData)
             if (resData.stats) {
                 updateStatsCards(resData.stats);
             }
@@ -135,59 +134,68 @@ function renderUsersTable(users) {
 
         rowsHtml += '<tr>' +
             '<td>' +
-            '<div class="user-info-cell">' +
-            '<div class="user-avatar">' + initials + '</div>' +
-            '<div>' +
-            '<strong>' + (user.name || '') + '</strong>' +
-            '<span class="user-email">' + (user.email || '') + '</span>' +
-            '</div>' +
-            '</div>' +
+                '<div class="user-info-cell">' +
+                    '<div class="user-avatar">' + initials + '</div>' +
+                    '<div>' +
+                        '<strong>' + (user.name || '') + '</strong>' +
+                        '<span class="user-email">' + (user.email || '') + '</span>' +
+                    '</div>' +
+                '</div>' +
             '</td>' +
             '<td>' + rolesHtml + '</td>' +
             '<td>' + (user.phone || '-') + '</td>' +
             '<td>' +
-            '<div class="action-buttons">' +
-            '<button class="btn-icon edit-btn" title="تعديل الموظف" onclick="openEditUserModal(' + userJson + ')">' +
-            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>' +
-            '</button>' +
-            '<button class="btn-icon danger-btn" title="حذف الموظف" onclick="deleteUser(' + user.id + ')">' +
-            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>' +
-            '</button>' +
-            '</div>' +
+                '<div class="action-buttons">' +
+                    // زر إضافة الدور
+                    '<button class="btn-icon edit-btn" title="إضافة دور وظيفي للموظف" onclick="openAddRoleModal(' + userJson + ')">' +
+                        '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>' +
+                    '</button>' +
+                    '<button class="btn-icon danger-btn" title="حذف الموظف" onclick="deleteUser(' + user.id + ')">' +
+                        '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>' +
+                    '</button>' +
+                '</div>' +
             '</td>' +
-            '</tr>';
+        '</tr>';
     }
 
     tbody.innerHTML = rowsHtml;
 }
 
 // ==========================================
-// 5. حفظ الموظف (إضافة / تعديل) مع Toast
+// 5. حفظ الموظف (إضافة / تعديل الدور) مع Toast
 // ==========================================
 async function handleUserFormSubmit(e) {
     e.preventDefault();
 
     const roleValue = getInputValue('userRole');
+    const isEdit = editingUserId !== null;
 
-    const payload = {
-        name: getInputValue('userName'),
-        email: getInputValue('userEmail'),
-        phone: getInputValue('userPhone'),
-    };
+    let payload = {};
 
-    // نرسل الدور فقط إذا اختارت المستخدم دوراً جديداً من القائمة
-    if (roleValue !== '') {
-        payload.role = roleValue;
-    }
+    if (isEdit) {
+        // عند إضافة دور لموظف حالي: نرسل الدور الجديد فقط ولا نعدل البيانات الأخرى
+        if (roleValue !== '') {
+            payload.role = roleValue;
+        }
+    } else {
+        // عند إضافة موظف جديد: نرسل كافة البيانات بحرية تامة
+        payload = {
+            name: getInputValue('userName'),
+            email: getInputValue('userEmail'),
+            phone: getInputValue('userPhone'),
+        };
 
-    const passwordVal = getInputValue('userPassword');
-    if (passwordVal !== '') {
-        payload.password = passwordVal;
+        if (roleValue !== '') {
+            payload.role = roleValue;
+        }
+
+        const passwordVal = getInputValue('userPassword');
+        if (passwordVal !== '') {
+            payload.password = passwordVal;
+        }
     }
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-    const isEdit = editingUserId !== null;
-
     let targetUrl = isEdit ? '/users/' + editingUserId : '/users';
     const methodType = isEdit ? 'PUT' : 'POST';
 
@@ -210,7 +218,7 @@ async function handleUserFormSubmit(e) {
             fetchUsers();
 
             if (isEdit) {
-                showToast("تم تعديل بيانات الموظف بنجاح", "success");
+                showToast("تم إضافة الدور الوظيفي بنجاح", "success");
             } else {
                 showToast("تم إضافة الموظف بنجاح", "success");
             }
@@ -221,6 +229,7 @@ async function handleUserFormSubmit(e) {
         showToast("حدث خطأ في الاتصال بالسيرفر", "error");
     }
 }
+
 // ==========================================
 // 6. دوال الحذف والـ Modal والتأكيد مع Toast
 // ==========================================
@@ -266,23 +275,64 @@ async function confirmDeleteUser() {
 }
 
 // ==========================================
-// 7. التحكم في المودالات والدوال المساعدة
+// 7. التحكم في المودالات (إضافة دور vs إضافة موظف جديد)
 // ==========================================
-function openEditUserModal(user) {
+function openAddRoleModal(user) {
     editingUserId = user.id;
 
-    // ... (تغيير عنوان المودال وعرض الاسم والإيميل ورقم الهاتف) ...
+    // تعبئة البيانات للاطلاع فقط
     setInputValue('userName', user.name || '');
     setInputValue('userEmail', user.email || '');
     setInputValue('userPhone', user.phone || '');
 
-    // 💡 إفراغ حقل الدور عند فتح التعديل لكي لا يُجبَرَ المستخدم على اختيار دور جديد
-    setInputValue('userRole', '');
+    // 🔒 قفل الحقول الأساسية تماماً لكي لا يتمكن المدير من تعديلها
+    const nameInput = document.getElementById('userName');
+    const emailInput = document.getElementById('userEmail');
+    const phoneInput = document.getElementById('userPhone');
+    
+    if (nameInput) nameInput.disabled = true;
+    if (emailInput) emailInput.disabled = true;
+    if (phoneInput) phoneInput.disabled = true;
 
+    // إخفاء حقل كلمة المرور تماماً وإلغاء إلزاميته
+    const passGroup = document.getElementById('userPassword')?.closest('.form-group');
+    if (passGroup) passGroup.style.display = 'none';
+    
     const passInput = document.getElementById('userPassword');
-    if (passInput) {
-        passInput.value = '';
-        passInput.required = false;
+    if (passInput) passInput.required = false;
+
+    // فلترة الأدوار لإظهار الأدوار المفقودة فقط التي لا يمتلكها الموظف حالياً
+    const roleSelect = document.getElementById('userRole');
+    if (roleSelect) {
+        const userCurrentRoles = user.roles ? user.roles.map(r => r.toString().toLowerCase()) : [];
+        
+        for (let i = 0; i < roleSelect.options.length; i++) {
+            const optVal = roleSelect.options[i].value.toLowerCase();
+            if (optVal === "") continue; 
+            
+            if (userCurrentRoles.includes(optVal)) {
+                roleSelect.options[i].style.display = 'none';
+            } else {
+                roleSelect.options[i].style.display = 'block';
+            }
+        }
+        roleSelect.value = ''; 
+    }
+
+    // تغيير العنوان
+    const modalTitle = document.querySelector('#userModal .modal-header h3');
+    if (modalTitle) {
+        modalTitle.innerHTML = `
+            <span style="display: inline-flex; align-items: center; gap: 8px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; display: inline-block;">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="8.5" cy="7" r="4"></circle>
+                <line x1="20" y1="8" x2="20" y2="14"></line>
+                <line x1="23" y1="11" x2="17" y2="11"></line>
+              </svg>
+              إضافة دور وظيفي لـ: ${user.name}
+            </span>
+        `;
     }
 
     const modal = document.getElementById('userModal');
@@ -294,20 +344,42 @@ function openUserModal() {
     const form = document.getElementById('userForm');
     if (form) form.reset();
 
+    // 🔓 فتح وتفعيل جميع الحقول لتكون قابلة للكتابة والإضافة بحرية تامة
+    const nameInput = document.getElementById('userName');
+    const emailInput = document.getElementById('userEmail');
+    const phoneInput = document.getElementById('userPhone');
+    
+    if (nameInput) nameInput.disabled = false;
+    if (emailInput) emailInput.disabled = false;
+    if (phoneInput) phoneInput.disabled = false;
+
+    // إظهار حقل كلمة المرور وجعله مطلوباً
+    const passGroup = document.getElementById('userPassword')?.closest('.form-group');
+    if (passGroup) passGroup.style.display = 'block';
+    
+    const passInput = document.getElementById('userPassword');
+    if (passInput) passInput.required = true;
+
+    // إظهار جميع خيارات الأدوار دون أي فلترة
+    const roleSelect = document.getElementById('userRole');
+    if (roleSelect) {
+        for (let i = 0; i < roleSelect.options.length; i++) {
+            roleSelect.options[i].style.display = 'block';
+        }
+    }
+
     const modalTitle = document.querySelector('#userModal .modal-header h3');
     if (modalTitle) {
         modalTitle.innerHTML = `
-    <span style="display: inline-flex; align-items: center; gap: 8px;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; display: inline-block;">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-        <circle cx="12" cy="7" r="4"></circle>
-      </svg>
-      إضافة موظف جديد
-    </span>
-  `;
+            <span style="display: inline-flex; align-items: center; gap: 8px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; display: inline-block;">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              إضافة موظف جديد
+            </span>
+        `;
     }
-    const passInput = document.getElementById('userPassword');
-    if (passInput) passInput.required = true;
 
     const modal = document.getElementById('userModal');
     if (modal) modal.classList.add('active');

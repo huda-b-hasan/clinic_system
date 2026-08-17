@@ -8,10 +8,14 @@ use Illuminate\Http\Request;
 
 class BillController extends Controller
 {
+    /**
+     * جلب بيانات الفواتير الخاصة بالمريض الحالي مع ملخص المبالغ المدفوعة والمعلقة
+     */
     public function getBillDataPatient(Request $request)
     {
         $userId = session('user_id');
 
+        // البحث عن ملف المريض المرتبط بحساب المستخدم الحالي
         $patient = \DB::table('patients')->where('user_id', $userId)->first();
 
         if (! $patient) {
@@ -20,6 +24,7 @@ class BillController extends Controller
             ], 404);
         }
 
+        // جلب الفواتير المرتبطة بمواعيد المريض عبر الجلسات العلاجية
         $bills = \DB::table('bills')
             ->join('clinic_sessions', 'bills.clinic_session_id', '=', 'clinic_sessions.id')
             ->join('appointments', 'clinic_sessions.appointment_id', '=', 'appointments.id')
@@ -27,12 +32,12 @@ class BillController extends Controller
             ->select('bills.*', 'clinic_sessions.appointment_id')
             ->get();
 
+        // حساب إجمالي الأموال المدفوعة والمعلقة
         $totalPaid = $bills->where('status', 'paid')->sum('amount_paid');
-
         $totalPending = $bills->whereIn('status', ['unpaid', 'partially_paid'])->sum('amount_paid');
 
+        // تنسيق الفواتير لعرضها بشكل منظم في الواجهة الأمامية
         $formattedInvoices = $bills->map(function ($bill) {
-
             $sessionName = 'جلسة علاجية';
 
             $treatmentIds = \DB::table('appointment_treatment')
@@ -89,6 +94,9 @@ class BillController extends Controller
         ], 200);
     }
 
+    /**
+     * جلب عداد الفواتير المعلقة (غير المدفوعة) للمريض الحالي
+     */
     public function getPendingBillsCount(Request $request)
     {
         $userId = session('user_id');
@@ -106,7 +114,7 @@ class BillController extends Controller
             ->join('clinic_sessions', 'bills.clinic_session_id', '=', 'clinic_sessions.id')
             ->join('appointments', 'clinic_sessions.appointment_id', '=', 'appointments.id')
             ->where('appointments.patient_id', $patient->id)
-            ->whereIn('bills.status', ['unpaid', 'partially_paid']) // الفواتير المعلقة
+            ->whereIn('bills.status', ['unpaid', 'partially_paid'])
             ->count(); 
 
         return response()->json([
@@ -115,12 +123,14 @@ class BillController extends Controller
         ], 200);
     }
 
+    /**
+     * جلب ملخص فواتير الآدمن مقسمة (مدفوعة / غير مدفوعة) مع الإحصائيات
+     */
     public function getBillsSummary(Request $request)
     {
         try {
             $paidBillsCount = Bill::where('status', 'paid')->count();
             $unpaidBillsCount = Bill::where('status', 'unpaid')->count();
-
 
             $allBills = Bill::orderBy('created_at', 'desc')->get();
 
@@ -128,8 +138,7 @@ class BillController extends Controller
             $unpaidBillsList = [];
 
             foreach ($allBills as $bill) {
-
-               // محاولة الوصول لاسمالمريض من خلال الجلسة المشتركة بأمان
+                // جلب اسم المريض بأمان من الجلسة أو الموعد المرتبط
                 $patientName = 'مريض غير معروف';
 
                 if (method_exists($bill, 'clinicSession') && $bill->clinicSession) {
@@ -152,7 +161,7 @@ class BillController extends Controller
                     'date' => $bill->date,          
                 ];
 
-                // تقسيم الفواتير حسب الحالة الحقيقية لها
+                // تصنيف الفواتير بناءً على حالتها
                 if ($bill->status === 'paid') {
                     $paidBillsList[] = $billData;
                 } else {
@@ -160,7 +169,6 @@ class BillController extends Controller
                 }
             }
 
-            // 3. إرجاع البيانات بنجاح للفرونت إند
             return response()->json([
                 'status' => 'success',
                 'data' => [
@@ -183,6 +191,9 @@ class BillController extends Controller
         }
     }
 
+    /**
+     * تسوية فواتير المريض وتغيير حالتها إلى مدفوعة (Paid)
+     */
     public function pay(Request $request, $id)
     {
         $bill = Bill::find($id);
@@ -204,14 +215,18 @@ class BillController extends Controller
             'data' => $bill,
         ], 200);
     }
-public function getFinancialCardsAndBills(Request $request)
+
+    /**
+     * جلب البطاقات المالية للإيرادات والمصروفات والأرباح مع سجلات الفواتير والمشتريات الشاملة
+     */
+    public function getFinancialCardsAndBills(Request $request)
     {
         try {
             $currentYear = now()->year;
             $currentMonth = now()->month;
             $today = now()->toDateString();
 
-            // 1. الإيرادات
+            // 1. حساب الإيرادات (السنوية، الشهرية، اليومية) للفواتير المدفوعة
             $yearlyRevenue = (float) Bill::whereYear('date', $currentYear)
                 ->where('status', 'paid')
                 ->sum('amount_paid');
@@ -225,7 +240,7 @@ public function getFinancialCardsAndBills(Request $request)
                 ->where('status', 'paid')
                 ->sum('amount_paid');
 
-            // 2. المصروفات (تأمين في حال عدم وجود جدول المشتريات لتجنب الـ 500)
+            // 2. حساب المصروفات من جدول فواتير المواد
             $yearlyExpenses = 0;
             $monthlyExpenses = 0;
             if (\Schema::hasTable('material_invoices')) {
@@ -239,7 +254,7 @@ public function getFinancialCardsAndBills(Request $request)
             $totalUnpaid = (float) Bill::whereIn('status', ['unpaid', 'partially_paid'])
                 ->sum('amount_paid');
 
-            // 3. فواتير المشتريات (إن وجدت)
+            // 3. جلب فواتير المشتريات (المواد) إن وجدت وتنسيقها
             $purchaseInvoices = collect();
             if (\Schema::hasTable('material_invoices') && \Schema::hasTable('materials')) {
                 $purchaseInvoices = \DB::table('material_invoices')
@@ -252,7 +267,7 @@ public function getFinancialCardsAndBills(Request $request)
                             'id' => $invoice->id,
                             'bill_number' => 'PUR-'.str_pad($invoice->id, 4, '0', STR_PAD_LEFT),
                             'patient_name' => $invoice->material_name,
-                            'session_name' => $invoice->quantity_added, // تم إزالة القوس والرمز الزائد ليظهر العدد فقط
+                            'session_name' => $invoice->quantity_added,
                             'amount' => number_format($invoice->total_price, 0).' ل.س',
                             'date' => $invoice->invoice_date,
                             'status_text' => 'مشتريات',
@@ -261,7 +276,7 @@ public function getFinancialCardsAndBills(Request $request)
                     });
             }
 
-            // 4. فواتير المرضى
+            // 4. جلب فواتير المرضى وتنسيقها
             $patientBills = Bill::orderBy('created_at', 'desc')
                 ->get()
                 ->map(function ($bill) {
@@ -276,7 +291,7 @@ public function getFinancialCardsAndBills(Request $request)
                             }
                         }
                     } catch (\Exception $ex) {
-                        // تجاوز أي خطأ علاقة لتجنب توقف السيرفر
+                        // تجاهل أي خطأ في العلاقات لضمان عدم توقف السيرفر
                     }
 
                     $statusText = 'مدفوعة';
@@ -302,6 +317,7 @@ public function getFinancialCardsAndBills(Request $request)
                     ];
                 });
 
+            // دمج سجلات فواتير المرضى مع فواتير المشتريات في قائمة مالية واحدة متكاملة
             $allFinancialRecords = $patientBills->concat($purchaseInvoices);
 
             return response()->json([
@@ -325,4 +341,3 @@ public function getFinancialCardsAndBills(Request $request)
         }
     }
 }
-

@@ -11,13 +11,17 @@ use Illuminate\Support\Facades\Auth;
 
 class PatientController extends Controller
 {
+
+    /**
+     * جلب الملف الشخصي للمريض الحالي المسجل دخول عبر الجلسة 
+     */
     public function getPatientProfile()
     {
-        // 1. فحص هل السيشين موجودة أصلاً أم تضيع؟
+        // 1. التحقق من وجود السيشين
         if (! session()->has('user_id')) {
             return response()->json([
-                'message' => 'السيشين فارغة تماماً! قد يكون السبب نوع الـ Route أو انتهاء الجلسة',
-                'session_all' => session()->all(), // سيطبع لك كل محتويات الجلسة الحالية لمعاينتها
+                'message' => ' انتهاء الجلسة',
+                'session_all' => session()->all(),
             ], 403);
         }
 
@@ -25,7 +29,7 @@ class PatientController extends Controller
             return response()->json(['message' => 'أنت مسجل دخول ولكن ليس بصلاحية مريض، دورك الحالي: '.session('user_role')], 403);
         }
 
-        // 2. فحص الاستعلام
+        // 2. البحث عن بيانات المريض المرتبطة بالمستخدم
         $userId = session('user_id');
         $patient = Patient::with('user')->where('user_id', $userId)->first();
 
@@ -41,6 +45,9 @@ class PatientController extends Controller
         ]);
     }
 
+    /**
+     * تحديث الملف الشخصي للمريض الحالي
+     */
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
@@ -57,7 +64,7 @@ class PatientController extends Controller
             'phone' => $validatedData['phone'],
         ]);
 
-        // تحديث جدول المرضى التابع له
+        // تحديث جدول المرضى المرتبط بالمستخدم
         $user->patient()->update([
             'gender' => $validatedData['gender'],
         ]);
@@ -68,9 +75,11 @@ class PatientController extends Controller
         ], 200);
     }
 
+    /**
+     * جلب مواعيد المريض الحالي مع تفاصيل الأطباء، المعالجات، والفواتير
+     */
     public function getAppointments()
     {
-        // 1. التحقق من وجود السيشين
         if (! session()->has('user_id')) {
             return response()->json(['message' => 'غير مصرح لك، السيشين منتهية'], 403);
         }
@@ -82,14 +91,11 @@ class PatientController extends Controller
             return response()->json(['message' => 'لم يتم العثور على بيانات المريض'], 404);
         }
 
-        // 2. جلب المواعيد مع العلاقات المتداخلة الصحيحة بناءً على الـ Migrons
-        // الموعد يملك طبيب (doctor)، وعلاجات (treatments)
-        // ويملك جلسة (clinicSession) والجلسة هي التي تملك الفاتورة (clinicSession.bill)
         $appointments = $patient->appointments()
             ->with([
                 'doctor',
                 'treatments',
-                'clinicSession.bill', // جلب الجلسة والفاتورة التابعة لها بأمان
+                'clinicSession.bill',
             ])
             ->orderBy('appointment_date', 'desc')
             ->get();
@@ -101,12 +107,12 @@ class PatientController extends Controller
         ], 200);
     }
 
+    /**
+     * جلب المعالجات الحديثة التي تحتاج لتقييم (خلال آخر 30 يوماً)
+     */
     public function getRecentTreatmentsForRating()
     {
-        // 1. جلب معرف المستخدم من السيشين
         $userId = session('user_id');
-
-        // 2. جلب المريض المرتبط بهذا المستخدم
         $patient = Patient::where('user_id', $userId)->first();
 
         if (! $patient) {
@@ -117,21 +123,17 @@ class PatientController extends Controller
             ]);
         }
 
-        // 3. الاستعلام عن كل الخدمات الفريدة التي تمت جلساتها خلال آخر 30 يوماً ولم تُقيّم بعد
         $recentTreatments = Treatment::whereHas('appointments', function ($query) use ($patient) {
             $query->where('patient_id', $patient->id)
                 ->whereHas('clinicSession', function ($q) {
-                    // تمت الجلسة خلال آخر 30 يوماً (شهر أو أقل)
                     $q->where('created_at', '>=', Carbon::now()->subDays(30));
                 });
         })
-        // التأكد من أن المستخدم الحالي لم يقم بتقييم هذه الخدمات مسبقاً
-            ->whereDoesntHave('ratings', function ($query) use ($userId) {
-                $query->where('user_id', $userId);
-            })
-            ->get();
+        ->whereDoesntHave('ratings', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })
+        ->get();
 
-        // 4. تحويل مجموعة البيانات إلى مصفوفة مبسطة (id و name) وإرجاعها
         $treatmentsArray = $recentTreatments->map(function ($treatment) {
             return [
                 'treatment_id' => $treatment->id,
@@ -142,16 +144,16 @@ class PatientController extends Controller
         return response()->json([
             'status' => true,
             'count' => count($treatmentsArray),
-            'data' => $treatmentsArray, // مصفوفة الخدمات الجاهزة للتقييم
+            'data' => $treatmentsArray,
         ]);
     }
 
+    /**
+     * التحقق مما إذا كان هناك تقييم معلق لم يتم إجراؤه (خلال آخر 7 أيام)
+     */
     public function checkPendingRating()
     {
-        // 1. جلب معرف المستخدم من السيشين التي قمتِ بالتحقق منها في الميدل وير
         $userId = session('user_id');
-
-        // 2. جلب المريض المرتبط بهذا المستخدم
         $patient = Patient::where('user_id', $userId)->first();
 
         if (! $patient) {
@@ -162,21 +164,17 @@ class PatientController extends Controller
             ]);
         }
 
-        // 3. الاستعلام الحديث (Eloquent ORM) للبحث عن معالجة تحتاج لتقييم
         $pendingTreatment = Treatment::whereHas('appointments', function ($query) use ($patient) {
             $query->where('patient_id', $patient->id)
                 ->whereHas('clinicSession', function ($q) {
-                    // تمت الجلسة خلال آخر 7 أيام
                     $q->where('created_at', '>=', Carbon::now()->subDays(7));
                 });
         })
-        // التأكد من أن المستخدم الحالي لم يقم بتقييم هذه المعالجة مسبقاً
-            ->whereDoesntHave('ratings', function ($query) use ($userId) {
-                $query->where('user_id', $userId);
-            })
-            ->first();
+        ->whereDoesntHave('ratings', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })
+        ->first();
 
-        // 4. إرجاع النتيجة للـ Front-end
         if ($pendingTreatment) {
             return response()->json([
                 'status' => true,
@@ -194,9 +192,11 @@ class PatientController extends Controller
         ]);
     }
 
+    /**
+     * جلب بيانات لوحة تحكم المريض (Dashboard) مع الإحصائيات والفواتير غير المدفوعة
+     */
     public function getPatientDashboardData()
     {
-        // 1. التحقق من السيشين اليدوية
         if (! session()->has('user_id')) {
             return response()->json(['message' => 'غير مصرح لك، الجلسة منتهية'], 403);
         }
@@ -208,28 +208,19 @@ class PatientController extends Controller
             return response()->json(['message' => 'لم يتم العثور على بيانات المريض'], 404);
         }
 
-        // جلب جميع مواعيد المريض مع العلاقات المطلوبة وترتيبها من الأحدث للأقدم
         $allAppointments = $patient->appointments()
             ->with(['doctor:id,name', 'treatments:id,name', 'clinicSession.bill'])
             ->orderBy('appointment_date', 'desc')
             ->get();
 
-        // 2. تقسيم المواعيد بناءً على الحالات المطلوبة باستخدام Collection Filtering
-
-        // أ. المواعيد المعلقة (Pending)
+        // تصفية المواعيد حسب حالتها
         $pendingAppointments = $allAppointments->where('status', 'pending')->values();
-
-        // ب. المواعيد الملغاة (Cancelled) - تأكد أن التسمية في الـ Enum تطابق القيمة هنا
         $cancelledAppointments = $allAppointments->where('status', 'canceled')->values();
-
-        // ج. الجلسات المكتملة (Completed) والتي تمتلك جلسة مسجلة فعلياً
         $completedAppointments = $allAppointments->where('status', 'completed')
-            ->filter(function ($app) {
-                return $app->clinicSession !== null;
-            })
+            ->filter(fn($app) => $app->clinicSession !== null)
             ->values();
 
-        // 3. تحليل وفحص الفواتير المستحقة (غير المدفوعة) من المواعيد المكتملة
+        // تجميع الفواتير المستحقة (غير المدفوعة)
         $unpaidBills = [];
         $totalUnpaidAmount = 0;
 
@@ -263,13 +254,8 @@ class PatientController extends Controller
                 'total_unpaid_amount' => $totalUnpaidAmount,
             ],
             'data' => [
-                // المواعيد المعلقة
                 'pending_appointments' => $pendingAppointments,
-
-                // المواعيد الملغاة
                 'cancelled_appointments' => $cancelledAppointments,
-
-                // المواعيد المكتملة (مهيأة ومحسنة العرض)
                 'completed_appointments' => $completedAppointments->map(function ($app) {
                     return [
                         'session_id' => $app->clinicSession->id,
@@ -280,8 +266,6 @@ class PatientController extends Controller
                         'bill' => $app->clinicSession->bill,
                     ];
                 }),
-
-                // الفواتير غير المدفوعة
                 'unread_cancellations' => $unreadCancellations->map(function ($item) {
                     return [
                         'id' => $item->id,
@@ -291,11 +275,17 @@ class PatientController extends Controller
                     ];
                 }),
             ],
-
         ], 200);
     }
-    // ////////////////////////////////////////////////////////////////////////
 
+
+    // ==========================================
+    // دوال إدارة المرضى  
+    // ==========================================
+
+    /**
+     * عرض قائمة جميع المرضى
+     */
     public function index()
     {
         $patients = Patient::select('id', 'name', 'phone', 'gender', 'birthdate', 'address', 'medical_notes')
@@ -309,9 +299,11 @@ class PatientController extends Controller
         ], 200);
     }
 
+    /**
+     * عرض تفاصيل مريض محدد مع حساب المستخدم المرتبط
+     */
     public function show($id)
     {
-        // جلب المريض المحدد مع بيانات حسابه المرتبط (User)
         $patient = Patient::with('user:id,name,email,phone')->find($id);
 
         if (! $patient) {
@@ -327,6 +319,9 @@ class PatientController extends Controller
         ], 200);
     }
 
+    /**
+     * إضافة مريض جديد
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -346,6 +341,9 @@ class PatientController extends Controller
         ], 201);
     }
 
+    /**
+     * تحديث بيانات مريض محدد
+     */
     public function update(Request $request, $id)
     {
         $patient = Patient::find($id);
@@ -375,17 +373,20 @@ class PatientController extends Controller
         ], 200);
     }
 
-public function searchPatients(Request $request)
-{
-    $query = $request->get('q');
+    /**
+     * البحث عن المرضى بالاسم أو رقم الهاتف
+     */
+    public function searchPatients(Request $request)
+    {
+        $query = $request->get('q');
 
-    $patients = Patient::where('name', 'LIKE', "%{$query}%")
-        ->orWhere('phone', 'LIKE', "%{$query}%")
-        ->get(['id', 'name', 'phone']);
+        $patients = Patient::where('name', 'LIKE', "%{$query}%")
+            ->orWhere('phone', 'LIKE', "%{$query}%")
+            ->get(['id', 'name', 'phone']);
 
-    return response()->json([
-        'status' => 'success',
-        'data' => $patients
-    ]);
-}
+        return response()->json([
+            'status' => 'success',
+            'data' => $patients,
+        ]);
+    }
 }

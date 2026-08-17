@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 
 class DoctorController extends Controller
 {
+    /**
+     * جلب قائمة جميع الأطباء في النظام (المعرف والاسم فقط)
+     */
     public function getAllDoctors()
     {
         try {
@@ -32,23 +35,22 @@ class DoctorController extends Controller
         }
     }
 
-    // dashboard doctor
-
+    /**
+     * جلب ملف الطبيب الحالي المسجل دخوله عبر الجلسة (Session)
+     */
     public function getCurrentDoctorProfile(Request $request)
     {
         try {
-            // 1. جلب الـ ID الخاص بالطبيب من السشن
             $doctorId = session('user_id');
 
             if (! $doctorId) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'لم يتم العثور على طبيب مسجل حالياً في الجلسة.',
-                ], 401); //  تعني غير مصرح له
+                ], 401);
             }
 
-            // 2. جلب بيانات الطبيب بالكامل
-            $doctor = User::doctor() // استخدام الـ Scope للتأكد من أنه طبيب فعلاً
+            $doctor = User::doctor()
                 ->where('id', $doctorId)
                 ->first();
 
@@ -59,14 +61,13 @@ class DoctorController extends Controller
                 ], 404);
             }
 
-            // 3. إرجاع البيانات بنجاح
             return response()->json([
                 'status' => 'success',
                 'data' => [
                     'id' => $doctor->id,
                     'name' => $doctor->name,
                     'email' => $doctor->email,
-                    'phone' => $doctor->phone, // الحقل الذي أضفناه سوياً في السيرفر
+                    'phone' => $doctor->phone,
                 ],
             ], 200);
 
@@ -78,6 +79,9 @@ class DoctorController extends Controller
         }
     }
 
+    /**
+     * جلب لوحة التحكم الخاصة بالطبيب (الإحصائيات، المواعيد، الجلسات، والمرضى)
+     */
     public function getDashboardDoctor(Request $request)
     {
         try {
@@ -96,12 +100,10 @@ class DoctorController extends Controller
                 ->count('patient_id');
 
             $totalCompletedSessionsCount = ClinicSessions::whereHas('appointment', function ($query) use ($doctorId) {
-
                 $query->where('doctor_id', $doctorId);
-
             })->count();
 
-            // 2. جلب مواعيد اليوم
+            // 2. جلب مواعيد اليوم وتصنيفها
             $todayAppointments = Appointment::where('doctor_id', $doctorId)
                 ->whereDate('appointment_date', $today)
                 ->with(['patient', 'room', 'treatments'])
@@ -111,15 +113,16 @@ class DoctorController extends Controller
             $cancelledAppointments = $todayAppointments->where('status', 'canceled')->values()->toArray();
             $completedAppointments = $todayAppointments->where('status', 'completed')->values()->toArray();
 
-            // 3. جلب كل الجلسات التي نفذها هذا الطبيب
+            // 3. جلب الجلسات الطبية التي نفذها الطبيب
             $doctorSessions = ClinicSessions::whereHas('appointment', function ($query) use ($doctorId) {
                 $query->where('doctor_id', $doctorId);
             })
                 ->with(['appointment.patient', 'appointment.treatments', 'bill'])
-                ->latest() // ترتيب الجلسات من الأحدث إلى الأقدم
+                ->latest()
                 ->get()
                 ->toArray();
 
+            // 4. جلب قائمة المرضى الفريدين الذين زاروا الطبيب
             $totalPatients = Appointment::where('doctor_id', $doctorId)
                 ->where('status', 'completed')
                 ->with('patient')
@@ -129,7 +132,6 @@ class DoctorController extends Controller
                 ->values()
                 ->toArray();
 
-            // 4. إرجاع البيانات كاملة كـ JSON
             return response()->json([
                 'status' => 'success',
                 'data' => [
@@ -144,7 +146,7 @@ class DoctorController extends Controller
                         'completed' => $completedAppointments,
                     ],
                     'sessions' => $doctorSessions,
-                    'pateints' => $totalPatients,
+                    'patients' => $totalPatients,
                 ],
             ], 200);
 
@@ -158,13 +160,19 @@ class DoctorController extends Controller
         }
     }
 
+    /**
+     * جلب جميع مواعيد الطبيب مصنفة حسب الحالة
+     */
     public function getDoctorAppointments(Request $request)
     {
         try {
             $doctorId = session('user_id');
 
             if (! $doctorId) {
-                return response()->json(['success' => false, 'message' => 'لم يتم التعرف على الطبيب، يرجى إعادة تسجيل الدخول'], 401);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'لم يتم التعرف على الطبيب، يرجى إعادة تسجيل الدخول',
+                ], 401);
             }
 
             $appointments = Appointment::where('doctor_id', $doctorId)

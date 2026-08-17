@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class MaterialController extends Controller
 {
     /**
-     * 1. جلب جميع المواد (سواء متوفرة أو نافدة)
+     * 1. عرض قائمة جميع المواد (المتوفرة والنافدة)
      */
     public function index(): JsonResponse
     {
@@ -23,7 +23,7 @@ class MaterialController extends Controller
     }
 
     /**
-     * 2. جلب جميع المواد المتاحة فقط (التي كميتها أكبر من 0)
+     * 2. عرض المواد المتاحة في المخزن فقط (التي كميتها أكبر من 0)
      */
     public function getAvailableMaterials(): JsonResponse
     {
@@ -38,32 +38,30 @@ class MaterialController extends Controller
     }
 
     /**
-     * 3. إضافة مادة جديدة للمخزن
+     * 3. إضافة مادة جديدة إلى المخزن بكمية صفرية
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-        // 1. التحقق من البيانات الأساسية للكتالوج فقط
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'unit_price' => 'required|numeric|min:0',
         ]);
 
-        // 2. إنشاء كرت المادة بكمية صفرية
         $material = Material::create([
             'name' => $validated['name'],
-            'quantity' => 0, 
+            'quantity' => 0,
             'unit_price' => $validated['unit_price'],
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'تم تعريف المادة  بنجاح.',
+            'message' => 'تم تعريف المادة بنجاح.',
             'data' => $material,
         ], 201);
     }
 
     /**
-     * 4. عرض تفاصيل مادة واحدة عبر ID
+     * 4. عرض تفاصيل مادة محددة باستخدام المعرف (ID)
      */
     public function show($id): JsonResponse
     {
@@ -83,7 +81,7 @@ class MaterialController extends Controller
     }
 
     /**
-     * 5. تعديل بيانات مادة
+     * 5. تحديث بيانات مادة موجودة
      */
     public function update(Request $request, $id): JsonResponse
     {
@@ -112,7 +110,7 @@ class MaterialController extends Controller
     }
 
     /**
-     * 6. حذف مادة من المخزن
+     * 6. حذف مادة من المخزن نهائياً
      */
     public function destroy($id): JsonResponse
     {
@@ -134,7 +132,7 @@ class MaterialController extends Controller
     }
 
     /**
-     * 7. خصم كمية مستهلكة من المادة
+     * 7. خصم كمية محددة من المادة (استهلاك يدوي)
      */
     public function deductQuantity(Request $request, $id): JsonResponse
     {
@@ -169,11 +167,10 @@ class MaterialController extends Controller
     }
 
     /**
-     * 8. إعادة تزويد / زيادة كمية المادة
+     * 8. إعادة تزويد المخزن بشحنة جديدة وتسجيل فاتورة المشتريات
      */
-    public function restock(Request $request, $id)
+    public function restock(Request $request, $id): JsonResponse
     {
-        // 1. التحقق من صحة البيانات المدخلة
         $request->validate([
             'quantity_added' => 'required|integer|min:1',
             'unit_price' => 'required|numeric|min:0',
@@ -181,7 +178,6 @@ class MaterialController extends Controller
         ]);
 
         try {
-            // 2. تنفيذ العملية داخل Transaction لضمان الأمان
             $result = DB::transaction(function () use ($request, $id) {
                 $material = Material::findOrFail($id);
 
@@ -190,7 +186,7 @@ class MaterialController extends Controller
                 $totalPrice = $quantityAdded * $unitPrice;
                 $invoiceDate = $request->invoice_date ?? now()->toDateString();
 
-                // أ) إنشاء فاتورة التوريد والشراء
+                // أ. إنشاء فاتورة التوريد والشراء
                 $invoice = $material->invoices()->create([
                     'quantity_added' => $quantityAdded,
                     'unit_price' => $unitPrice,
@@ -198,7 +194,7 @@ class MaterialController extends Controller
                     'invoice_date' => $invoiceDate,
                 ]);
 
-                // ب) زيادة كمية المخزن الكلية وتحديث آخر سعر شراء للمادة
+                // ب. زيادة الكمية الكلية وتحديث سعر الوحدة الحالي للمادة
                 $material->increment('quantity', $quantityAdded);
                 $material->update(['unit_price' => $unitPrice]);
 

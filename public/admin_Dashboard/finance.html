@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="users.css">
     <link rel="stylesheet" href="finance.css">
     <link rel="stylesheet" href="../template.css">
+    <link rel="stylesheet" href="../component/logout.css">
     <link rel="stylesheet" href="../component/toast.css">
 
     <link rel="icon"
@@ -157,6 +158,22 @@
                                 </svg>
                             </span><span>الملف الشخصي</span></a></li>
                 </ul>
+                                <ul>
+                    <li class="logout" id="logout-btn">
+                        <a href="#" id="logout-link">
+                            <span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-log-out h-4 w-4" aria-hidden="true">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" x2="9" y1="12" y2="12"></line>
+                                </svg>
+                            </span>
+                            <span>تسجيل خروج</span>
+                        </a>
+                    </li>
+                </ul>
             </nav>
         </aside>
 
@@ -173,20 +190,7 @@
                 </div>
             </div>
             <div class="summary-cards">
-                <div class="summary-card gold-accent">
-                    <div class="icon-box gold-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
-                            <line x1="12" x2="12" y1="2" y2="22"></line>
-                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                        </svg>
-                    </div>
-                    <div class="text-content">
-                        <h3>إجمالي الخصومات الممنوحة</h3>
-                        <!-- تمت إضافة id هنا -->
-                        <p id="totalDiscountsStat">$0</p>
-                    </div>
-                </div>
+
 
                 <div class="summary-card">
                     <div class="icon-box">
@@ -459,6 +463,7 @@
     <div class="toast" id="toast"></div>
     <script src="finance.js"></script>
     <script src="admininfo.js"></script>
+    <script src="../component/logout.js"></script>
     <script>
         // التحكم بالسايدبار
         const menuToggle = document.querySelector('.menu-toggle');

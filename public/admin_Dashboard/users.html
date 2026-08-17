@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="users.css">
     <link rel="stylesheet" href="../template.css">
+    <link rel="stylesheet" href="../component/logout.css">
     <link rel="stylesheet" href="../component/toast.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -156,6 +157,22 @@
                                     <circle cx="12" cy="7" r="4"></circle>
                                 </svg>
                             </span><span>الملف الشخصي</span></a></li>
+                </ul>
+                                <ul>
+                    <li class="logout" id="logout-btn">
+                        <a href="#" id="logout-link">
+                            <span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-log-out h-4 w-4" aria-hidden="true">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" x2="9" y1="12" y2="12"></line>
+                                </svg>
+                            </span>
+                            <span>تسجيل خروج</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </aside>
@@ -380,6 +397,7 @@
     </script>
     <script src="users.js"></script>
     <script src="../component/toast.js"></script>
+    <script src="../component/logout.js"></script>
 </body>
 
 </html>

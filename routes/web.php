@@ -33,7 +33,9 @@ Route::get('/login', function () {
 Route::get('/register', function () {
     return File::get(public_path('auth/register.html'));
 });
-
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('/register', [AuthController::class, 'register']);

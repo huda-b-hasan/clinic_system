@@ -157,17 +157,7 @@ async function fetchPromoCodes() {
                                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
                             </svg>
                         </button>
-                        <button class="btn-icon danger-btn" onclick="openDeleteModal(${code.id})" title="حذف الكود">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 6h18"></path>
-                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                <line x1="14" y1="11" x2="14" y2="17"></line>
-                            </svg>
-                        </button>
+
                     </div>
                 </td>
             `;
@@ -335,3 +325,15 @@ window.addEventListener('DOMContentLoaded', () => {
     fetchStats();
     fetchPromoCodes();
 });
+// زر الحذف تم الغاءه 
+                        // <button class="btn-icon danger-btn" onclick="openDeleteModal(${code.id})" title="حذف الكود">
+                        //     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        //         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        //         stroke-linecap="round" stroke-linejoin="round">
+                        //         <path d="M3 6h18"></path>
+                        //         <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                        //         <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                        //         <line x1="10" y1="11" x2="10" y2="17"></line>
+                        //         <line x1="14" y1="11" x2="14" y2="17"></line>
+                        //     </svg>
+                        // </button>

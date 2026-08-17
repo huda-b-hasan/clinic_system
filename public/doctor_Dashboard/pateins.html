@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="../template.css">
     <link rel="stylesheet" href="pateins.css">
     <link rel="stylesheet" href="../component/toast.css">
+    <link rel="stylesheet" href="../component/logout.css">
+        <link rel="stylesheet" href="../component/logout.css">
+
 </head>
 
 <body>
@@ -91,6 +94,23 @@
                                     <circle cx="12" cy="7" r="4"></circle>
                                 </svg></span><span>الملف الشخصي</span></a></li>
                 </ul>
+                                <ul>
+                    <li class="logout" id="logout-btn">
+                        <a href="#" id="logout-link">
+                            <span class="icon-nav">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-log-out h-4 w-4" aria-hidden="true">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" x2="9" y1="12" y2="12"></line>
+                                </svg>
+                            </span>
+                            <span>تسجيل خروج</span>
+                        </a>
+                    </li>
+                </ul>
+
             </nav>
         </aside>
 
@@ -183,7 +203,7 @@
     <div class="modal-backdrop" id="addPatientModal">
         <div class="modal-box">
             <div class="modal-header">
-                <h3>إضافة ملف مريض جديد</h3>
+                <h3> تعديل ملف المريض  </h3>
                 <button class="close-modal-btn" id="closeModalBtn">✕</button>
             </div>
             <!-- فورم الإضافة متوافق مع المايغريشن -->
@@ -192,19 +212,19 @@
 
                     <div class="form-group-p">
                         <label class="form-label-p" for="name">الاسم الكامل *</label>
-                        <input type="text" id="name" name="name" required class="form-input-p"
+                        <input disabled type="text" id="name" name="name" required class="form-input-p"
                             placeholder="أدخل اسم المريض الثنائي">
                     </div>
 
                     <div class="form-group-p">
                         <label class="form-label-p" for="phone">رقم الهاتف *</label>
-                        <input type="text" id="phone" name="phone" required class="form-input-p"
+                        <input disabled type="text" id="phone" name="phone" required class="form-input-p"
                             placeholder="09xxxxxxxx" style="direction: ltr;">
                     </div>
 
                     <div class="form-group-p">
                         <label class="form-label-p" for="gender">الجنس *</label>
-                        <select id="gender" name="gender" required class="form-select-p">
+                        <select disabled id="gender" name="gender" required class="form-select-p">
                             <option value="" disabled selected>اختر الجنس</option>
                             <option value="female">أنثى</option>
                             <option value="male">ذكر</option>
@@ -213,12 +233,12 @@
 
                     <div class="form-group-p">
                         <label class="form-label-p" for="birthdate">تاريخ الميلاد</label>
-                        <input type="date" id="birthdate" name="birthdate" class="form-input-p">
+                        <input disabled type="date" id="birthdate" name="birthdate" class="form-input-p">
                     </div>
 
                     <div class="form-group-p full-width-p">
                         <label class="form-label-p" for="address">العنوان</label>
-                        <input type="text" id="address" name="address" class="form-input-p"
+                        <input disabled type="text" id="address" name="address" class="form-input-p"
                             placeholder="المحافظة، المنطقة، الشارع">
                     </div>
 
@@ -263,6 +283,9 @@
         });
     </script>
     <script src="../component/patientData.js"></script>
+        <script src="../component/logout.js"></script>
+        <script src="../component/logout.js"></script>
+
 </body>
 
 </html>

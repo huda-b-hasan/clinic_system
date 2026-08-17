@@ -7,14 +7,18 @@ use App\Models\Bill;
 use App\Models\Room;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ReceptionController extends Controller
 {
-    public function getAllReceptionist()
+    /**
+     * جلب قائمة جميع موظفي الاستقبال (المعرف والاسم فقط)
+     */
+    public function getAllReceptionist(): JsonResponse
     {
         try {
-            $reseption = User::whereHas('roles', function ($query) {
+            $receptionists = User::whereHas('roles', function ($query) {
                 $query->where('name', 'Receptionist');
             })
                 ->select('id', 'name')
@@ -22,18 +26,21 @@ class ReceptionController extends Controller
 
             return response()->json([
                 'status' => true,
-                'data' => $reseption,
+                'data' => $receptionists,
             ], 200);
 
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'خطأ في السيرفر: '.$e->getMessage(),
+                'message' => 'خطأ في السيرفر: ' . $e->getMessage(),
             ], 500);
         }
     }
 
-    public function getCurrentReceptionistProfile(Request $request)
+    /**
+     * جلب ملف موظف الاستقبال الحالي المسجل دخوله عبر الجلسة (Session)
+     */
+    public function getCurrentReceptionistProfile(Request $request): JsonResponse
     {
         try {
             $receptionistId = session('user_id');
@@ -60,7 +67,7 @@ class ReceptionController extends Controller
                     'id' => $receptionist->id,
                     'name' => $receptionist->name,
                     'email' => $receptionist->email,
-                    'phone' => $receptionist->phone, 
+                    'phone' => $receptionist->phone,
                 ],
             ], 200);
 
@@ -71,63 +78,53 @@ class ReceptionController extends Controller
             ], 500);
         }
     }
-    // /////////////////////////////////////////////////////////
-/**
-     * جلب إحصائيات لوحة التحكم بالكامل للمستقبل (المواعيد المفصلة وحالة الغرف الحية)
+
+    /**
+     * جلب إحصائيات لوحة التحكم الكاملة للاستقبال (المواعيد المفصلة وحالة الغرف الحية)
      */
-    public function getReceptionDashboardStats(Request $request)
+    public function getReceptionDashboardStats(Request $request): JsonResponse
     {
         try {
-            $today = \Carbon\Carbon::today();
+            $today = Carbon::today();
 
             // ==========================================
             // 1. حساب الإحصائيات السريعة (الكروت العلوية)
             // ==========================================
-            
-            // إجمالي مواعيد اليوم
             $todayAppointmentsCount = Appointment::whereDate('appointment_date', $today)->count();
 
-            // المواعيد التي في صالة الانتظار اليوم (حالتها pending)
             $waitingPatientsCount = Appointment::whereDate('appointment_date', $today)
                 ->where('status', 'pending')
                 ->count();
 
-            // الفواتير غير المسددة
             $unpaidBillsCount = Bill::where('status', 'unpaid')->count();
 
-            // عدد الغرف الإجمالي وعدد الغرف المشغولة حالياً
             $totalRoomsCount = Room::count();
             
-            // الغرفة تعتبر "مشغولة" إذا كان هناك موعد قائم "active" أو مريض داخلها حالياً اليوم
+            // الغرفة مشغولة إذا كان الموعد بحالة 'active' اليوم
             $occupiedRoomsCount = Appointment::whereDate('appointment_date', $today)
-                ->where('status', 'active') 
+                ->where('status', 'active')
                 ->distinct('room_id')
                 ->count('room_id');
 
-
             // ==========================================
-            // 2. تصفية المواعيد وتفاصيلها في مصفوفات حسب الحالة
+            // 2. تصفية المواعيد وتفاصيلها حسب الحالة
             // ==========================================
-            
-            // جلب المواعيد مع العلاقات كاملة (المريض، الطبيب، الغرفة، والخدمات)
             $todayAppointments = Appointment::whereDate('appointment_date', $today)
                 ->with(['patient', 'doctor', 'room', 'treatments'])
                 ->get();
 
-            // فصل المواعيد إلى مصفوفات بناءً على الحالة
             $pendingAppointments = [];
             $completedAppointments = [];
             $canceledAppointments = [];
 
             foreach ($todayAppointments as $appointment) {
-                // تنسيق تفاصيل الموعد بالشكل المطلوب للفرونت
                 $appointmentData = [
                     'id' => $appointment->id,
                     'patient_name' => $appointment->patient->name ?? 'مريض غير معروف',
                     'doctor_name' => $appointment->doctor->name ?? 'غير محدد',
                     'treatment_name' => $appointment->treatments->first()->name ?? 'إجراء عام',
                     'room_name' => $appointment->room->name ?? 'بدون غرفة',
-                    'time' => \Carbon\Carbon::parse($appointment->appointment_date)->format('H:i'),
+                    'time' => Carbon::parse($appointment->appointment_date)->format('H:i'),
                 ];
 
                 if ($appointment->status === 'pending') {
@@ -139,16 +136,13 @@ class ReceptionController extends Controller
                 }
             }
 
-
             // ==========================================
             // 3. جلب حالة الغرف وتفاصيلها الحية
             // ==========================================
-            
             $rooms = Room::all();
             $roomsDetails = [];
 
             foreach ($rooms as $room) {
-                // البحث عن موعد نشط حالياً (active) داخل هذه الغرفة لليوم
                 $currentActiveAppointment = Appointment::where('room_id', $room->id)
                     ->whereDate('appointment_date', $today)
                     ->where('status', 'active')
@@ -158,7 +152,7 @@ class ReceptionController extends Controller
                 if ($currentActiveAppointment) {
                     $roomsDetails[] = [
                         'room_name' => $room->name,
-                        'status' => 'occupied', // مشغولة
+                        'status' => 'occupied',
                         'patient_name' => $currentActiveAppointment->patient->name ?? 'مريض غير معروف',
                         'doctor_name' => $currentActiveAppointment->doctor->name ?? 'غير محدد',
                         'treatment_name' => $currentActiveAppointment->treatments->first()->name ?? 'إجراء عام',
@@ -166,14 +160,13 @@ class ReceptionController extends Controller
                 } else {
                     $roomsDetails[] = [
                         'room_name' => $room->name,
-                        'status' => 'available', // متاحة
+                        'status' => 'available',
                         'patient_name' => null,
                         'doctor_name' => null,
                         'treatment_name' => null,
                     ];
                 }
             }
-
 
             // ==========================================
             // 4. إرجاع النتيجة المتكاملة
@@ -192,107 +185,43 @@ class ReceptionController extends Controller
                         'completed' => $completedAppointments,
                         'canceled' => $canceledAppointments,
                     ],
-                    'rooms' => $roomsDetails
-                ]
+                    'rooms' => $roomsDetails,
+                ],
             ], 200);
 
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'فشل جلب الإحصائيات: ' . $e->getMessage()
+                'message' => 'فشل جلب الإحصائيات: ' . $e->getMessage(),
             ], 500);
         }
     }
-    /**
-     * جلب الإحصائيات والبيانات الحية للوحة تحكم الاستقبال (التي صممناها في HTML)
-     */
-    public function getDashboardData()
-    {
-        $today = Carbon::today();
-
-        // 1. الإحصائيات السريعة للكروت
-        $todayAppointmentsCount = Appointment::whereDate('appointment_date', $today)->count();
-        $waitingPatientsCount = Appointment::whereDate('appointment_date', $today)->where('status', 'pending')->count();
-        $unpaidBillsCount = Bill::where('status', 'unpaid')->count();
-
-        // حساب الغرف المشغولة
-        $totalRooms = Room::count();
-        $occupiedRoomsCount = Appointment::whereDate('appointment_date', $today)
-            ->where('status', 'completed') // افترضنا هنا أن 'completed' تعني أن الجلسة تمت في الغرفة
-            ->distinct('room_id')
-            ->count('room_id');
-
-        // 2. جلب المواعيد مصنفة حسب التبويبات (Tabs)
-        $appointments = Appointment::whereDate('appointment_date', $today)
-            ->with(['patient', 'room', 'treatments']) // جلب العلاقات المرتبطة
-            ->get()
-            ->groupBy('status');
-
-        // 3. حالة الغرف الحية
-        $rooms = Room::all()->map(function ($room) use ($today) {
-            $activeAppointment = Appointment::where('room_id', $room->id)
-                ->whereDate('appointment_date', $today)
-                ->where('status', 'pending')
-                ->with(['patient', 'treatments'])
-                ->first();
-
-            return [
-                'id' => $room->id,
-                'name' => $room->name,
-                'status' => $activeAppointment ? 'occupied' : 'available',
-                'patient_name' => $activeAppointment ? $activeAppointment->patient->name : null,
-                'treatment_name' => $activeAppointment ? ($activeAppointment->treatments->first()->name ?? 'إجراء عام') : null,
-            ];
-        });
-
-        // إرجاع البيانات بصيغة JSON للفرونت إند
-        return response()->json([
-            'stats' => [
-                'today_appointments' => $todayAppointmentsCount,
-                'occupied_rooms' => "{$occupiedRoomsCount} / {$totalRooms}",
-                'waiting_patients' => $waitingPatientsCount,
-                'unpaid_bills' => $unpaidBillsCount,
-            ],
-            'appointments' => [
-                'pending' => $appointments->get('pending', []),
-                'completed' => $appointments->get('completed', []),
-                'canceled' => $appointments->get('canceled', []),
-            ],
-            'rooms' => $rooms,
-        ]);
-    }
 
     /**
-     * تسجيل حضور مريض وإكمال الموعد (تحديث حالة الموعد)
+     * تسجيل حضور المريض وإكمال الموعد (تحديث الحالة إلى مكتمل)
      */
-    public function attendAppointment(Request $request, $id)
+    public function attendAppointment(Request $request, $id): JsonResponse
     {
         $appointment = Appointment::findOrFail($id);
-
-        // تحديث الحالة إلى مكتمل
         $appointment->update(['status' => 'completed']);
-
-        // هنا يمكن إضافة أي لوجيك آخر، مثل إنشاء فاتورة تلقائياً
 
         return response()->json([
             'success' => true,
             'message' => 'تم تسجيل حضور المريض وإكمال الموعد.',
-        ]);
+        ], 200);
     }
 
     /**
      * إلغاء موعد مريض
      */
-    public function cancelAppointment(Request $request, $id)
+    public function cancelAppointment(Request $request, $id): JsonResponse
     {
         $appointment = Appointment::findOrFail($id);
-
-        // تحديث الحالة إلى ملغى
         $appointment->update(['status' => 'canceled']);
 
         return response()->json([
             'success' => true,
             'message' => 'تم إلغاء الموعد بنجاح.',
-        ]);
+        ], 200);
     }
 }

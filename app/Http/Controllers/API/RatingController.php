@@ -10,15 +10,16 @@ use Illuminate\Support\Facades\Validator;
 
 class RatingController extends Controller
 {
+    /**
+     * عرض جميع التقييمات  مع إحصائيات عامة
+     */
     public function index()
     {
-
         $ratings = Rating::with([
             'user:id,name,email',
             'treatment:id,name',
         ])->latest()->get();
 
-        // حساب إجمالي التقييمات بالسيستم وإيجاد المتوسط العام (اختياري، كإحصائية عامة للآدمن)
         $totalRatings = $ratings->count();
         $overallAverage = Rating::avg('stars_number');
 
@@ -29,10 +30,14 @@ class RatingController extends Controller
             'data' => $ratings,
         ], 200);
     }
-    
+
+    /**
+     * جلب تقييمات خدمة تجميلية محددة مع حساب المتوسط
+     */
     public function getTreatmentRatings($treatment_id)
     {
         $treatment = Treatment::find($treatment_id);
+        
         if (! $treatment) {
             return response()->json(['message' => 'الخدمة التجميلية غير موجودة'], 404);
         }
@@ -58,8 +63,8 @@ class RatingController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'treatment_id' => 'required|exists:treatments,id', // التأكد أن الخدمة موجودة بقاعدة البيانات
-            'stars_number' => 'required|integer|min:1|max:5',  // النجوم يجب أن تكون بين 1 و 5
+            'treatment_id' => 'required|exists:treatments,id',
+            'stars_number' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string|max:1000',
         ]);
 
@@ -67,14 +72,14 @@ class RatingController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        // جوة الـ store() في RatingController عدلي السطر ده:
+        // جلب معرف المستخدم من الجلسة أو الطلب
         $userId = session('user_id') ?? $request->user_id;
 
         if (! $userId) {
             return response()->json(['message' => 'يجب تسجيل الدخول لإضافة تقييم'], 401);
         }
 
-        // منع المستخدم من تكرار تقييم الخدمة نفسها (اختياري - حسب رغبتكِ بالسيستم)
+        // منع المستخدم من تكرار تقييم الخدمة نفسها
         $alreadyRated = Rating::where('user_id', $userId)
             ->where('treatment_id', $request->treatment_id)
             ->exists();
@@ -83,12 +88,13 @@ class RatingController extends Controller
             return response()->json(['message' => 'لقد قمتِ بتقييم هذه الخدمة مسبقاً!'], 400);
         }
 
-        // إنشاء التقييم
+        // إنشاء التقييم الجديد
         $rating = Rating::create([
             'user_id' => $userId,
             'treatment_id' => $request->treatment_id,
             'stars_number' => $request->stars_number,
-            'comment' => $request->comment ?? '',        ]);
+            'comment' => $request->comment ?? '',
+        ]);
 
         return response()->json([
             'message' => 'تم إضافة تقييمكِ بنجاح، شكراً لكِ!',
@@ -97,7 +103,7 @@ class RatingController extends Controller
     }
 
     /**
-     * تعديل تقييم سابق (مثلاً تعديل النجوم أو التعليق)
+     * تعديل تقييم سابق (للنجوم أو التعليق)
      */
     public function update(Request $request, $id)
     {
@@ -107,12 +113,15 @@ class RatingController extends Controller
             return response()->json(['message' => 'التقييم غير موجود'], 404);
         }
 
-        // التحقق من صلاحية التعديل (فقط صاحب التقييم يعدله)
-        // جوة الـ store() في RatingController عدلي السطر ده:
         $userId = session('user_id') ?? $request->user_id;
 
         if (! $userId) {
-            return response()->json(['message' => 'يجب تسجيل الدخول لإضافة تقييم'], 401);
+            return response()->json(['message' => 'يجب تسجيل الدخول لتعديل التقييم'], 401);
+        }
+
+        // التأكد أن المستخدم هو صاحب التقييم
+        if ($rating->user_id != $userId) {
+            return response()->json(['message' => 'لا تملكين صلاحية تعديل هذا التقييم'], 403);
         }
 
         $validator = Validator::make($request->all(), [
@@ -144,7 +153,8 @@ class RatingController extends Controller
         }
 
         // التأكد من الصلاحية قبل الحذف
-        $userId = auth()->id() ?? $request->user_id;
+        $userId = session('user_id') ?? auth()->id() ?? $request->user_id;
+
         if ($rating->user_id != $userId) {
             return response()->json(['message' => 'لا تملكين صلاحية حذف هذا التقييم'], 403);
         }
@@ -153,5 +163,4 @@ class RatingController extends Controller
 
         return response()->json(['message' => 'تم حذف التقييم بنجاح'], 200);
     }
-
 }

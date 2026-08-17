@@ -14,16 +14,16 @@ use Illuminate\Support\Facades\DB;
 class ClinicSessionController extends Controller
 {
     /**
-     * جلب تفاصيل الجلسة والموعد بناءً على appointment_id
+     * جلب تفاصيل الجلسة والموعد بناءً على معرف الموعد
      */
     public function getSessionDetails($appointmentId): JsonResponse
     {
-        // 1. جلب الموعد مع العلاقات المطلوبة
+        // 1. جلب الموعد مع العلاقات المرتبطة (المريض، الغرفة، الأجهزة، والمواد)
         $appointment = Appointment::with([
             'patient',
             'room',
             'treatments.devices',
-            'treatments.materials', // المواد الأساسية المربوطة بالعلاج
+            'treatments.materials',
         ])->find($appointmentId);
 
         if (! $appointment) {
@@ -39,7 +39,7 @@ class ClinicSessionController extends Controller
             $patientAge = Carbon::parse($appointment->patient->birthdate)->age;
         }
 
-        // 3. تجهيز البيانات وتنظيمها
+        // 3. تنسيق وإرجاع البيانات المطلوبة
         return response()->json([
             'success' => true,
             'data' => [
@@ -76,18 +76,18 @@ class ClinicSessionController extends Controller
     }
 
     /**
-     * إنهاء الجلسة، خصم المواد من المخزن، وإصدار الفاتورة
+     * إنهاء الجلسة الطبية، خصم المواد المستهلكة من المخزن، وإصدار الفاتورة الإجمالية
      */
     public function completeSession(Request $request, $appointmentId): JsonResponse
     {
-        // 1. التحقق من البيانات المرسلة
+        // 1. التحقق من صحة المدخلات
         $request->validate([
             'doctor_notes' => 'nullable|string',
             'materials' => 'nullable|array', // [material_id => quantity]
             'materials.*' => 'integer|min:0',
         ]);
 
-        // 2. جلب الموعد وتفاصيل العلاج المحجوز
+        // 2. التحقق من وجود الموعد وحالته
         $appointment = Appointment::with(['treatments', 'patient'])->find($appointmentId);
 
         if (! $appointment) {
@@ -106,20 +106,21 @@ class ClinicSessionController extends Controller
                 'doctor_notes' => $request->input('doctor_notes'),
             ]);
 
-            // ب. حساب سعر العلاجات (المحسوبة مسبقاً وسعرها صافي في booked_price)
+            // ب. حساب التكلفة الإجمالية للعلاجات المحجوزة
             $treatmentsTotal = $appointment->treatments->sum(function ($treatment) {
                 return $treatment->pivot->booked_price ?? $treatment->base_price;
             });
 
-            // ج. خصم المواد المستهلكة وحساب مجموع تكلفتها
+            // ج. معالجة خصم المواد المستهلكة وحساب تكلفتها
             $materialsTotal = 0;
             $usedMaterials = $request->input('materials', []);
 
             foreach ($usedMaterials as $materialId => $qty) {
                 if ($qty > 0) {
                     $material = Material::find($materialId);
+
                     if ($material) {
-                        // التأكد من توفر الكمية الكافية بالمخزن
+                        // التحقق من توفر الكمية الكافية في المخزن
                         if ($material->quantity < $qty) {
                             DB::rollBack();
 
@@ -129,25 +130,25 @@ class ClinicSessionController extends Controller
                             ], 400);
                         }
 
-                        // خصم المستهلك من المخزن
+                        // خصم الكمية المستهلكة من المخزون
                         $material->decrement('quantity', $qty);
 
-                        // إضافة تكلفة المادة للفاتورة
+                        // حساب تكلفة المواد وإضافتها للمجموع
                         $materialsTotal += ($material->unit_price * $qty);
-                        // ربط المادة بالجلسة وتخزين الكمية والتعريفة
+
+                        // ربط المادة بالجلسة وتخزين تفاصيل الاستهلاك
                         $session->materials()->attach($materialId, [
                             'quantity' => $qty,
                             'unit_price' => $material->unit_price,
                         ]);
                     }
                 }
-
             }
 
-            // د. المبلغ الإجمالي النهائي للفاتورة
+            // د. حساب المبلغ الإجمالي النهائي للفاتورة
             $grandTotal = $treatmentsTotal + $materialsTotal;
 
-            // هـ. إصدار الفاتورة
+            // هـ. إصدار الفاتورة الطبية
             $bill = Bill::create([
                 'clinic_session_id' => $session->id,
                 'amount_paid' => $grandTotal,
@@ -155,7 +156,7 @@ class ClinicSessionController extends Controller
                 'status' => 'unpaid',
             ]);
 
-            // و. تحديث حالة الموعد إلى مكتمل (completed)
+            // و. تحديث حالة الموعد إلى مكتمل
             $appointment->update(['status' => 'completed']);
 
             DB::commit();
